@@ -30,7 +30,7 @@ namespace HoloverseSandbox
 
 		private void Start()
 		{
-			_ = LoadVideo();
+			//_ = LoadVideo();
 		}
 
 #if UNITY_EDITOR
