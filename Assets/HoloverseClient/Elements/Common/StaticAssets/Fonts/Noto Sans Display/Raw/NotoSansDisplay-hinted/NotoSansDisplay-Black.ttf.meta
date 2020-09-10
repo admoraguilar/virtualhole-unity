@@ -1,0 +1,71 @@
+fileFormatVersion: 2
+guid: 0991f88dd0a500c4f82e04d2a5b6eb02
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Noto Sans Display
+  fontNames:
+  - Noto Sans Display
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: c4da0b3073952a24ea789005758a2be8, type: 3}
+  - {fileID: 12800000, guid: 4827774033ad98142893af953aa04ca4, type: 3}
+  - {fileID: 12800000, guid: 16f648505740ff64b82876bc11187da6, type: 3}
+  - {fileID: 12800000, guid: 0093ecb0315092446bf59e6cd009b1a4, type: 3}
+  - {fileID: 12800000, guid: 18657161373ce5d46800e8085b58901a, type: 3}
+  - {fileID: 12800000, guid: a6a68cb1f5d2a6041a7a573433ea98ce, type: 3}
+  - {fileID: 12800000, guid: 34950112ab7a5c543b2024b71fcdcfd6, type: 3}
+  - {fileID: 12800000, guid: 7342a19215b7b7f46b45332367faa51d, type: 3}
+  - {fileID: 12800000, guid: 64ab3de2c2f25184189b13895da7cd37, type: 3}
+  - {fileID: 12800000, guid: 657796c352558024192874abbfe52dec, type: 3}
+  - {fileID: 12800000, guid: f1bbc5e3bf5cf95408fddd3325ceb8d8, type: 3}
+  - {fileID: 12800000, guid: c81a5af31d4664746a6c98bbd967de80, type: 3}
+  - {fileID: 12800000, guid: c8853934bbc64c644a009b814c84832d, type: 3}
+  - {fileID: 12800000, guid: d6363ea49f5393943b8c15311b03861d, type: 3}
+  - {fileID: 12800000, guid: 128a0b9514e1fe540beb7ea9c7455ad0, type: 3}
+  - {fileID: 12800000, guid: 580190a5059e80e4e867c58cd32e28e6, type: 3}
+  - {fileID: 12800000, guid: 4219d6a5857845540a5e1409327d214c, type: 3}
+  - {fileID: 12800000, guid: 58c346d553bd9d144b9452886f631c63, type: 3}
+  - {fileID: 12800000, guid: c4457256c0c923e4dabac257a4386be4, type: 3}
+  - {fileID: 12800000, guid: 9050f08711188b64cb2666aa4af047b4, type: 3}
+  - {fileID: 12800000, guid: 4625b2f7c21bc284aab30bb82bf34d96, type: 3}
+  - {fileID: 12800000, guid: 68011698941b03147b19c086a10eea03, type: 3}
+  - {fileID: 12800000, guid: 51cf95096f8a9894d8b6cbd693a82f16, type: 3}
+  - {fileID: 12800000, guid: 04a8da091a6bdbb45b1700ee18c36bc7, type: 3}
+  - {fileID: 12800000, guid: 68fb5949cfee7a84d84578ce69d04f9b, type: 3}
+  - {fileID: 12800000, guid: 0498cc49a9755004ea0d868fa59712c9, type: 3}
+  - {fileID: 12800000, guid: a87b951a19fbb7043a4c6e71fab71da0, type: 3}
+  - {fileID: 12800000, guid: 02ea742aa5a0104438de731cf8806cfc, type: 3}
+  - {fileID: 12800000, guid: 68c1772a3de80434887773261d633d5d, type: 3}
+  - {fileID: 12800000, guid: 183bff4af871aa546b6f9837ec07b9e7, type: 3}
+  - {fileID: 12800000, guid: 3898aeca3121b03448ccba88d078b290, type: 3}
+  - {fileID: 12800000, guid: 6619e42b9dea4184bb3eb60e2cb9f4ad, type: 3}
+  - {fileID: 12800000, guid: d210f75be74056d4aa41468fa2f43d06, type: 3}
+  - {fileID: 12800000, guid: 13ada97b24b8cf34d8f08c4529a0cdd5, type: 3}
+  - {fileID: 12800000, guid: d3b18dfbbc52786438e41756b857d401, type: 3}
+  - {fileID: 12800000, guid: 8874d90cf90df974680d5b2002306f06, type: 3}
+  - {fileID: 12800000, guid: 63b9db0cd37d48c40ab1970b87fa2376, type: 3}
+  - {fileID: 12800000, guid: 286ac67c63c0a9b4999d383ffac7bb2e, type: 3}
+  - {fileID: 12800000, guid: a88681ac105c75948b5aae044a223d98, type: 3}
+  - {fileID: 12800000, guid: 8464afcc36dc37944b8f73793da68014, type: 3}
+  - {fileID: 12800000, guid: 4557446e89a64174f82b5f2eebb1a692, type: 3}
+  - {fileID: 12800000, guid: b5fe5a7e95f665349b7df54750f7db3e, type: 3}
+  - {fileID: 12800000, guid: d37a9b8e630e3244d9ad56a39e9b290c, type: 3}
+  - {fileID: 12800000, guid: f6ed23ee734cf844092a7a4732f8bfa6, type: 3}
+  - {fileID: 12800000, guid: 6257c31ffb148964a83e959327e86007, type: 3}
+  - {fileID: 12800000, guid: 5556115f40e1c03449998b5590e3d506, type: 3}
+  - {fileID: 12800000, guid: 5108f85f1f65ff64e8b840146ac877bd, type: 3}
+  - {fileID: 12800000, guid: 3213af8f9326f864398b9500eefbbf97, type: 3}
+  - {fileID: 12800000, guid: e458e1ef3ebcedd46bfc093bf41b888f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
