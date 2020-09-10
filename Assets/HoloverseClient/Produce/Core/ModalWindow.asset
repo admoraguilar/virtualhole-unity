@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea69db7d2ac9fd4499b09eaca48f6ae6, type: 3}
   m_Name: ModalWindow
   m_EditorClassIdentifier: 
-  rootCanvasPrefab: {fileID: 0}
+  rootCanvasPrefab: {fileID: 5059647550518324346, guid: 5d434dde270222944bd524de56c5f1d1,
+    type: 3}
   windowPrefabs: []

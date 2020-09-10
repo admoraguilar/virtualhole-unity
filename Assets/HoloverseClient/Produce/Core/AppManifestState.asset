@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AppManifestState
   m_EditorClassIdentifier: 
   _localAppData:
-    versionCode: 
+    versionCode: 0.0.1
     versionNumber: 0
