@@ -11,6 +11,8 @@
 /[Mm]emoryCaptures/
 /[Ss]andbox/
 /[Ss]ervices/
+/[Tt]empAppData/
+
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
