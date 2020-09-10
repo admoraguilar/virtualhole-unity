@@ -6,39 +6,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
 using Midnight.Concurrency;
+using Holoverse.Backend.YouTube;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Holoverse.Scraper
 {
-	[Serializable]
-	public class ChannelInfo
-	{
-		public string url;
-		public string id;
-		public string name;
-		public string avatarUrl;
-	}
-
-	[Serializable]
-	public class ChannelVideo
-	{
-		public string url;
-		public string id;
-		public string title;
-		public string duration;
-		public string viewCount;
-		public string thumbnailUrl;
-		public string channel;
-		public string channelId;
-		public string uploadDate;
-	}
-
 	public class HoloverseScraper : MonoBehaviour
 	{
+		private static string _debugPrepend => $"{nameof(HoloverseScraper)}";
+
 		public TextAsset idolChannelUrlsTxt = null;
 		public TextAsset audienceChannelUrlsTxt = null;
 
@@ -52,7 +30,7 @@ namespace Holoverse.Scraper
 		[ContextMenu("Run")]
 		public void Run()
 		{
-			MLog.Log("Scraping started");
+			MLog.Log($"{_debugPrepend} Scraping started");
 
 			_isStopped = false;
 			TaskExt.FireForget(RunAsync());
@@ -65,78 +43,11 @@ namespace Holoverse.Scraper
 
 					_lastRun = DateTime.Now;
 
-					List<ChannelInfo> idolChannels = new List<ChannelInfo>();
-
-					// idolVideos.json
-					List<ChannelVideo> idolVideos = new List<ChannelVideo>();
-					IReadOnlyList<string> idolChannelUrls = GetNewLineSeparatedValues(idolChannelUrlsTxt.text);
-					await Concurrent.ForEachAsync(
-						idolChannelUrls, 
-						(string url) => {
-							return ScrapeChannel(
-								"Idols", url, 
-								(ChannelInfo info) => { idolChannels.Add(info); },
-								(ChannelVideo video) => { idolVideos.Add(video); }
-							);
-						},
-						5
-					);
-					idolVideos = idolVideos.OrderByDescending((ChannelVideo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
-					string idolVideosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/Idols", "idolVideos.json", false);
-					JsonUtilities.SaveToDisk(idolVideos, new JsonUtilities.SaveToDiskParameters() {
-						filePath = idolVideosJsonPath,
-						onSave = (JsonUtilities.OperationResponse res) => {
-							MLog.Log($"Idol Videos scraped.");
-						}
-					});
-
-					// idolChannels.json
-					idolChannels = idolChannels.OrderBy((ChannelInfo info) => info.name).ToList();
-					string idolChannelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/Idols", "idolChannels.json", false);
-					JsonUtilities.SaveToDisk(idolChannels, new JsonUtilities.SaveToDiskParameters() {
-						filePath = idolChannelsJsonPath,
-						onSave = (JsonUtilities.OperationResponse res) => {
-							MLog.Log($"Idol Channels scraped.");
-						}
-					});
-
-					List<ChannelInfo> audienceChannels = new List<ChannelInfo>();
-
-					// audienceVideos.json
-					List<ChannelVideo> audienceVideos = new List<ChannelVideo>();
-					IReadOnlyList<string> audienceChannelUrls = GetNewLineSeparatedValues(audienceChannelUrlsTxt.text);
-					await Concurrent.ForEachAsync(
-						audienceChannelUrls, 
-						(string url) => {
-							return ScrapeChannel(
-								"Audiences", url,
-								(ChannelInfo info) => { audienceChannels.Add(info); },
-								(ChannelVideo video) => { audienceVideos.Add(video); }
-							);
-						},
-						5
-					);
-					audienceVideos = audienceVideos.OrderByDescending((ChannelVideo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
-					string audienceVideosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/Audiences", "audienceVideos.json", false);
-					JsonUtilities.SaveToDisk(audienceVideos, new JsonUtilities.SaveToDiskParameters() {
-						filePath = audienceVideosJsonPath,
-						onSave = (JsonUtilities.OperationResponse res) => {
-							MLog.Log($"Audience Videos scraped.");
-						}
-					});
-
-					// audienceChannels.json
-					audienceChannels = audienceChannels.OrderBy((ChannelInfo info) => info.name).ToList();
-					string audienceChannelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/Audiences", "audienceChannels.json", false);
-					JsonUtilities.SaveToDisk(audienceChannels, new JsonUtilities.SaveToDiskParameters() {
-						filePath = audienceChannelsJsonPath,
-						onSave = (JsonUtilities.OperationResponse res) => {
-							MLog.Log($"Audience Channels scraped.");
-						}
-					});
+					await ProcessChannelUrls("Idols", idolChannelUrlsTxt);
+					await ProcessChannelUrls("Audiences", audienceChannelUrlsTxt);
 
 					runStopwatch.Stop();
-					MLog.LogWarning($"Scraping run finished at: {runStopwatch.Elapsed}");
+					MLog.LogWarning($"{_debugPrepend} Scraping run finished at: {runStopwatch.Elapsed}");
 
 					DateTime nextRun = _lastRun.AddMinutes(frequencyMinutes);
 					while(DateTime.Now < nextRun && !_isStopped) {
@@ -146,9 +57,47 @@ namespace Holoverse.Scraper
 				}
 			}
 
+			async Task ProcessChannelUrls(string header, TextAsset urlsSource)
+			{
+				List<ChannelInfo> channels = new List<ChannelInfo>();
+
+				// videos.json
+				List<VideoInfo> videos = new List<VideoInfo>();
+				IReadOnlyList<string> channelUrls = GetNewLineSeparatedValues(urlsSource.text);
+				await Concurrent.ForEachAsync(
+					channelUrls,
+					(string url) => {
+						return ScrapeChannel(
+							header, url,
+							(ChannelInfo info) => { channels.Add(info); },
+							(VideoInfo video) => { videos.Add(video); }
+						);
+					},
+					5
+				);
+				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
+				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", false);
+				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters() {
+					filePath = videosJsonPath,
+					onSave = (JsonUtilities.OperationResponse res) => {
+						MLog.Log($"{_debugPrepend} {header} videos scraped.");
+					}
+				});
+
+				// channels.json
+				channels = channels.OrderBy((ChannelInfo info) => info.name).ToList();
+				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", false);
+				JsonUtilities.SaveToDisk(channels, new JsonUtilities.SaveToDiskParameters() {
+					filePath = channelsJsonPath,
+					onSave = (JsonUtilities.OperationResponse res) => {
+						MLog.Log($"{_debugPrepend} {header} channels scraped.");
+					}
+				});
+			}
+
 			async Task ScrapeChannel(
 				string subPath, string channelUrl, Action<ChannelInfo> onChannelScraped = null, 
-				Action<ChannelVideo> onVideoScraped = null)
+				Action<VideoInfo> onVideoScraped = null)
 			{
 				YoutubeClient client = new YoutubeClient();
 				Channel channel = await client.Channels.GetAsync(new ChannelId(channelUrl));
@@ -165,15 +114,15 @@ namespace Holoverse.Scraper
 				JsonUtilities.SaveToDisk(channelInfo, new JsonUtilities.SaveToDiskParameters() {
 					filePath = infoJsonPath,
 					onSave = (JsonUtilities.OperationResponse res) => {
-						MLog.Log($"Channel {channelInfo.name} info scraped.");
+						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} info scraped.");
 					}
 				});
 
 				// videos.json
-				List<ChannelVideo> channelVideos = new List<ChannelVideo>();
+				List<VideoInfo> VideoInfos = new List<VideoInfo>();
 				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl);
 				foreach(Video video in videos) {
-					ChannelVideo channelVideo = new ChannelVideo() {
+					VideoInfo VideoInfo = new VideoInfo() {
 						url = video.Url,
 						id = video.Id,
 						title = video.Title,
@@ -184,15 +133,15 @@ namespace Holoverse.Scraper
 						channelId = video.ChannelId,
 						uploadDate = video.UploadDate.ToString()
 					};
-					channelVideos.Add(channelVideo);
+					VideoInfos.Add(VideoInfo);
 
-					onVideoScraped?.Invoke(channelVideo);
+					onVideoScraped?.Invoke(VideoInfo);
 				}
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", false);
-				JsonUtilities.SaveToDisk(channelVideos, new JsonUtilities.SaveToDiskParameters() {
+				JsonUtilities.SaveToDisk(VideoInfos, new JsonUtilities.SaveToDiskParameters() {
 					filePath = videosJsonPath,
 					onSave = (JsonUtilities.OperationResponse res) => {
-						MLog.Log($"Channel {channelInfo.name} videos scraped.");
+						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} videos scraped.");
 					}
 				});
 			}
@@ -201,7 +150,7 @@ namespace Holoverse.Scraper
 		[ContextMenu("Stop")]
 		public void Stop()
 		{
-			MLog.Log("Scraping stopped");
+			MLog.Log($"{_debugPrepend} Scraping stopped");
 
 			_isStopped = true;
 		}

@@ -1,75 +1,67 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Text;
-using System.Collections;
+using System.Diagnostics;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
-using Holoverse.Scraper;
+using Holoverse.Backend.YouTube;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-public class TestLoader : MonoBehaviour
+namespace Holoverse.Scraper
 {
-	[Header("Single")]
-	public TextAsset videosJson = null;
-
-	[Header("Multiple")]
-	public TextAsset[] videoJsons = null;
-
-	[Header("Debug")]
-	public List<ChannelVideo> loadedVideos = new List<ChannelVideo>();
-
-	[ContextMenu("Load Single")]
-	public void Load()
+	public class TestLoader : MonoBehaviour
 	{
-		Stopwatch stopwatch = new Stopwatch();
-		stopwatch.Start();
+		[Header("Single")]
+		public TextAsset videosJson = null;
 
-		byte[] byteArray = Encoding.UTF8.GetBytes(videosJson.text);
-		using(MemoryStream ms = new MemoryStream(byteArray)) {
-			using(StreamReader sr = new StreamReader(ms)) {
-				using(JsonReader reader = new JsonTextReader(sr)) {
-					JsonSerializer serializer = new JsonSerializer();
-					int count = 0;
+		[Header("Multiple")]
+		public TextAsset[] videoJsons = null;
 
-					while(reader.Read() && count < 50) {
-						if(reader.TokenType == JsonToken.StartObject) {
-							ChannelVideo video = serializer.Deserialize<ChannelVideo>(reader);
-							if(video != null) {
-								loadedVideos.Add(video);
-								count++;
-							}
-						}
-					}
-				}
-			}
+		[Header("Debug")]
+		public List<VideoInfo> loadedVideos = new List<VideoInfo>();
+
+		[ContextMenu("Load Single")]
+		public void Load()
+		{
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			loadedVideos.AddRange(LoadVideoInfo(videosJson.text, 50));
+
+			stopwatch.Stop();
+			MLog.Log($"Load Single: {stopwatch.Elapsed}");
 		}
 
-		stopwatch.Stop();
-		MLog.Log($"Load Single: {stopwatch.Elapsed}");
-	}
+		[ContextMenu("Load Multiple")]
+		public void LoadMultiple()
+		{
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
 
-	[ContextMenu("Load Multiple")]
-	public void LoadMultiple()
-	{
-		Stopwatch stopwatch = new Stopwatch();
-		stopwatch.Start();
+			foreach(TextAsset videoJson in videoJsons) {
+				loadedVideos.AddRange(LoadVideoInfo(videoJson.text, 50));
+			}
 
-		foreach(TextAsset videoJson in videoJsons) {
-			byte[] byteArray = Encoding.UTF8.GetBytes(videoJson.text);
+			stopwatch.Stop();
+			MLog.Log($"Load Multiple: {stopwatch.Elapsed}");
+		}
+
+		private IEnumerable<VideoInfo> LoadVideoInfo(string json, int amount)
+		{
+			List<VideoInfo> result = new List<VideoInfo>();
+
+			byte[] byteArray = Encoding.UTF8.GetBytes(json);
 			using(MemoryStream ms = new MemoryStream(byteArray)) {
 				using(StreamReader sr = new StreamReader(ms)) {
 					using(JsonReader reader = new JsonTextReader(sr)) {
 						JsonSerializer serializer = new JsonSerializer();
 						int count = 0;
 
-						while(reader.Read() && count < 50) {
+						while(reader.Read() && count < amount) {
 							if(reader.TokenType == JsonToken.StartObject) {
-								ChannelVideo video = serializer.Deserialize<ChannelVideo>(reader);
+								VideoInfo video = serializer.Deserialize<VideoInfo>(reader);
 								if(video != null) {
-									loadedVideos.Add(video);
+									result.Add(video);
 									count++;
 								}
 							}
@@ -77,9 +69,8 @@ public class TestLoader : MonoBehaviour
 					}
 				}
 			}
-		}
 
-		stopwatch.Stop();
-		MLog.Log($"Load Multiple: {stopwatch.Elapsed}");
+			return result;
+		}
 	}
 }
