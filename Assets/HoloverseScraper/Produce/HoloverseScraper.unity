@@ -122,6 +122,56 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &381035843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 381035844}
+  - component: {fileID: 381035845}
+  m_Layer: 0
+  m_Name: TestLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &381035844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381035843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &381035845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381035843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44047fd7d1e29ae448337a06b452685e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videosJson: {fileID: 4900000, guid: c887608fc87239c4a97f8395ce12db89, type: 3}
+  videoJsons:
+  - {fileID: 4900000, guid: c9f114d3ec477fa439d619ece16f2228, type: 3}
+  - {fileID: 4900000, guid: 13aa0596ce1ee834ead6d984843edcec, type: 3}
+  - {fileID: 4900000, guid: eb502b848ec870c4e8a63b67d4380da9, type: 3}
+  - {fileID: 4900000, guid: c887608fc87239c4a97f8395ce12db89, type: 3}
+  loadedVideos: []
 --- !u!1 &521336508
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +404,7 @@ RectTransform:
   m_Children:
   - {fileID: 1662637922}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

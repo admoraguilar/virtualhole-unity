@@ -9,9 +9,12 @@ using Midnight.Concurrency;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Holoverse.Scraper
 {
+	[Serializable]
 	public class ChannelInfo
 	{
 		public string url;
@@ -20,6 +23,7 @@ namespace Holoverse.Scraper
 		public string avatarUrl;
 	}
 
+	[Serializable]
 	public class ChannelVideo
 	{
 		public string url;
