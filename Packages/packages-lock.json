@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry"
     },
+    "com.midnight-cigarettes.midnight-unity": {
+      "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.midnight-unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "31921c6a3ca2156dc44e6de388bcb3b6ce128b05"
+    },
     "com.unity.2d.animation": {
       "version": "3.2.4",
       "depth": 1,
@@ -124,6 +131,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.package-validation-suite": {
+      "version": "0.7.10-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "nuget.mono-cecil": "0.1.6-preview"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.11.2",
       "depth": 1,
@@ -166,12 +182,30 @@
         "com.unity.modules.ui": "1.0.0"
       }
     },
+    "com.unity.upm.develop": {
+      "version": "0.1.2-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9",
+        "nuget.mono-cecil": "0.1.6-preview",
+        "com.unity.package-validation-suite": "0.7.10-preview"
+      },
+      "url": "https://packages.unity.com"
+    },
     "jillejr.newtonsoft.json-for-unity": {
       "version": "12.0.301",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://npm.cloudsmith.io/jillejr/newtonsoft-json-for-unity"
+    },
+    "nuget.mono-cecil": {
+      "version": "0.1.6-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
