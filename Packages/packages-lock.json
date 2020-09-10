@@ -8,11 +8,10 @@
       "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry"
     },
     "com.midnight-cigarettes.midnight-unity": {
-      "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.midnight-unity.git",
+      "version": "file:com.midnight-cigarettes.midnight-unity",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "31921c6a3ca2156dc44e6de388bcb3b6ce128b05"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.2d.animation": {
       "version": "3.2.4",
