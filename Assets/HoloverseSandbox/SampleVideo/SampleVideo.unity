@@ -514,6 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6229166c6c269fa4a963bc1733de1c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLoadOnStart: 1
   thumbnailUrl: https://i.ytimg.com/vi/-_xju_AWwH0/mqdefault.jpg
   channelName: "Haato Channel \u8D64\u4E95\u306F\u3042\u3068"
   viewsCount: 115K views
@@ -859,6 +860,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6229166c6c269fa4a963bc1733de1c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isLoadOnStart: 0
   thumbnailUrl: https://i.ytimg.com/vi/-_xju_AWwH0/mqdefault.jpg
   channelName: "Haato Channel \u8D64\u4E95\u306F\u3042\u3068"
   viewsCount: 115K views

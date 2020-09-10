@@ -6,12 +6,16 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using Euphoria.Backend;
 using TMPro;
+using YoutubeExplode;
+using YoutubeExplode.Channels;
+using YoutubeExplode.Videos;
 
 namespace HoloverseSandbox
 {
 	public class VideoLoadTest : MonoBehaviour
 	{
 		[Header("Data")]
+		public bool isLoadOnStart = false;
 		public string thumbnailUrl = string.Empty;
 		public string channelName = string.Empty;
 		public string viewsCount = string.Empty;
@@ -28,9 +32,28 @@ namespace HoloverseSandbox
 			viewsUi.text = viewsCount;
 		}
 
+		private async Task LoadExplodeVideo()
+		{
+			Debug.Log("Load Explode Video");
+
+			YoutubeClient youtubeClient = new YoutubeClient();
+
+			IReadOnlyList<Video> videos = await youtubeClient.Channels.GetUploadsAsync(new ChannelId("UC1CfXB_kRs3C-zaeTG3oGyg"));
+			Debug.Log($"video count: {videos.Count}");
+			//foreach(Video video in videos) {
+			//	Debug.Log($"{video.Title} | {video.Duration} | {video.UploadDate} | {video.Author}");
+			//}
+			Video video = videos[0];
+			thumbnailUi.sprite = await UnityWebRequestUtilities.SendImageRequestAsync(video.Thumbnails.MediumResUrl);
+			channelUi.text = video.Author;
+			viewsUi.text = $"{video.Engagement.ViewCount}";
+		}
+
 		private void Start()
 		{
-			//_ = LoadVideo();
+			if(isLoadOnStart) {
+				_ = LoadExplodeVideo();
+			}
 		}
 
 #if UNITY_EDITOR
@@ -39,6 +62,12 @@ namespace HoloverseSandbox
 		private void Editor_LoadVideo()
 		{
 			_ = LoadVideo();
+		}
+
+		[ContextMenu("Load Explode Video")]
+		private void Editor_LoadExplodeVideo()
+		{
+			_ = LoadExplodeVideo();
 		}
 
 #endif
