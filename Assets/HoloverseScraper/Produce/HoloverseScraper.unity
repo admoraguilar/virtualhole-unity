@@ -165,13 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44047fd7d1e29ae448337a06b452685e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videosJson: {fileID: 4900000, guid: c887608fc87239c4a97f8395ce12db89, type: 3}
-  videoJsons:
-  - {fileID: 4900000, guid: c9f114d3ec477fa439d619ece16f2228, type: 3}
-  - {fileID: 4900000, guid: 13aa0596ce1ee834ead6d984843edcec, type: 3}
-  - {fileID: 4900000, guid: eb502b848ec870c4e8a63b67d4380da9, type: 3}
-  - {fileID: 4900000, guid: c887608fc87239c4a97f8395ce12db89, type: 3}
-  loadedVideos: []
+  videosJson: {fileID: 4900000, guid: 0bb3ff853654f1243ad19107bda6be9c, type: 3}
+  videoJsons: []
 --- !u!1 &521336508
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,6 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e79bf1f825f8d4b939f64873bba772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contentFilterTxt: {fileID: 4900000, guid: 4b55ac6a8cdfc364eaea1ffef11050d3, type: 3}
   idolChannelUrlsTxt: {fileID: 4900000, guid: a35ab7c0db499504cbecc14a71b01023, type: 3}
   audienceChannelUrlsTxt: {fileID: 4900000, guid: 6f5ca1d8cc16fe64fa7b59e2ff548216,
     type: 3}

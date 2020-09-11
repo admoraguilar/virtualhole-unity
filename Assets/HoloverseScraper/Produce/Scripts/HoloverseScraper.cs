@@ -7,6 +7,7 @@ using UnityEngine;
 using Midnight;
 using Midnight.Concurrency;
 using Holoverse.Backend.YouTube;
+using Newtonsoft.Json;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
@@ -17,6 +18,9 @@ namespace Holoverse.Scraper
 	{
 		private static string _debugPrepend => $"{nameof(HoloverseScraper)}";
 
+		public TextAsset contentFilterTxt = null;
+
+		[Space]
 		public TextAsset idolChannelUrlsTxt = null;
 		public TextAsset audienceChannelUrlsTxt = null;
 
@@ -43,8 +47,13 @@ namespace Holoverse.Scraper
 
 					_lastRun = DateTime.Now;
 
-					await ProcessChannelUrls("Idols", idolChannelUrlsTxt);
-					await ProcessChannelUrls("Audiences", audienceChannelUrlsTxt);
+					try {
+						await ProcessChannelGroup("Idols", false, idolChannelUrlsTxt);
+						await ProcessChannelGroup("Audiences", true, audienceChannelUrlsTxt);
+					} catch (Exception e) {
+						MLog.LogError(e.Message);
+						//break;
+					}
 
 					runStopwatch.Stop();
 					MLog.LogWarning($"{_debugPrepend} Scraping run finished at: {runStopwatch.Elapsed}");
@@ -57,18 +66,18 @@ namespace Holoverse.Scraper
 				}
 			}
 
-			async Task ProcessChannelUrls(string header, TextAsset urlsSource)
+			async Task ProcessChannelGroup(string header, bool shouldFilterContent, TextAsset channelGroupSource)
 			{
 				List<ChannelInfo> channels = new List<ChannelInfo>();
 
 				// videos.json
 				List<VideoInfo> videos = new List<VideoInfo>();
-				IReadOnlyList<string> channelUrls = GetNewLineSeparatedValues(urlsSource.text);
+				IReadOnlyList<string> channelUrls = GetNLSV(channelGroupSource.text);
 				await Concurrent.ForEachAsync(
 					channelUrls,
 					(string url) => {
 						return ScrapeChannel(
-							header, url,
+							header, url, shouldFilterContent,
 							(ChannelInfo info) => { channels.Add(info); },
 							(VideoInfo video) => { videos.Add(video); }
 						);
@@ -77,30 +86,35 @@ namespace Holoverse.Scraper
 				);
 				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", false);
-				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters() {
-					filePath = videosJsonPath,
-					onSave = (JsonUtilities.OperationResponse res) => {
+				JsonUtilities.SaveToDisk(videos, CreateSaveToDiskParams(
+					videosJsonPath,
+					(JsonUtilities.OperationResponse res) => {
 						MLog.Log($"{_debugPrepend} {header} videos scraped.");
-					}
-				});
+					})
+				);
 
 				// channels.json
 				channels = channels.OrderBy((ChannelInfo info) => info.name).ToList();
 				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", false);
-				JsonUtilities.SaveToDisk(channels, new JsonUtilities.SaveToDiskParameters() {
-					filePath = channelsJsonPath,
-					onSave = (JsonUtilities.OperationResponse res) => {
+				JsonUtilities.SaveToDisk(channels, CreateSaveToDiskParams(
+					channelsJsonPath,
+					(JsonUtilities.OperationResponse res) => {
 						MLog.Log($"{_debugPrepend} {header} channels scraped.");
-					}
-				});
+					})
+				);
 			}
 
 			async Task ScrapeChannel(
-				string subPath, string channelUrl, Action<ChannelInfo> onChannelScraped = null, 
-				Action<VideoInfo> onVideoScraped = null)
+				string subPath, string channelUrl, bool shouldFilterContent, 
+				Action<ChannelInfo> onChannelScraped = null, Action<VideoInfo> onVideoScraped = null)
 			{
+				// So we can have some form of identification per link
+				// easily keep track of which channels we have
+				channelUrl = GetCSV(channelUrl)[0];
+
 				YoutubeClient client = new YoutubeClient();
 				Channel channel = await client.Channels.GetAsync(new ChannelId(channelUrl));
+				MLog.Log($"{_debugPrepend} Init channel scrape: {channel.Title}");
 
 				// info.json
 				ChannelInfo channelInfo = new ChannelInfo() {
@@ -111,39 +125,74 @@ namespace Holoverse.Scraper
 				};
 				onChannelScraped?.Invoke(channelInfo);
 				string infoJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "info.json", false);
-				JsonUtilities.SaveToDisk(channelInfo, new JsonUtilities.SaveToDiskParameters() {
-					filePath = infoJsonPath,
-					onSave = (JsonUtilities.OperationResponse res) => {
+				JsonUtilities.SaveToDisk(channelInfo, CreateSaveToDiskParams(
+					infoJsonPath,
+					(JsonUtilities.OperationResponse res) => {
 						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} info scraped.");
-					}
-				});
+					})
+				);
 
 				// videos.json
-				List<VideoInfo> VideoInfos = new List<VideoInfo>();
+				List<VideoInfo> videoInfos = new List<VideoInfo>();
 				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl);
 				foreach(Video video in videos) {
-					VideoInfo VideoInfo = new VideoInfo() {
+					// Filter
+					if(shouldFilterContent && contentFilterTxt != null) {
+						List<string> keywords = new List<string>(GetNLSV(contentFilterTxt.text));
+						
+						List<string> sources = new List<string>() {
+							video.Id, video.Title,
+							video.Author, video.Description,
+						};
+						sources.AddRange(video.Keywords);
+
+						if(!IsMatch(keywords, sources, out IEnumerable<string> matches)) {
+							MLog.Log($"{_debugPrepend} Skipping video: {video.Title}, non-holoverse...");
+							continue;
+						} else {
+							MLog.Log($"{_debugPrepend} Video matched with keywords: [{string.Join(",", matches)}]");
+						}
+					}
+
+					VideoInfo videoInfo = new VideoInfo() {
 						url = video.Url,
 						id = video.Id,
 						title = video.Title,
 						duration = video.Duration.ToString(),
 						viewCount = video.Engagement.ViewCount.ToString(),
-						thumbnailUrl = video.Thumbnails.MediumResUrl,
+						mediumResThumbnailUrl = video.Thumbnails.MediumResUrl,
 						channel = video.Author,
 						channelId = video.ChannelId,
 						uploadDate = video.UploadDate.ToString()
 					};
-					VideoInfos.Add(VideoInfo);
+					videoInfos.Add(videoInfo);
 
-					onVideoScraped?.Invoke(VideoInfo);
+					onVideoScraped?.Invoke(videoInfo);
 				}
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", false);
-				JsonUtilities.SaveToDisk(VideoInfos, new JsonUtilities.SaveToDiskParameters() {
-					filePath = videosJsonPath,
-					onSave = (JsonUtilities.OperationResponse res) => {
+				JsonUtilities.SaveToDisk(videoInfos, CreateSaveToDiskParams(
+					videosJsonPath,
+					(JsonUtilities.OperationResponse res) => {
 						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} videos scraped.");
-					}
-				});
+					})
+				);
+			}
+
+			bool IsMatch(
+				IReadOnlyList<string> keywords, IReadOnlyList<string> sources, 
+				out IEnumerable<string> matches)
+			{
+				matches = sources.Where(item => keywords.Any(n => item.IndexOf(n, StringComparison.OrdinalIgnoreCase) >= 0));
+				return matches.Count() > 0;
+			}
+
+			JsonUtilities.SaveToDiskParameters CreateSaveToDiskParams(string filePath, Action<JsonUtilities.OperationResponse> onSave)
+			{
+				JsonUtilities.SaveToDiskParameters saveToDiskParams = new JsonUtilities.SaveToDiskParameters();
+				saveToDiskParams.filePath = filePath;
+				saveToDiskParams.onSave = onSave;
+				saveToDiskParams.jsonSerializerSettings.Formatting = Formatting.None;
+				return saveToDiskParams;
 			}
 		}
 
@@ -155,9 +204,14 @@ namespace Holoverse.Scraper
 			_isStopped = true;
 		}
 
-		private IReadOnlyList<string> GetNewLineSeparatedValues(string content)
+		private IReadOnlyList<string> GetCSV(string content)
 		{
-			return content.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+			return content.Split(',');
+		}
+
+		private IReadOnlyList<string> GetNLSV(string content)
+		{
+			return content.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		private void Start()

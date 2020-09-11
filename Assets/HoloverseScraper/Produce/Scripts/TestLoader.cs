@@ -26,7 +26,7 @@ namespace Holoverse.Scraper
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 
-			loadedVideos.AddRange(LoadVideoInfo(videosJson.text, 50));
+			loadedVideos.AddRange(LoadVideoInfo(videosJson.text, -1));
 
 			stopwatch.Stop();
 			MLog.Log($"Load Single: {stopwatch.Elapsed}");
@@ -57,7 +57,9 @@ namespace Holoverse.Scraper
 						JsonSerializer serializer = new JsonSerializer();
 						int count = 0;
 
-						while(reader.Read() && count < amount) {
+						while(reader.Read()) {
+							if(amount >= 0 && count >= amount) { break; }
+
 							if(reader.TokenType == JsonToken.StartObject) {
 								VideoInfo video = serializer.Deserialize<VideoInfo>(reader);
 								if(video != null) {

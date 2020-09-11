@@ -1,6 +1,8 @@
-﻿
+﻿using System;
+
 namespace Holoverse.Backend.YouTube
 {
+	[Serializable]
 	public class ChannelInfo
 	{
 		public string url;

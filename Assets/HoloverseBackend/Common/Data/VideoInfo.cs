@@ -1,6 +1,8 @@
-﻿
+﻿using System;
+
 namespace Holoverse.Backend.YouTube
 {
+	[Serializable]
 	public class VideoInfo
 	{
 		public string url;
@@ -8,7 +10,7 @@ namespace Holoverse.Backend.YouTube
 		public string title;
 		public string duration;
 		public string viewCount;
-		public string thumbnailUrl;
+		public string mediumResThumbnailUrl;
 		public string channel;
 		public string channelId;
 		public string uploadDate;
