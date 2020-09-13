@@ -165,8 +165,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44047fd7d1e29ae448337a06b452685e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videosJson: {fileID: 4900000, guid: 0bb3ff853654f1243ad19107bda6be9c, type: 3}
-  videoJsons: []
+  videosJson: {fileID: 4900000, guid: d6e423faa79aade4da8f55ab92e14b36, type: 3}
+  videoJsons:
+  - {fileID: 4900000, guid: 1653d8acdf83ac34cb4d26090865abc7, type: 3}
+  - {fileID: 4900000, guid: d6e423faa79aade4da8f55ab92e14b36, type: 3}
+  - {fileID: 4900000, guid: 1653d8acdf83ac34cb4d26090865abc7, type: 3}
+  - {fileID: 4900000, guid: d6e423faa79aade4da8f55ab92e14b36, type: 3}
+  loadedVideos: []
 --- !u!1 &521336508
 GameObject:
   m_ObjectHideFlags: 0
