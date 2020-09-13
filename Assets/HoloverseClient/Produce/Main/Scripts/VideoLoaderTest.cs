@@ -41,6 +41,9 @@ namespace Holoverse.Client
 				thumbnail.sprite = await UnityWebRequestUtilities.SendImageRequestAsync(videoInfo.mediumResThumbnailUrl);
 				title.text = videoInfo.title;
 				channel.text = videoInfo.channel;
+
+				LayoutGroup layoutGroup = button.GetComponent<LayoutGroup>();
+				LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
 			}
 		}
 
