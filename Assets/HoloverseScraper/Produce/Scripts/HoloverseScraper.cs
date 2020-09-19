@@ -86,21 +86,23 @@ namespace Holoverse.Scraper
 				);
 				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", false);
-				JsonUtilities.SaveToDisk(videos, CreateSaveToDiskParams(
-					videosJsonPath,
-					(JsonUtilities.OperationResponse res) => {
-						MLog.Log($"{_debugPrepend} {header} videos scraped.");
-					})
+				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters {
+						filePath = videosJsonPath,
+						onSave = (JsonUtilities.OperationResponse res) => {
+							MLog.Log($"{_debugPrepend} {header} videos scraped.");
+						}
+					}
 				);
 
 				// channels.json
 				channels = channels.OrderBy((ChannelInfo info) => info.name).ToList();
 				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", false);
-				JsonUtilities.SaveToDisk(channels, CreateSaveToDiskParams(
-					channelsJsonPath,
-					(JsonUtilities.OperationResponse res) => {
-						MLog.Log($"{_debugPrepend} {header} channels scraped.");
-					})
+					JsonUtilities.SaveToDisk(channels, new JsonUtilities.SaveToDiskParameters {
+						filePath = channelsJsonPath,
+						onSave = (JsonUtilities.OperationResponse res) => {
+							MLog.Log($"{_debugPrepend} {header} channels scraped.");
+						}
+					}
 				);
 			}
 
@@ -125,11 +127,12 @@ namespace Holoverse.Scraper
 				};
 				onChannelScraped?.Invoke(channelInfo);
 				string infoJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "info.json", false);
-				JsonUtilities.SaveToDisk(channelInfo, CreateSaveToDiskParams(
-					infoJsonPath,
-					(JsonUtilities.OperationResponse res) => {
-						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} info scraped.");
-					})
+				JsonUtilities.SaveToDisk(channelInfo, new JsonUtilities.SaveToDiskParameters {
+						filePath = infoJsonPath,
+						onSave = (JsonUtilities.OperationResponse res) => {
+							MLog.Log($"{_debugPrepend} Channel {channelInfo.name} info scraped.");
+						}
+					}
 				);
 
 				// videos.json
@@ -170,11 +173,12 @@ namespace Holoverse.Scraper
 					onVideoScraped?.Invoke(videoInfo);
 				}
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", false);
-				JsonUtilities.SaveToDisk(videoInfos, CreateSaveToDiskParams(
-					videosJsonPath,
-					(JsonUtilities.OperationResponse res) => {
-						MLog.Log($"{_debugPrepend} Channel {channelInfo.name} videos scraped.");
-					})
+				JsonUtilities.SaveToDisk(videoInfos, new JsonUtilities.SaveToDiskParameters {
+						filePath = videosJsonPath,
+						onSave = (JsonUtilities.OperationResponse res) => {
+							MLog.Log($"{_debugPrepend} Channel {channelInfo.name} videos scraped.");
+						}
+					}
 				);
 			}
 
@@ -184,15 +188,6 @@ namespace Holoverse.Scraper
 			{
 				matches = sources.Where(item => keywords.Any(n => item.IndexOf(n, StringComparison.OrdinalIgnoreCase) >= 0));
 				return matches.Count() > 0;
-			}
-
-			JsonUtilities.SaveToDiskParameters CreateSaveToDiskParams(string filePath, Action<JsonUtilities.OperationResponse> onSave)
-			{
-				JsonUtilities.SaveToDiskParameters saveToDiskParams = new JsonUtilities.SaveToDiskParameters();
-				saveToDiskParams.filePath = filePath;
-				saveToDiskParams.onSave = onSave;
-				saveToDiskParams.jsonSerializerSettings.Formatting = Formatting.None;
-				return saveToDiskParams;
 			}
 		}
 
