@@ -10,7 +10,7 @@ using YoutubeExplode;
 using YoutubeExplode.Channels;
 using YoutubeExplode.Videos;
 
-namespace HoloverseSandbox
+namespace Holoverse.Sandbox
 {
 	public class VideoLoadTest : MonoBehaviour
 	{

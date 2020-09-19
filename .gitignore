@@ -73,3 +73,4 @@ crashlytics-build.properties
 !/Packages/**/*.msb4u.*
 /Assets/Dependencies
 /Assets/Dependencies.meta
+Assets/BuildReports/
