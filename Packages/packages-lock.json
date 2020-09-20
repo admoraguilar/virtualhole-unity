@@ -220,6 +220,12 @@
       "dependencies": {},
       "url": "https://npm.cloudsmith.io/jillejr/newtonsoft-json-for-unity"
     },
+    "jp.setchi.fancyscrollview": {
+      "version": "file:jp.setchi.fancyscrollview@34d45635a6",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "nuget.mono-cecil": {
       "version": "0.1.6-preview",
       "depth": 1,
