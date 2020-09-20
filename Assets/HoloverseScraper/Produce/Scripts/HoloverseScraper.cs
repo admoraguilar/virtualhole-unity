@@ -7,7 +7,6 @@ using UnityEngine;
 using Midnight;
 using Midnight.Concurrency;
 using Holoverse.Backend.YouTube;
-using Newtonsoft.Json;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;

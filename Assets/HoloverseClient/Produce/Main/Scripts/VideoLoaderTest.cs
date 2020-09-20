@@ -1,18 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
+using Midnight.Web;
+using Midnight.Concurrency;
 using Newtonsoft.Json;
 using Holoverse.Backend.YouTube;
 using Holoverse.Client.UI;
-using Euphoria.Backend;
-using FancyScrollView;
 using Newtonsoft.Json.Linq;
-using YoutubeExplode.Videos;
 
 namespace Holoverse.Client
 {
@@ -66,11 +64,12 @@ namespace Holoverse.Client
 				if(!_isInit) {
 					_isInit = true;
 
-					TaskExt.FireForget(UnityWebRequestUtilities.SendLocalTextFileRequestAsync(_filePath));
+					GenericGetWebRequest request = new GenericGetWebRequest();
+					TaskExt.FireForget(request.SendAsync(_filePath));
 
-					MLog.Log($"Test: {UnityWebRequestUtilities.currentTextRequest.downloadProgress}");
-					while(UnityWebRequestUtilities.currentTextRequest.downloadProgress < .1f) {
-						MLog.Log($"Downloading at {UnityWebRequestUtilities.currentTextRequest.downloadProgress}...");
+					MLog.Log($"Test: {request.request.downloadProgress}");
+					while(request.request.downloadProgress < .1f) {
+						MLog.Log($"Downloading at {request.request.downloadProgress}...");
 						await Task.Yield();
 					}
 					MLog.Log("Now streaming!");
@@ -79,7 +78,7 @@ namespace Holoverse.Client
 					if(Application.platform != RuntimePlatform.Android) {
 						stream = _fileStream = new FileStream(_filePath, FileMode.Open);
 					} else {
-						byte[] data = UnityWebRequestUtilities.currentTextRequest.downloadHandler.data;
+						byte[] data = request.request.downloadHandler.data;
 						stream = _memoryStream = new MemoryStream(data);
 					}
 					
@@ -223,7 +222,7 @@ namespace Holoverse.Client
 
 			foreach(VideoInfo videoInfo in await iterator.LoadAsync(videoAmount)) {
 				_cellData.Add(new VideoScrollViewCellData {
-					thumbnail = await UnityWebRequestUtilities.SendImageRequestAsync(videoInfo.mediumResThumbnailUrl),
+					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.mediumResThumbnailUrl),
 					title = videoInfo.title,
 					channel = videoInfo.channel,
 					onClick = () => Application.OpenURL(videoInfo.url)

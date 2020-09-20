@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
-using Euphoria.Backend;
+using Midnight;
+using Midnight.Web;
 using TMPro;
 using YoutubeExplode;
 using YoutubeExplode.Channels;
@@ -27,7 +26,7 @@ namespace Holoverse.Sandbox
 
 		private async Task LoadVideo()
 		{
-			thumbnailUi.sprite = await UnityWebRequestUtilities.SendImageRequestAsync(thumbnailUrl);
+			thumbnailUi.sprite = await ImageGetWebRequest.GetAsync(thumbnailUrl);
 			channelUi.text = channelName;
 			viewsUi.text = viewsCount;
 		}
@@ -44,7 +43,7 @@ namespace Holoverse.Sandbox
 			//	Debug.Log($"{video.Title} | {video.Duration} | {video.UploadDate} | {video.Author}");
 			//}
 			Video video = videos[0];
-			thumbnailUi.sprite = await UnityWebRequestUtilities.SendImageRequestAsync(video.Thumbnails.MediumResUrl);
+			thumbnailUi.sprite = await ImageGetWebRequest.GetAsync(video.Thumbnails.MediumResUrl);
 			channelUi.text = video.Author;
 			viewsUi.text = $"{video.Engagement.ViewCount}";
 		}
