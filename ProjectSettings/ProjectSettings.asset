@@ -6,8 +6,8 @@ PlayerSettings:
   serializedVersion: 20
   productGUID: 1a7394858a699e14194dd956d84bb42d
   AndroidProfiler: 0
-  AndroidFilterTouchesWhenObscured: 0
-  AndroidEnableSustainedPerformanceMode: 0
+  AndroidFilterTouchesWhenObscured: 1
+  AndroidEnableSustainedPerformanceMode: 1
   defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
@@ -703,7 +703,7 @@ PlayerSettings:
   allowUnsafeCode: 0
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
-  gcIncremental: 0
+  gcIncremental: 1
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform:
     : 6
