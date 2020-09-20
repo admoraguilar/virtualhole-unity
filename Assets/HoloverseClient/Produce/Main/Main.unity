@@ -1310,8 +1310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0af2631fdcc014c939954042b1f481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellInterval: 0.66045064
-  scrollOffset: 0.66045064
+  cellInterval: 0.6640625
+  scrollOffset: 0.6640625
   loop: 0
   cellContainer: {fileID: 1074850746}
   reuseCellMarginCount: 0
@@ -1338,12 +1338,14 @@ MonoBehaviour:
   elasticity: 0.1
   mouseScrollSensitivity: 250
   dragScrollSensitivity: 1
+  swipeVelocity: 7
+  swipeVelocityThreshold: 15
   inertia: 1
-  decelerationRate: 0.5
+  decelerationRate: 0.135
   snap:
     Enable: 0
     VelocityThreshold: 0.5
-    Duration: 0.35
+    Duration: 0.3
     Easing: 24
   draggable: 1
   scrollbar: {fileID: 0}

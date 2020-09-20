@@ -56,7 +56,9 @@ namespace FancyScrollView
         }
 
 		[SerializeField] float mouseScrollSensitivity = 250f;
-        [SerializeField] float dragScrollSensitivity = 1f;
+		[SerializeField] float dragScrollSensitivity = 1f;
+		[SerializeField] float swipeVelocity = 3f;
+		[SerializeField] float swipeVelocityThreshold = 15f;
 
         /// <summary>
         /// <see cref="ViewportSize"/> の端から端まで Drag したときのスクロール位置の変化量.
@@ -158,6 +160,7 @@ namespace FancyScrollView
         bool hold;
         bool scrolling;
         bool dragging;
+		float dragTime;
         float velocity;
 
         [Serializable]
@@ -398,6 +401,7 @@ namespace FancyScrollView
 
             scrollStartPosition = currentPosition;
             dragging = true;
+			dragTime = 0f;
             autoScrollState.Reset();
         }
 
@@ -446,7 +450,12 @@ namespace FancyScrollView
                 return;
             }
 
-            dragging = false;
+			if(dragTime <= 0.2f) {
+				var direction = (scrollDirection == ScrollDirection.Horizontal ? -eventData.delta.x : eventData.delta.y);
+				velocity += swipeVelocity * Mathf.Sign(direction);
+			}
+
+			dragging = false;
         }
 
         float CalculateOffset(float position)
@@ -488,6 +497,10 @@ namespace FancyScrollView
         {
             var deltaTime = Time.unscaledDeltaTime;
             var offset = CalculateOffset(currentPosition);
+
+			if(dragging) {
+				dragTime += deltaTime;
+			}
 
             if (autoScrollState.Enable)
             {

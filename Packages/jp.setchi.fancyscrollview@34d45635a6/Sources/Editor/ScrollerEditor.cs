@@ -21,6 +21,8 @@ namespace FancyScrollView
         SerializedProperty elasticity;
 		SerializedProperty mouseScrollSensitivity;
         SerializedProperty dragScrollSensitivity;
+		SerializedProperty swipeVelocity;
+		SerializedProperty swipeVelocityThreshold;
         SerializedProperty inertia;
         SerializedProperty decelerationRate;
         SerializedProperty snap;
@@ -38,6 +40,8 @@ namespace FancyScrollView
             elasticity = serializedObject.FindProperty("elasticity");
 			mouseScrollSensitivity = serializedObject.FindProperty("mouseScrollSensitivity");
 			dragScrollSensitivity = serializedObject.FindProperty("dragScrollSensitivity");
+			swipeVelocity = serializedObject.FindProperty("swipeVelocity");
+			swipeVelocityThreshold = serializedObject.FindProperty("swipeVelocityThreshold");
             inertia = serializedObject.FindProperty("inertia");
             decelerationRate = serializedObject.FindProperty("decelerationRate");
             snap = serializedObject.FindProperty("snap");
@@ -84,6 +88,8 @@ namespace FancyScrollView
             DrawMovementTypeRelatedValue();
 			EditorGUILayout.PropertyField(mouseScrollSensitivity);
             EditorGUILayout.PropertyField(dragScrollSensitivity);
+			EditorGUILayout.PropertyField(swipeVelocity);
+			EditorGUILayout.PropertyField(swipeVelocityThreshold);
             EditorGUILayout.PropertyField(inertia);
             DrawInertiaRelatedValues();
             EditorGUILayout.PropertyField(draggable);
