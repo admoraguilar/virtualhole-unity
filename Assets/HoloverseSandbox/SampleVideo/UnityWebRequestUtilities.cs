@@ -8,8 +8,6 @@ using Midnight;
 
 namespace Euphoria.Backend
 {
-	using UDebug = UnityEngine.Debug;
-
 	public static class UnityWebRequestUtilities
 	{
 		private static string _logPrepend => $"[{typeof(UnityWebRequestUtilities).Name}]";
@@ -35,14 +33,14 @@ namespace Euphoria.Backend
 					isAborted = true;
 				});
 
-				UDebug.Log($"{_logPrepend} Send Start: {url}");
+				MLog.Log($"{_logPrepend} Send Start: {url}");
 
 				Stopwatch stopwatch = new Stopwatch();
 				stopwatch.Start();
 				await webReq.SendWebRequest();
 				stopwatch.Stop();
 
-				UDebug.Log(
+				MLog.Log(
 					$"{_logPrepend} Send Result: {url} {Environment.NewLine}" +
 					$"Seconds: {stopwatch.Elapsed.TotalSeconds:0.00}s {Environment.NewLine}" +
 					$"Size: {ConvertSizeByteToKilobyte(webReq.downloadedBytes):0.00}kb"
@@ -53,7 +51,7 @@ namespace Euphoria.Backend
 					// (e.g)
 					// Listing Page: show a request timeout error modal instead of loading a page.
 					// Library Page: catch the error and just show the library page and not update it with listing content
-					UDebug.LogWarning($"{_logPrepend} {webReq.error}");
+					MLog.LogWarning($"{_logPrepend} {webReq.error}");
 				} else {
 					Texture2D texture2D = DownloadHandlerTexture.GetContent(webReq);
 					sprite = Sprite.Create(
@@ -67,6 +65,48 @@ namespace Euphoria.Backend
 			}
 
 			return sprite;
+		}
+
+		public static UnityWebRequest currentTextRequest = null;
+
+		public static async Task SendLocalTextFileRequestAsync(string url, CancellationToken cancellationToken = default)
+		{
+			UnityWebRequest webReq = UnityWebRequest.Get(url);
+
+			//DownloadHandlerFile downloadHandler = new DownloadHandlerFile(savePath);
+			//downloadHandler.removeFileOnAbort = true;
+			//webReq.downloadHandler = downloadHandler;
+
+			currentTextRequest = webReq;
+			webReq.timeout = 240;
+
+			CancellationTokenRegistration abort = cancellationToken.Register(() => {
+				webReq.Abort();
+			});
+
+			MLog.Log($"{_logPrepend} Send Start: {url}");
+
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+			await webReq.SendWebRequest();
+			stopwatch.Stop();
+
+			MLog.Log(
+				$"{_logPrepend} Send Result: {url} {Environment.NewLine}" +
+				$"Seconds: {stopwatch.Elapsed.TotalSeconds:0.00}s {Environment.NewLine}" +
+				$"Size: {ConvertSizeByteToKilobyte(webReq.downloadedBytes):0.00}kb"
+			);
+
+			if(webReq.isHttpError || webReq.isNetworkError) {
+				// TODO: Handle timeout for different scenarios
+				// (e.g)
+				// Listing Page: show a request timeout error modal instead of loading a page.
+				// Library Page: catch the error and just show the library page and not update it with listing content
+				MLog.LogWarning($"{_logPrepend} {webReq.error}");
+			}
+
+			cancellationToken.ThrowIfCancellationRequested();
+			abort.Dispose();
 		}
 
 		private static double ConvertSizeByteToKilobyte(ulong bytes)
