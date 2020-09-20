@@ -3,47 +3,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Midnight;
-using TMPro;
 using Newtonsoft.Json;
 using Holoverse.Backend.YouTube;
+using Holoverse.Client.UI;
 using Euphoria.Backend;
 
 namespace Holoverse.Client
 {
 	public class VideoLoaderTest : MonoBehaviour
 	{
+		public VideoScrollView videoScrollView = null;
 		public TextAsset videoSource = null;
 		public int videoAmount = 50;
-
-		public RectTransform scrollViewContent = null;
-		public Button prefab = null;
-
-		private List<VideoInfo> _loadedVideos = new List<VideoInfo>();
 
 		private async Task LoadVideos()
 		{
 			MLog.Log($"[{nameof(VideoLoaderTest)}] Loading of videos started");
 
-			_loadedVideos.AddRange(LoadVideoInfo(videoSource.text, videoAmount));
-			foreach(VideoInfo videoInfo in _loadedVideos) {
-				Button button = Instantiate(prefab, scrollViewContent, false);
-				button.gameObject.SetActive(true);
-				button.onClick.AddListener(() => {
-					Application.OpenURL(videoInfo.url);
+			List<VideoScrollViewCellData> videoScrollViewCellData = new List<VideoScrollViewCellData>();
+			foreach(VideoInfo videoInfo in LoadVideoInfo(videoSource.text, videoAmount)) {
+				videoScrollViewCellData.Add(new VideoScrollViewCellData {
+					thumbnail = await UnityWebRequestUtilities.SendImageRequestAsync(videoInfo.mediumResThumbnailUrl),
+					title = videoInfo.title,
+					channel = videoInfo.channel,
+					onClick = () => Application.OpenURL(videoInfo.url)
 				});
-
-				Image thumbnail = button.transform.Find("Thumbnail").GetComponent<Image>();
-				TMP_Text title = button.transform.Find("Title").GetComponent<TMP_Text>();
-				TMP_Text channel = button.transform.Find("Channel").GetComponent<TMP_Text>();
-
-				thumbnail.sprite = await UnityWebRequestUtilities.SendImageRequestAsync(videoInfo.mediumResThumbnailUrl);
-				title.text = videoInfo.title;
-				channel.text = videoInfo.channel;
-
-				LayoutGroup layoutGroup = button.GetComponent<LayoutGroup>();
-				LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+				videoScrollView.UpdateData(videoScrollViewCellData);
 			}
 		}
 
