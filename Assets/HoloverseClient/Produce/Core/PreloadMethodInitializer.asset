@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba23491389e85f0439574e604ceff5d5, type: 3}
   m_Name: PreloadMethodInitializer
   m_EditorClassIdentifier: 
+  _preloadMethodsSource: {fileID: 4900000, guid: 5d449c9e70f1b1d46a04b072a394f51e,
+    type: 3}
