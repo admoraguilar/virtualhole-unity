@@ -17,6 +17,13 @@ namespace FancyScrollView
     /// <typeparam name="TContext"><see cref="Context"/> の型.</typeparam>
     public abstract class FancyCell<TItemData, TContext> : MonoBehaviour where TContext : class, new()
     {
+		protected enum Visibility
+		{
+			None,
+			GameObjectActive,
+			CanvasGroupAlpha
+		};
+
         /// <summary>
         /// このセルで表示しているデータのインデックス.
         /// </summary>
@@ -25,7 +32,38 @@ namespace FancyScrollView
         /// <summary>
         /// このセルの可視状態.
         /// </summary>
-        public virtual bool IsVisible => gameObject.activeSelf;
+        public virtual bool IsVisible
+		{
+			get {
+				if(VisibilityHandling == Visibility.CanvasGroupAlpha) {
+					return CanvasGroup.alpha > 0f;
+				} else {
+					return gameObject.activeSelf;
+				}
+			}
+		}
+
+		protected Visibility VisibilityHandling 
+		{
+			get {
+				if(visibilityHandling == Visibility.None) {
+					visibilityHandling = CanvasGroup != null ? Visibility.CanvasGroupAlpha : Visibility.GameObjectActive;
+				}
+				return visibilityHandling;
+			} 
+		}
+		
+		private Visibility visibilityHandling = Visibility.None;
+
+		protected CanvasGroup CanvasGroup 
+		{ 
+			get {
+				if(canvasGroup == null) { canvasGroup = GetComponent<CanvasGroup>(); }
+				return canvasGroup;
+			}
+		}
+
+		private CanvasGroup canvasGroup = null;
 
         /// <summary>
         /// <see cref="FancyScrollView{TItemData, TContext}.Context"/> の参照.
@@ -44,11 +82,20 @@ namespace FancyScrollView
         /// </summary>
         public virtual void Initialize() { }
 
-        /// <summary>
-        /// このセルの可視状態を設定します.
-        /// </summary>
-        /// <param name="visible">可視状態なら <c>true</c>, 非可視状態なら <c>false</c>.</param>
-        public virtual void SetVisible(bool visible) => gameObject.SetActive(visible);
+		/// <summary>
+		/// このセルの可視状態を設定します.
+		/// </summary>
+		/// <param name="visible">可視状態なら <c>true</c>, 非可視状態なら <c>false</c>.</param>
+		public virtual void SetVisible(bool visible)
+		{
+			if(VisibilityHandling == Visibility.CanvasGroupAlpha) {
+				CanvasGroup.alpha = visible ? 1f : 0f;
+				CanvasGroup.interactable = visible ? true : false;
+				CanvasGroup.blocksRaycasts = visible ? true : false;
+			} else {
+				gameObject.SetActive(visible);
+			}
+		}
 
         /// <summary>
         /// アイテムデータに基づいてこのセルの表示内容を更新します.

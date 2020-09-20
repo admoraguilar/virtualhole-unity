@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using FancyScrollView;
 
@@ -6,6 +7,13 @@ namespace Holoverse.Client.UI
 {
 	public class VideoScrollView : FancyScrollRect<VideoScrollViewCellData, VideoScrollRectContext>
 	{
+		public event Action<float> OnScrollerPositionChanged = delegate { };
+
+		public float itemCount => ItemsSource.Count;
+
+		public float scrollerPosition => Scroller.Position;
+		private float _prevScrollerPosition = 0f;
+
 		protected override float CellSize {
 			get {
 				RectTransform cellPrefabRT = CellPrefab.GetComponent<RectTransform>();
@@ -20,6 +28,13 @@ namespace Holoverse.Client.UI
 		public void UpdateData(IList<VideoScrollViewCellData> items)
 		{
 			UpdateContents(items);
+		}
+
+		private void Update()
+		{
+			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {
+				OnScrollerPositionChanged?.Invoke(_prevScrollerPosition = scrollerPosition);
+			}
 		}
 	}
 }
