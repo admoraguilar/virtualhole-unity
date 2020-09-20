@@ -1310,8 +1310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0af2631fdcc014c939954042b1f481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellInterval: 0.6640625
-  scrollOffset: 0.6640625
+  cellInterval: 0.79812205
+  scrollOffset: 0.79812205
   loop: 0
   cellContainer: {fileID: 1074850746}
   reuseCellMarginCount: 0
@@ -1362,8 +1362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   videoScrollView: {fileID: 969969305}
-  videoSource: {fileID: 4900000, guid: 4dad35cd05788a7449b2d3d1fa8d5885, type: 3}
-  videoAmount: 20
+  videoAmount: 10
 --- !u!1 &986612351
 GameObject:
   m_ObjectHideFlags: 0
