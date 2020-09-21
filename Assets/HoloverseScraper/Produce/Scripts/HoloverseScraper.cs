@@ -209,8 +209,12 @@ namespace Holoverse.Scraper
 			async Task DebugVideo()
 			{
 				YoutubeClient client = new YoutubeClient();
-				Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=ePiRDXav8qo");
-				MLog.Log(video.UploadDate);
+
+				//Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=ePiRDXav8qo");
+				//MLog.Log(video.UploadDate);
+
+				IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=UU1CfXB_kRs3C-zaeTG3oGyg");
+				MLog.Log($"Videos count: {videos.Count}");
 			}
 		}
 
