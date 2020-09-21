@@ -69,7 +69,6 @@ namespace Holoverse.Scraper
 			{
 				List<ChannelInfo> channels = new List<ChannelInfo>();
 
-				// videos.json
 				List<VideoInfo> videos = new List<VideoInfo>();
 				IReadOnlyList<string> channelUrls = GetNLSV(channelGroupSource.text);
 				await Concurrent.ForEachAsync(
@@ -83,6 +82,8 @@ namespace Holoverse.Scraper
 					},
 					5
 				);
+
+				// videos.json
 				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", PathType.Data);
 				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters {
@@ -111,6 +112,7 @@ namespace Holoverse.Scraper
 			{
 				// So we can have some form of identification per link
 				// easily keep track of which channels we have
+				string uploadsPlaylistUrl = GetCSV(channelUrl)[1];
 				channelUrl = GetCSV(channelUrl)[0];
 
 				YoutubeClient client = new YoutubeClient();
@@ -138,7 +140,11 @@ namespace Holoverse.Scraper
 				// videos.json
 				MLog.Log($"{_debugPrepend} [Start] Video infos scrape: {channel.Title}");
 				List<VideoInfo> videoInfos = new List<VideoInfo>();
-				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl);
+
+				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl); // Get by channel url
+				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync(uploadsPlaylistUrl); // Get by uploads playlist
+
+				DateTimeOffset lastVideoDate = default; 
 				foreach(Video video in videos) {
 					// Filter
 					if(shouldFilterContent && contentFilterTxt != null) {
@@ -158,16 +164,26 @@ namespace Holoverse.Scraper
 						}
 					}
 
+					// We process the video date because sometimes
+					// the dates are messed up, so we run a correction to
+					// fix it
+					Video processedVideo = video;
+					if(lastVideoDate != default && processedVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
+						MLog.Log($"Wrong date detected! Fixing {processedVideo.Title}...");
+						processedVideo = await client.Videos.GetAsync(processedVideo.Url);
+					}
+					lastVideoDate = processedVideo.UploadDate;
+
 					VideoInfo videoInfo = new VideoInfo() {
-						url = video.Url,
-						id = video.Id,
-						title = video.Title,
-						duration = video.Duration.ToString(),
-						viewCount = video.Engagement.ViewCount.ToString(),
-						mediumResThumbnailUrl = video.Thumbnails.MediumResUrl,
-						channel = video.Author,
-						channelId = video.ChannelId,
-						uploadDate = video.UploadDate.ToString()
+						url = processedVideo.Url,
+						id = processedVideo.Id,
+						title = processedVideo.Title,
+						duration = processedVideo.Duration.ToString(),
+						viewCount = processedVideo.Engagement.ViewCount.ToString(),
+						mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
+						channel = processedVideo.Author,
+						channelId = processedVideo.ChannelId,
+						uploadDate = processedVideo.UploadDate.ToString()
 					};
 					videoInfos.Add(videoInfo);
 
@@ -210,11 +226,33 @@ namespace Holoverse.Scraper
 			{
 				YoutubeClient client = new YoutubeClient();
 
-				//Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=ePiRDXav8qo");
+				//Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=NwPUjto9j_Q");
 				//MLog.Log(video.UploadDate);
 
-				IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=UU1CfXB_kRs3C-zaeTG3oGyg");
-				MLog.Log($"Videos count: {videos.Count}");
+				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=UUS9uQI-jC3DE0L4IpXyvr6w");
+				//foreach(Video video in videos) {
+				//	MLog.Log(
+				//		$"Title: {video.Title} {Environment.NewLine}" +
+				//		$"UploadDate: {video.UploadDate}"
+				//	);
+				//}
+
+				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync("https://www.youtube.com/channel/UCS9uQI-jC3DE0L4IpXyvr6w");
+				DateTimeOffset lastVideoDate = default;
+				foreach(Video video in videos) {
+					Video currentVideo = video;
+
+					if(lastVideoDate != default && currentVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
+						MLog.Log($"Wrong date detected! Fixing {currentVideo.Title}...");
+						currentVideo = await client.Videos.GetAsync(currentVideo.Url);
+					}
+
+					lastVideoDate = currentVideo.UploadDate;
+					MLog.Log(
+						$"Title: {currentVideo.Title} {Environment.NewLine}" +
+						$"UploadDate: {currentVideo.UploadDate}"
+					);
+				}
 			}
 		}
 

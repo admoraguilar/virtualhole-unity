@@ -623,8 +623,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contentFilterTxt: {fileID: 4900000, guid: 4b55ac6a8cdfc364eaea1ffef11050d3, type: 3}
-  idolChannelUrlsTxt: {fileID: 4900000, guid: a35ab7c0db499504cbecc14a71b01023, type: 3}
-  audienceChannelUrlsTxt: {fileID: 4900000, guid: 6f5ca1d8cc16fe64fa7b59e2ff548216,
+  idolChannelUrlsTxt: {fileID: 4900000, guid: 2d3b9f8e162d425418fcdb0ec821a4c4, type: 3}
+  audienceChannelUrlsTxt: {fileID: 4900000, guid: 6f743c12ab48f3d41bc1f9427bfefec7,
     type: 3}
   shouldRunOnStart: 0
   frequencyMinutes: 5
