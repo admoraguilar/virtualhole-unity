@@ -912,7 +912,7 @@ RectTransform:
   m_Father: {fileID: 1320087173}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.05}
+  m_AnchorMin: {x: 0, y: 0.07}
   m_AnchorMax: {x: 1, y: 0.95}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -1176,8 +1176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0af2631fdcc014c939954042b1f481, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellInterval: 0.86119556
-  scrollOffset: 0.86119556
+  cellInterval: 0.6690572
+  scrollOffset: 0.6690572
   loop: 0
   cellContainer: {fileID: 1074850746}
   reuseCellMarginCount: 0
@@ -1205,7 +1205,7 @@ MonoBehaviour:
   mouseScrollSensitivity: 250
   dragScrollSensitivity: 1
   swipeVelocity: 7
-  swipeVelocityThreshold: 15
+  swipeVelocityThreshold: 20
   inertia: 1
   decelerationRate: 0.135
   snap:
@@ -1227,8 +1227,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7813f9b42ea509740a147b04d61875d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videoScrollView: {fileID: 969969305}
-  videoAmount: 10
+  scrollView: {fileID: 969969305}
+  amountPerLoad: 15
+  cellDistanceToLoad: 7
+  isLoadOnStart: 1
 --- !u!1 &986612351
 GameObject:
   m_ObjectHideFlags: 0

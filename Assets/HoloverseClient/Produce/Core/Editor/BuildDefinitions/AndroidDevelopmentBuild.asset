@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _target: 13
   _scenes: []
-  _scriptingDefineSymbols: []
+  _scriptingDefineSymbols:
+  - MLOG
   _options: 302252813

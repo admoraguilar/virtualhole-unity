@@ -84,7 +84,7 @@ namespace Holoverse.Scraper
 					5
 				);
 				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
-				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", false);
+				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", PathType.Data);
 				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters {
 						filePath = videosJsonPath,
 						onSave = (JsonUtilities.OperationResponse res) => {
@@ -95,7 +95,7 @@ namespace Holoverse.Scraper
 
 				// channels.json
 				channels = channels.OrderBy((ChannelInfo info) => info.name).ToList();
-				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", false);
+				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", PathType.Data);
 					JsonUtilities.SaveToDisk(channels, new JsonUtilities.SaveToDiskParameters {
 						filePath = channelsJsonPath,
 						onSave = (JsonUtilities.OperationResponse res) => {
@@ -125,7 +125,7 @@ namespace Holoverse.Scraper
 					avatarUrl = channel.LogoUrl,
 				};
 				onChannelScraped?.Invoke(channelInfo);
-				string infoJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "info.json", false);
+				string infoJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "info.json", PathType.Data);
 				JsonUtilities.SaveToDisk(channelInfo, new JsonUtilities.SaveToDiskParameters {
 						filePath = infoJsonPath,
 						onSave = (JsonUtilities.OperationResponse res) => {
@@ -171,7 +171,7 @@ namespace Holoverse.Scraper
 
 					onVideoScraped?.Invoke(videoInfo);
 				}
-				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", false);
+				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", PathType.Data);
 				JsonUtilities.SaveToDisk(videoInfos, new JsonUtilities.SaveToDiskParameters {
 						filePath = videosJsonPath,
 						onSave = (JsonUtilities.OperationResponse res) => {
