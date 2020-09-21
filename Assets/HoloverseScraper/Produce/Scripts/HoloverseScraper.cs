@@ -118,6 +118,7 @@ namespace Holoverse.Scraper
 				MLog.Log($"{_debugPrepend} Init channel scrape: {channel.Title}");
 
 				// info.json
+				MLog.Log($"{_debugPrepend} [Start] Channel info scrape: {channel.Title}");
 				ChannelInfo channelInfo = new ChannelInfo() {
 					url = channel.Url,
 					id = channel.Id,
@@ -135,6 +136,7 @@ namespace Holoverse.Scraper
 				);
 
 				// videos.json
+				MLog.Log($"{_debugPrepend} [Start] Video infos scrape: {channel.Title}");
 				List<VideoInfo> videoInfos = new List<VideoInfo>();
 				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl);
 				foreach(Video video in videos) {
@@ -169,6 +171,7 @@ namespace Holoverse.Scraper
 					};
 					videoInfos.Add(videoInfo);
 
+					MLog.Log($"{_debugPrepend} Scrapped video {videoInfo.title} - {videoInfo.channel}");
 					onVideoScraped?.Invoke(videoInfo);
 				}
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{subPath}/{channel.Id}", "videos.json", PathType.Data);
@@ -196,6 +199,19 @@ namespace Holoverse.Scraper
 			MLog.Log($"{_debugPrepend} Scraping stopped");
 
 			_isStopped = true;
+		}
+
+		[ContextMenu("Test Run")]
+		public void TestRun()
+		{
+			TaskExt.FireForget(DebugVideo());
+
+			async Task DebugVideo()
+			{
+				YoutubeClient client = new YoutubeClient();
+				Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=ePiRDXav8qo");
+				MLog.Log(video.UploadDate);
+			}
 		}
 
 		private IReadOnlyList<string> GetCSV(string content)
