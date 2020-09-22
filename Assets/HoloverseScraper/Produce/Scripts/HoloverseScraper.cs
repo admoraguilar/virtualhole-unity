@@ -198,6 +198,8 @@ namespace Holoverse.Scraper
 						}
 					}
 				);
+
+				// livestream.json
 			}
 
 			bool IsMatch(
@@ -237,21 +239,53 @@ namespace Holoverse.Scraper
 				//	);
 				//}
 
-				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync("https://www.youtube.com/channel/UCS9uQI-jC3DE0L4IpXyvr6w");
-				DateTimeOffset lastVideoDate = default;
-				foreach(Video video in videos) {
-					Video currentVideo = video;
+				//IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync("https://www.youtube.com/channel/UCyl1z3jo3XHR1riLFKG5UAg");
+				//DateTimeOffset lastVideoDate = default;
+				//foreach(Video video in videos) {
+				//	Video currentVideo = video;
 
-					if(lastVideoDate != default && currentVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
-						MLog.Log($"Wrong date detected! Fixing {currentVideo.Title}...");
-						currentVideo = await client.Videos.GetAsync(currentVideo.Url);
-					}
+				//	if(lastVideoDate != default && currentVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
+				//		MLog.Log($"Wrong date detected! Fixing {currentVideo.Title}...");
+				//		currentVideo = await client.Videos.GetAsync(currentVideo.Url);
+				//	}
 
-					lastVideoDate = currentVideo.UploadDate;
-					MLog.Log(
-						$"Title: {currentVideo.Title} {Environment.NewLine}" +
-						$"UploadDate: {currentVideo.UploadDate}"
-					);
+				//	lastVideoDate = currentVideo.UploadDate;
+				//	MLog.Log(
+				//		$"Title: {currentVideo.Title} {Environment.NewLine}" +
+				//		$"UploadDate: {currentVideo.UploadDate}"
+				//	);
+				//}
+
+				// live stream test
+				//IReadOnlyList<Video> videos = await client.Search.GetVideosAsync("subaru ch live", 0, 1);
+				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=PLNU1y2zASBktS0XQ7OgWFZZaIOS00Oqib");
+				//foreach(Video video in videos) {
+				//	MLog.Log(
+				//		$"Title: {video.Title} {Environment.NewLine}" +
+				//		$"UploadDate: {video.UploadDate}"
+				//	);
+				//}
+
+				//IReadOnlyList<Broadcast> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
+				IReadOnlyList<Video> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
+				int index = 0;
+				foreach(Broadcast broadcast in broadcasts.Select(v => v as Broadcast)) {
+					MLog.Log($"==Broadcast #{++index}==");
+					MLog.Log($"Id: {broadcast.Id}");
+					MLog.Log($"Title: {broadcast.Title}");
+					MLog.Log($"Author: {broadcast.Author}");
+					MLog.Log($"Channel Id: {broadcast.ChannelId}");
+					MLog.Log($"Upload Date: {broadcast.UploadDate}");
+					MLog.Log($"Is Live: {broadcast.IsLive}");
+					MLog.Log($"Viewer Count: {broadcast.ViewerCount}");
+					MLog.Log($"Schedule: {broadcast.Schedule}");
+					MLog.Log($"Description: {broadcast.Description}");
+					MLog.Log($"Duration: {broadcast.Duration}");
+					MLog.Log($"Thumbnails: {broadcast.Thumbnails.MediumResUrl}");
+					MLog.Log($"Keywords: {string.Join(",", broadcast.Keywords)}");
+					MLog.Log($"Likes: {broadcast.Engagement.LikeCount}");
+					MLog.Log($"Dislikes: {broadcast.Engagement.DislikeCount}");
+					MLog.Log($"View Count: {broadcast.Engagement.ViewCount}");
 				}
 			}
 		}
