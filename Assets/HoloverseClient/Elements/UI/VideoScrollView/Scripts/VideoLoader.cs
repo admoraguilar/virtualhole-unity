@@ -4,7 +4,7 @@ using UnityEngine;
 using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
-using Holoverse.Backend.YouTube;
+using Holoverse.Data.YouTube;
 using Holoverse.Client.UI;
 
 namespace Holoverse.Client

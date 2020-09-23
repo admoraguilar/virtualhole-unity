@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Holoverse.Backend.YouTube
+namespace Holoverse.Data.YouTube
 {
 	[Serializable]
 	public class ChannelInfo

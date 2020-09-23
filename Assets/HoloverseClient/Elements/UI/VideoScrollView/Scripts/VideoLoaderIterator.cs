@@ -8,7 +8,7 @@ using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
 using Newtonsoft.Json;
-using Holoverse.Backend.YouTube;
+using Holoverse.Data.YouTube;
 
 namespace Holoverse.Client
 {

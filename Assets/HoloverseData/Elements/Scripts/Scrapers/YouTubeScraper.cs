@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Midnight;
-using Holoverse.Backend.YouTube;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
 using System.Linq;
 
-namespace Holoverse.Data
+namespace Holoverse.Data.YouTube
 {
 	public class YouTubeScraper
 	{
@@ -51,12 +50,12 @@ namespace Holoverse.Data
 					url = processedVideo.Url,
 					id = processedVideo.Id,
 					title = processedVideo.Title,
-					duration = processedVideo.Duration.ToString(),
-					viewCount = processedVideo.Engagement.ViewCount.ToString(),
+					duration = processedVideo.Duration,
+					viewCount = processedVideo.Engagement.ViewCount,
 					mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
 					channel = processedVideo.Author,
 					channelId = processedVideo.ChannelId,
-					uploadDate = processedVideo.UploadDate.ToString()
+					uploadDate = processedVideo.UploadDate
 				});
 			}
 

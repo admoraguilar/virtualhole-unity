@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
 using Midnight.Concurrency;
-using Holoverse.Backend.YouTube;
+using Holoverse.Data.YouTube;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
@@ -84,7 +84,7 @@ namespace Holoverse.Data
 				);
 
 				// videos.json
-				videos = videos.OrderByDescending((VideoInfo video) => DateTimeOffset.Parse(video.uploadDate)).ToList();
+				videos = videos.OrderByDescending((VideoInfo video) => video.uploadDate).ToList();
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", PathType.Data);
 				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters {
 						filePath = videosJsonPath,
@@ -178,12 +178,12 @@ namespace Holoverse.Data
 						url = processedVideo.Url,
 						id = processedVideo.Id,
 						title = processedVideo.Title,
-						duration = processedVideo.Duration.ToString(),
-						viewCount = processedVideo.Engagement.ViewCount.ToString(),
+						duration = processedVideo.Duration,
+						viewCount = processedVideo.Engagement.ViewCount,
 						mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
 						channel = processedVideo.Author,
 						channelId = processedVideo.ChannelId,
-						uploadDate = processedVideo.UploadDate.ToString()
+						uploadDate = processedVideo.UploadDate
 					};
 					videoInfos.Add(videoInfo);
 

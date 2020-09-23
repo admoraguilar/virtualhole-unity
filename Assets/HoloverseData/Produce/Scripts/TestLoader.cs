@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
-using Holoverse.Backend.YouTube;
+using Holoverse.Data.YouTube;
 using Newtonsoft.Json;
 
 namespace Holoverse.Data
