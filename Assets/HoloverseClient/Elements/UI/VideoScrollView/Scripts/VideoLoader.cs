@@ -4,6 +4,7 @@ using UnityEngine;
 using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
+using Holoverse.Data;
 using Holoverse.Data.YouTube;
 using Holoverse.Client.UI;
 
@@ -19,7 +20,7 @@ namespace Holoverse.Client
 		public bool isLoadOnStart = true;
 
 		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
-		private VideoLoaderIterator _iterator = null;
+		private DataSource<VideoInfo> _videoSource = null;
 		private bool _isLoading = false;
 
 		private void OnScrollerPositionChanged(float position)
@@ -39,8 +40,8 @@ namespace Holoverse.Client
 
 			MLog.Log($"{_debugPrepend} Loading of videos started");
 
-			if(_iterator == null) {
-				_iterator = new VideoLoaderIterator(
+			if(_videoSource == null) {
+				_videoSource = new DataSource<VideoInfo>(
 					PathUtilities.CreateDataPath(
 						string.Empty, "videos.json", 
 						PathType.StreamingAssets
@@ -48,7 +49,7 @@ namespace Holoverse.Client
 				);
 			}
 
-			foreach(VideoInfo videoInfo in await _iterator.LoadAsync(amountPerLoad)) {
+			foreach(VideoInfo videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
 				_cellData.Add(new VideoScrollViewCellData {
 					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.mediumResThumbnailUrl),
 					title = videoInfo.title,

@@ -6,6 +6,7 @@ namespace Holoverse.Data.YouTube
 	{
 		public bool IsLive = false;
 		public long viewerCount = 0;
-		public DateTimeOffset schedule = DateTimeOffset.MinValue;
+		//public DateTimeOffset schedule = DateTimeOffset.MinValue;
+		public string schedule = string.Empty;
 	}
 }

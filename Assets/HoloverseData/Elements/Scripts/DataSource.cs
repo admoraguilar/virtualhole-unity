@@ -8,16 +8,16 @@ using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
 using Newtonsoft.Json;
-using Holoverse.Data.YouTube;
+using Newtonsoft.Json.Linq;
 
-namespace Holoverse.Client
+namespace Holoverse.Data
 {
-	public class VideoLoaderIterator : IList<VideoInfo>, IDisposable
+	public class DataSource<T> : IList<T>, IDisposable
 	{
-		private static string _debugPrepend => $"[{nameof(VideoLoaderIterator)}]";
+		private static string _debugPrepend => $"[{nameof(DataSource<T>)}]";
 
-		private List<VideoInfo> _videoInfos = new List<VideoInfo>();
-		private List<VideoInfo> _subset = new List<VideoInfo>();
+		private List<T> _allList = new List<T>();
+		private List<T> _subsetList = new List<T>();
 
 		private MemoryStream _memoryStream = null;
 		private FileStream _fileStream = null;
@@ -28,20 +28,20 @@ namespace Holoverse.Client
 		private string _url = string.Empty;
 		private bool _isInit = false;
 
-		public VideoLoaderIterator(string url)
+		public T this[int index]
+		{
+			get => _allList[index];
+			set => _allList[index] = value;
+		}
+
+		public int Count => _allList.Count;
+
+		public bool IsReadOnly => ((ICollection<T>)_allList).IsReadOnly;
+
+		public DataSource(string url)
 		{
 			_url = url;
 		}
-
-		public VideoInfo this[int index]
-		{
-			get => _videoInfos[index];
-			set => _videoInfos[index] = value;
-		}
-
-		public int Count => _videoInfos.Count;
-
-		public bool IsReadOnly => ((ICollection<VideoInfo>)_videoInfos).IsReadOnly;
 
 		public void Dispose()
 		{
@@ -62,21 +62,21 @@ namespace Holoverse.Client
 			}
 		}
 
-		public async Task<IEnumerable<VideoInfo>> LoadAsync(int amount)
+		public async Task<IEnumerable<T>> LoadAsync(int amount)
 		{
 			if(!_isInit) {
 				_isInit = true;
 
 				Stream stream = null;
-				bool isLocal = Path.GetPathRoot(_url) != string.Empty ? true : false;
 
+				bool isLocal = Path.GetPathRoot(_url) != string.Empty ? true : false;
 				if(isLocal && Application.platform != RuntimePlatform.Android) {
 					stream = _fileStream = new FileStream(_url, FileMode.Open);
 				} else {
 					GenericGetWebRequest request = new GenericGetWebRequest();
 					TaskExt.FireForget(request.SendAsync(_url));
 
-					MLog.Log($"{_debugPrepend} Iterator started: {request.request.downloadProgress}");
+					MLog.Log($"{_debugPrepend} Loading started: {request.request.downloadProgress}");
 					while(request.request.downloadProgress < .1f) {
 						MLog.Log($"{_debugPrepend} Downloading at {request.request.downloadProgress}...");
 						await Task.Yield();
@@ -92,68 +92,78 @@ namespace Holoverse.Client
 				_jsonSerializer = new JsonSerializer();
 			}
 
-			_subset.Clear();
+			string subsetJson = "[";
+			int subsetJsonObjectsCount = 0;
 			while(_jsonReader.Read()) {
-				if(_subset.Count >= amount) { break; }
+				if(subsetJsonObjectsCount > amount) {
+					subsetJson = subsetJson.Substring(0, subsetJson.Length - 1);
+					subsetJson += "]";
+					break;
+				}
 
 				if(_jsonReader.TokenType == JsonToken.StartObject) {
-					VideoInfo video = _jsonSerializer.Deserialize<VideoInfo>(_jsonReader);
-					if(video != null) { _subset.Add(video); }
+					subsetJsonObjectsCount++;
+					subsetJson += $"{JObject.Load(_jsonReader)},";
 				}
 			}
 
-			_videoInfos.AddRange(_subset);
-			return _subset;
+			_subsetList.Clear();
+
+			IEnumerable<T> subsetObjs = JsonConvert.DeserializeObject<T[]>(subsetJson);
+			_subsetList.AddRange(subsetObjs);
+			_allList.AddRange(subsetObjs);
+
+			return _subsetList;
 		}
 
-		public void Add(VideoInfo item)
+		public void Add(T item)
 		{
-			_videoInfos.Add(item);
+			_allList.Add(item);
 		}
 
 		public void Clear()
 		{
-			_videoInfos.Clear();
+			_allList.Clear();
 		}
 
-		public bool Contains(VideoInfo item)
+		public bool Contains(T item)
 		{
-			return _videoInfos.Contains(item);
+			return _allList.Contains(item);
 		}
 
-		public void CopyTo(VideoInfo[] array, int arrayIndex)
+		public void CopyTo(T[] array, int arrayIndex)
 		{
-			_videoInfos.CopyTo(array, arrayIndex);
+			_allList.CopyTo(array, arrayIndex);
 		}
 
-		public IEnumerator<VideoInfo> GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
-			return _videoInfos.GetEnumerator();
+			return _allList.GetEnumerator();
 		}
 
-		public int IndexOf(VideoInfo item)
+		public int IndexOf(T item)
 		{
-			return _videoInfos.IndexOf(item);
+			return _allList.IndexOf(item);
 		}
 
-		public void Insert(int index, VideoInfo item)
+		public void Insert(int index, T item)
 		{
-			_videoInfos.Insert(index, item);
+			_allList.Insert(index, item);
 		}
 
-		public bool Remove(VideoInfo item)
+		public bool Remove(T item)
 		{
-			return _videoInfos.Remove(item);
+			return _allList.Remove(item);
 		}
 
 		public void RemoveAt(int index)
 		{
-			_videoInfos.RemoveAt(index);
+			_allList.RemoveAt(index);
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return _videoInfos.GetEnumerator();
+			return _allList.GetEnumerator();
 		}
 	}
 }

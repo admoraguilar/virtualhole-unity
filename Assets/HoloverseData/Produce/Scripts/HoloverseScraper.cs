@@ -178,12 +178,12 @@ namespace Holoverse.Data
 						url = processedVideo.Url,
 						id = processedVideo.Id,
 						title = processedVideo.Title,
-						duration = processedVideo.Duration,
+						duration = processedVideo.Duration.ToString(),
 						viewCount = processedVideo.Engagement.ViewCount,
 						mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
 						channel = processedVideo.Author,
 						channelId = processedVideo.ChannelId,
-						uploadDate = processedVideo.UploadDate
+						uploadDate = processedVideo.UploadDate.ToString()
 					};
 					videoInfos.Add(videoInfo);
 
@@ -227,44 +227,6 @@ namespace Holoverse.Data
 			async Task DebugVideo()
 			{
 				YoutubeClient client = new YoutubeClient();
-
-				//Video video = await client.Videos.GetAsync("https://www.youtube.com/watch?v=NwPUjto9j_Q");
-				//MLog.Log(video.UploadDate);
-
-				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=UUS9uQI-jC3DE0L4IpXyvr6w");
-				//foreach(Video video in videos) {
-				//	MLog.Log(
-				//		$"Title: {video.Title} {Environment.NewLine}" +
-				//		$"UploadDate: {video.UploadDate}"
-				//	);
-				//}
-
-				//IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync("https://www.youtube.com/channel/UCyl1z3jo3XHR1riLFKG5UAg");
-				//DateTimeOffset lastVideoDate = default;
-				//foreach(Video video in videos) {
-				//	Video currentVideo = video;
-
-				//	if(lastVideoDate != default && currentVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
-				//		MLog.Log($"Wrong date detected! Fixing {currentVideo.Title}...");
-				//		currentVideo = await client.Videos.GetAsync(currentVideo.Url);
-				//	}
-
-				//	lastVideoDate = currentVideo.UploadDate;
-				//	MLog.Log(
-				//		$"Title: {currentVideo.Title} {Environment.NewLine}" +
-				//		$"UploadDate: {currentVideo.UploadDate}"
-				//	);
-				//}
-
-				// live stream test
-				//IReadOnlyList<Video> videos = await client.Search.GetVideosAsync("subaru ch live", 0, 1);
-				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync("https://www.youtube.com/playlist?list=PLNU1y2zASBktS0XQ7OgWFZZaIOS00Oqib");
-				//foreach(Video video in videos) {
-				//	MLog.Log(
-				//		$"Title: {video.Title} {Environment.NewLine}" +
-				//		$"UploadDate: {video.UploadDate}"
-				//	);
-				//}
 
 				//IReadOnlyList<Broadcast> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
 				IReadOnlyList<Video> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);

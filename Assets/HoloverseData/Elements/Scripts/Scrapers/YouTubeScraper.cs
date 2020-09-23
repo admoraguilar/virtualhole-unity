@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Midnight;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
-using System.Linq;
 
 namespace Holoverse.Data.YouTube
 {
@@ -50,26 +50,37 @@ namespace Holoverse.Data.YouTube
 					url = processedVideo.Url,
 					id = processedVideo.Id,
 					title = processedVideo.Title,
-					duration = processedVideo.Duration,
+					duration = processedVideo.Duration.ToString(),
 					viewCount = processedVideo.Engagement.ViewCount,
 					mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
 					channel = processedVideo.Author,
 					channelId = processedVideo.ChannelId,
-					uploadDate = processedVideo.UploadDate
+					uploadDate = processedVideo.UploadDate.ToString()
 				});
 			}
 
 			return results;
 		}
 
-		public async Task<List<VideoInfo>> ScrapeChannelBroadcasts(string channelUrl)
+		public async Task<List<BroadcastInfo>> ScrapeChannelBroadcasts(string channelUrl)
 		{
-			List<VideoInfo> results = new List<VideoInfo>();
+			List<BroadcastInfo> results = new List<BroadcastInfo>();
 
 			IReadOnlyList<Video> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, BroadcastType.Now);
 			foreach(Broadcast broadcast in broadcasts.Select(v => v as Broadcast)) {
-				results.Add(new VideoInfo {
-					
+				results.Add(new BroadcastInfo {
+					url = broadcast.Url,
+					id = broadcast.Id,
+					title = broadcast.Title,
+					duration = broadcast.Duration.ToString(),
+					viewCount = broadcast.Engagement.ViewCount,
+					mediumResThumbnailUrl = broadcast.Thumbnails.MediumResUrl,
+					channel = broadcast.Author,
+					channelId = broadcast.ChannelId,
+					uploadDate = broadcast.UploadDate.ToString(),
+					IsLive = broadcast.IsLive,
+					viewerCount = broadcast.ViewerCount,
+					schedule = broadcast.Schedule.ToString()
 				});
 			}
 
