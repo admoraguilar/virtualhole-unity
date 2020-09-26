@@ -18,7 +18,7 @@ namespace Holoverse.Data
 		public TextAsset[] videoJsons = null;
 
 		[Header("Debug")]
-		public List<VideoInfo> loadedVideos = new List<VideoInfo>();
+		public List<Video> loadedVideos = new List<Video>();
 
 		[ContextMenu("Load Single")]
 		public void Load()
@@ -46,9 +46,9 @@ namespace Holoverse.Data
 			MLog.Log($"Load Multiple: {stopwatch.Elapsed}");
 		}
 
-		private IEnumerable<VideoInfo> LoadVideoInfo(string json, int amount)
+		private IEnumerable<Video> LoadVideoInfo(string json, int amount)
 		{
-			List<VideoInfo> result = new List<VideoInfo>();
+			List<Video> result = new List<Video>();
 
 			byte[] byteArray = Encoding.UTF8.GetBytes(json);
 			using(MemoryStream ms = new MemoryStream(byteArray)) {
@@ -61,7 +61,7 @@ namespace Holoverse.Data
 							if(amount >= 0 && count >= amount) { break; }
 
 							if(reader.TokenType == JsonToken.StartObject) {
-								VideoInfo video = serializer.Deserialize<VideoInfo>(reader);
+								Video video = serializer.Deserialize<Video>(reader);
 								if(video != null) {
 									result.Add(video);
 									count++;

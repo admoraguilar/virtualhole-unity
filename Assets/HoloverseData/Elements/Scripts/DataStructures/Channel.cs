@@ -3,7 +3,7 @@
 namespace Holoverse.Data.YouTube
 {
 	[Serializable]
-	public class ChannelInfo
+	public class Channel
 	{
 		public string url = string.Empty;
 		public string id = string.Empty;

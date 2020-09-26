@@ -6,6 +6,13 @@ namespace Holoverse.Data
 {
 	public abstract class Filter<T>
 	{
-		public abstract bool IsValid(T item);
+		public bool isOpposite = false;
+
+		public bool IsValid(T item)
+		{
+			return IsValidImpl(item) && !isOpposite;
+		}
+
+		protected abstract bool IsValidImpl(T item);
 	}
 }

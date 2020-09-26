@@ -11,8 +11,12 @@ using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
 
-namespace Holoverse.Data
+namespace Holoverse.Data.YouTube
 {
+	using ExChannel = YoutubeExplode.Channels.Channel;
+	using ExVideo = YoutubeExplode.Videos.Video;
+	using ExBroadcast = YoutubeExplode.Videos.Broadcast;
+
 	public class HoloverseScraper : MonoBehaviour
 	{
 		private static string _debugPrepend => $"{nameof(HoloverseScraper)}";
@@ -67,24 +71,24 @@ namespace Holoverse.Data
 
 			async Task ProcessChannelGroup(string header, bool shouldFilterContent, TextAsset channelGroupSource)
 			{
-				List<ChannelInfo> channels = new List<ChannelInfo>();
+				List<Channel> channels = new List<Channel>();
 
-				List<VideoInfo> videos = new List<VideoInfo>();
+				List<Video> videos = new List<Video>();
 				IReadOnlyList<string> channelUrls = GetNLSV(channelGroupSource.text);
 				await Concurrent.ForEachAsync(
 					channelUrls,
 					(string url) => {
 						return ScrapeChannel(
 							header, url, shouldFilterContent,
-							(ChannelInfo info) => { channels.Add(info); },
-							(VideoInfo video) => { videos.Add(video); }
+							(Channel info) => { channels.Add(info); },
+							(Video video) => { videos.Add(video); }
 						);
 					},
 					5
 				);
 
 				// videos.json
-				videos = videos.OrderByDescending((VideoInfo video) => video.uploadDate).ToList();
+				videos = videos.OrderByDescending((Video video) => video.uploadDate).ToList();
 				string videosJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "videos.json", PathType.Data);
 				JsonUtilities.SaveToDisk(videos, new JsonUtilities.SaveToDiskParameters {
 						filePath = videosJsonPath,
@@ -95,7 +99,7 @@ namespace Holoverse.Data
 				);
 
 				// channels.json
-				channels = channels.OrderBy((ChannelInfo info) => info.name).ToList();
+				channels = channels.OrderBy((Channel info) => info.name).ToList();
 				string channelsJsonPath = PathUtilities.CreateDataPath($"HoloverseScraper/{header}", "channels.json", PathType.Data);
 					JsonUtilities.SaveToDisk(channels, new JsonUtilities.SaveToDiskParameters {
 						filePath = channelsJsonPath,
@@ -107,8 +111,8 @@ namespace Holoverse.Data
 			}
 
 			async Task ScrapeChannel(
-				string subPath, string channelUrl, bool shouldFilterContent, 
-				Action<ChannelInfo> onChannelScraped = null, Action<VideoInfo> onVideoScraped = null)
+				string subPath, string channelUrl, bool shouldFilterContent,
+				Action<Channel> onChannelScraped = null, Action<Video> onVideoScraped = null)
 			{
 				// So we can have some form of identification per link
 				// easily keep track of which channels we have
@@ -116,12 +120,12 @@ namespace Holoverse.Data
 				channelUrl = GetCSV(channelUrl)[0];
 
 				YoutubeClient client = new YoutubeClient();
-				Channel channel = await client.Channels.GetAsync(new ChannelId(channelUrl));
+				ExChannel channel = await client.Channels.GetAsync(new ChannelId(channelUrl));
 				MLog.Log($"{_debugPrepend} Init channel scrape: {channel.Title}");
 
 				// info.json
 				MLog.Log($"{_debugPrepend} [Start] Channel info scrape: {channel.Title}");
-				ChannelInfo channelInfo = new ChannelInfo() {
+				Channel channelInfo = new Channel() {
 					url = channel.Url,
 					id = channel.Id,
 					name = channel.Title,
@@ -139,17 +143,17 @@ namespace Holoverse.Data
 
 				// videos.json
 				MLog.Log($"{_debugPrepend} [Start] Video infos scrape: {channel.Title}");
-				List<VideoInfo> videoInfos = new List<VideoInfo>();
+				List<Video> videoInfos = new List<Video>();
 
-				IReadOnlyList<Video> videos = await client.Channels.GetUploadsAsync(channelUrl); // Get by channel url
+				IReadOnlyList<ExVideo> videos = await client.Channels.GetUploadsAsync(channelUrl); // Get by channel url
 				//IReadOnlyList<Video> videos = await client.Playlists.GetVideosAsync(uploadsPlaylistUrl); // Get by uploads playlist
 
 				DateTimeOffset lastVideoDate = default; 
-				foreach(Video video in videos) {
+				foreach(ExVideo video in videos) {
 					// Filter
 					if(shouldFilterContent && contentFilterTxt != null) {
 						List<string> keywords = new List<string>(GetNLSV(contentFilterTxt.text));
-						
+
 						List<string> sources = new List<string>() {
 							video.Id, video.Title,
 							video.Author, video.Description,
@@ -167,14 +171,14 @@ namespace Holoverse.Data
 					// We process the video date because sometimes
 					// the dates are messed up, so we run a correction to
 					// fix it
-					Video processedVideo = video;
+					ExVideo processedVideo = video;
 					if(lastVideoDate != default && processedVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
 						MLog.Log($"Wrong date detected! Fixing {processedVideo.Title}...");
 						processedVideo = await client.Videos.GetAsync(processedVideo.Url);
 					}
 					lastVideoDate = processedVideo.UploadDate;
 
-					VideoInfo videoInfo = new VideoInfo() {
+					Video videoInfo = new Video() {
 						url = processedVideo.Url,
 						id = processedVideo.Id,
 						title = processedVideo.Title,
@@ -230,9 +234,9 @@ namespace Holoverse.Data
 				YoutubeClient client = new YoutubeClient();
 
 				//IReadOnlyList<Broadcast> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
-				IReadOnlyList<Video> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
+				IReadOnlyList<ExVideo> broadcasts = await client.Channels.GetBroadcastsAsync("UCyl1z3jo3XHR1riLFKG5UAg", BroadcastType.Now);
 				int index = 0;
-				foreach(Broadcast broadcast in broadcasts.Select(v => v as Broadcast)) {
+				foreach(ExBroadcast broadcast in broadcasts.Select(v => v as ExBroadcast)) {
 					MLog.Log($"==Broadcast #{++index}==");
 					MLog.Log($"Id: {broadcast.Id}");
 					MLog.Log($"Title: {broadcast.Title}");

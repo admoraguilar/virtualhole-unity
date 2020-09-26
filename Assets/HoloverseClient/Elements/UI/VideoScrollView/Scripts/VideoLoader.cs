@@ -20,7 +20,7 @@ namespace Holoverse.Client
 		public bool isLoadOnStart = true;
 
 		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
-		private Container<VideoInfo> _videoSource = null;
+		private Container<Video> _videoSource = null;
 		private bool _isLoading = false;
 
 		private void OnScrollerPositionChanged(float position)
@@ -41,7 +41,7 @@ namespace Holoverse.Client
 			MLog.Log($"{_debugPrepend} Loading of videos started");
 
 			if(_videoSource == null) {
-				_videoSource = new Container<VideoInfo>(
+				_videoSource = new Container<Video>(
 					PathUtilities.CreateDataPath(
 						string.Empty, "videos.json", 
 						PathType.StreamingAssets
@@ -49,7 +49,7 @@ namespace Holoverse.Client
 				);
 			}
 
-			foreach(VideoInfo videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
+			foreach(Video videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
 				_cellData.Add(new VideoScrollViewCellData {
 					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.mediumResThumbnailUrl),
 					title = videoInfo.title,

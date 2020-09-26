@@ -2,7 +2,7 @@
 
 namespace Holoverse.Data.YouTube
 {
-	public class BroadcastInfo : VideoInfo
+	public class Broadcast : Video
 	{
 		public bool IsLive = false;
 		public long viewerCount = 0;

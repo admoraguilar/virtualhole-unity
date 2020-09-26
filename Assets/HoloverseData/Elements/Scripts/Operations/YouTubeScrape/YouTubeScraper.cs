@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using Midnight;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
-using YoutubeExplode.Channels;
 
 namespace Holoverse.Data.YouTube
 {
+	using ExChannel = YoutubeExplode.Channels.Channel;
+	using ExVideo = YoutubeExplode.Videos.Video;
+	using ExBroadcast = YoutubeExplode.Videos.Broadcast;
+
 	public class YouTubeScraper
 	{
 		private YoutubeClient _client = null;
@@ -18,10 +21,10 @@ namespace Holoverse.Data.YouTube
 			_client = new YoutubeClient();
 		}
 
-		public async Task<ChannelInfo> GetChannelInfo(string channelUrl)
+		public async Task<Channel> GetChannelInfo(string channelUrl)
 		{
-			Channel channel = await _client.Channels.GetAsync(channelUrl);
-			return new ChannelInfo {
+			ExChannel channel = await _client.Channels.GetAsync(channelUrl);
+			return new Channel {
 				url = channel.Url,
 				id = channel.Id,
 				name = channel.Title,
@@ -29,24 +32,24 @@ namespace Holoverse.Data.YouTube
 			};
 		}
 
-		public async Task<List<VideoInfo>> GetChannelVideos(string channelUrl)
+		public async Task<List<Video>> GetChannelVideos(string channelUrl)
 		{
-			List<VideoInfo> results = new List<VideoInfo>();
+			List<Video> results = new List<Video>();
 			
-			IReadOnlyList<Video> videos = await _client.Channels.GetUploadsAsync(channelUrl);
+			IReadOnlyList<ExVideo> videos = await _client.Channels.GetUploadsAsync(channelUrl);
 			DateTimeOffset lastVideoDate = default;
-			foreach(Video video in videos) {
+			foreach(ExVideo video in videos) {
 				// We process the video date because sometimes
 				// the dates are messed up, so we run a correction to
 				// fix it
-				Video processedVideo = video;
+				ExVideo processedVideo = video;
 				if(lastVideoDate != default && processedVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
 					MLog.Log($"Wrong date detected! Fixing {processedVideo.Title}...");
 					processedVideo = await _client.Videos.GetAsync(processedVideo.Url);
 				}
 				lastVideoDate = processedVideo.UploadDate;
 
-				results.Add(new VideoInfo {
+				results.Add(new Video {
 					url = processedVideo.Url,
 					id = processedVideo.Id,
 					title = processedVideo.Title,
@@ -62,23 +65,23 @@ namespace Holoverse.Data.YouTube
 			return results;
 		}
 
-		public async Task<List<BroadcastInfo>> GetChannelLiveBroadcasts(string channelUrl)
+		public async Task<List<Broadcast>> GetChannelLiveBroadcasts(string channelUrl)
 		{
 			return await GetChannelBroadcasts(channelUrl, BroadcastType.Now);
 		}
 
-		public async Task<List<BroadcastInfo>> GetChannelUpcomingBroadcasts(string channelUrl)
+		public async Task<List<Broadcast>> GetChannelUpcomingBroadcasts(string channelUrl)
 		{
 			return await GetChannelBroadcasts(channelUrl, BroadcastType.Upcoming);
 		}
 
-		private async Task<List<BroadcastInfo>> GetChannelBroadcasts(string channelUrl, BroadcastType type)
+		private async Task<List<Broadcast>> GetChannelBroadcasts(string channelUrl, BroadcastType type)
 		{
-			List<BroadcastInfo> results = new List<BroadcastInfo>();
+			List<Broadcast> results = new List<Broadcast>();
 
-			IReadOnlyList<Video> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, type);
-			foreach(Broadcast broadcast in broadcasts.Select(v => v as Broadcast)) {
-				results.Add(new BroadcastInfo {
+			IReadOnlyList<ExVideo> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, type);
+			foreach(ExBroadcast broadcast in broadcasts.Select(v => v as ExBroadcast)) {
+				results.Add(new Broadcast {
 					url = broadcast.Url,
 					id = broadcast.Id,
 					title = broadcast.Title,
