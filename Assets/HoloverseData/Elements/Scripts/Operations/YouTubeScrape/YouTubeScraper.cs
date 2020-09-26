@@ -18,7 +18,7 @@ namespace Holoverse.Data.YouTube
 			_client = new YoutubeClient();
 		}
 
-		public async Task<ChannelInfo> ScrapeChannelInfo(string channelUrl)
+		public async Task<ChannelInfo> GetChannelInfo(string channelUrl)
 		{
 			Channel channel = await _client.Channels.GetAsync(channelUrl);
 			return new ChannelInfo {
@@ -29,7 +29,7 @@ namespace Holoverse.Data.YouTube
 			};
 		}
 
-		public async Task<List<VideoInfo>> ScrapeChannelVideos(string channelUrl)
+		public async Task<List<VideoInfo>> GetChannelVideos(string channelUrl)
 		{
 			List<VideoInfo> results = new List<VideoInfo>();
 			
@@ -62,11 +62,21 @@ namespace Holoverse.Data.YouTube
 			return results;
 		}
 
-		public async Task<List<BroadcastInfo>> ScrapeChannelBroadcasts(string channelUrl)
+		public async Task<List<BroadcastInfo>> GetChannelLiveBroadcasts(string channelUrl)
+		{
+			return await GetChannelBroadcasts(channelUrl, BroadcastType.Now);
+		}
+
+		public async Task<List<BroadcastInfo>> GetChannelUpcomingBroadcasts(string channelUrl)
+		{
+			return await GetChannelBroadcasts(channelUrl, BroadcastType.Upcoming);
+		}
+
+		private async Task<List<BroadcastInfo>> GetChannelBroadcasts(string channelUrl, BroadcastType type)
 		{
 			List<BroadcastInfo> results = new List<BroadcastInfo>();
 
-			IReadOnlyList<Video> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, BroadcastType.Now);
+			IReadOnlyList<Video> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, type);
 			foreach(Broadcast broadcast in broadcasts.Select(v => v as Broadcast)) {
 				results.Add(new BroadcastInfo {
 					url = broadcast.Url,

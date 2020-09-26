@@ -12,9 +12,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Holoverse.Data
 {
-	public class DataSource<T> : IList<T>, IDisposable
+	public class Container<T> : IList<T>, IDisposable
 	{
-		private static string _debugPrepend => $"[{nameof(DataSource<T>)}]";
+		private static string _debugPrepend => $"[{nameof(Container<T>)}]";
 
 		private List<T> _allList = new List<T>();
 		private List<T> _subsetList = new List<T>();
@@ -38,7 +38,7 @@ namespace Holoverse.Data
 
 		public bool IsReadOnly => ((ICollection<T>)_allList).IsReadOnly;
 
-		public DataSource(string url)
+		public Container(string url)
 		{
 			_url = url;
 		}

@@ -8,6 +8,7 @@ namespace Holoverse.Data.YouTube
 		public string url = string.Empty;
 		public string id = string.Empty;
 		public string title = string.Empty;
+		public string description = string.Empty;
 		//public TimeSpan duration = TimeSpan.Zero;
 		public string duration = string.Empty;
 		public long viewCount = 0;

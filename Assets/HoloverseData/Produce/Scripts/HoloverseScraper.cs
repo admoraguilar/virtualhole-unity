@@ -178,6 +178,7 @@ namespace Holoverse.Data
 						url = processedVideo.Url,
 						id = processedVideo.Id,
 						title = processedVideo.Title,
+						description = processedVideo.Description,
 						duration = processedVideo.Duration.ToString(),
 						viewCount = processedVideo.Engagement.ViewCount,
 						mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
