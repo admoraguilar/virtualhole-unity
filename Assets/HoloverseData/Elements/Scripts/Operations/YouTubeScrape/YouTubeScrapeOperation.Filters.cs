@@ -4,21 +4,27 @@ namespace Holoverse.Data.YouTube
 {
 	public partial class YouTubeScrapeOperation
 	{
-		public class ChannelIdFilter : ChannelFilter
+		public class ChannelIdFilter<T> : ChannelFilter<T>
+			where T : Video
 		{
 			public ChannelIdFilter(Channel channel) : base(channel) { }
 
-			protected override bool IsValidImpl(Video video)
+			public ChannelIdFilter(IEnumerable<Channel> channels) : base(channels) { }
+
+			protected override bool IsValidImpl(T video)
 			{
 				return channels.Exists((Channel channel) => video.channelId.Contains(channel.id));
 			}
 		}
 
-		public class ChannelMatchFilter : ChannelFilter
+		public class ChannelMatchFilter<T> : ChannelFilter<T>
+			where T : Video
 		{
 			public ChannelMatchFilter(Channel channel) : base(channel) { }
 
-			protected override bool IsValidImpl(Video video)
+			public ChannelMatchFilter(IEnumerable<Channel> channels) : base(channels) { }
+
+			protected override bool IsValidImpl(T video)
 			{
 				return channels.Exists(
 					(Channel channel) => {
@@ -33,7 +39,8 @@ namespace Holoverse.Data.YouTube
 			}
 		}
 
-		public abstract class ChannelFilter : Filter<Video>
+		public abstract class ChannelFilter<T> : Filter<T>
+			where T : Video
 		{
 			public List<Channel> channels { get; protected set; } = null;
 
