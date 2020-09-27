@@ -39,7 +39,7 @@
   <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="*">
     <ExcludeAssets>all</ExcludeAssets>
   </PackageReference>
-  <PackageReference Include="YoutubeExplode" Version="5.1.5" />
+  <PackageReference Include="YoutubeExplode" Version="5.1.5.1" />
   </ItemGroup>
 
 	<!-- SDK.targets is imported inside this props file -->

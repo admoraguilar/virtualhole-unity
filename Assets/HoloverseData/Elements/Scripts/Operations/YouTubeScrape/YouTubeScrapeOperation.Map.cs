@@ -36,14 +36,19 @@ namespace Holoverse.Data.YouTube
 				community.filters.Add(new ChannelIdFilter<Video>(
 					settings.community.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
 				));
+				community.filters.Add(new ChannelMatchFilter<Video>(
+					settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+				));
 
 				live.filters.Add(new ChannelIdFilter<Broadcast>(
 					settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
 				));
+				live.filters.Add(new LiveBroadcastFilter<Broadcast>());
 
 				schedule.filters.Add(new ChannelIdFilter<Broadcast>(
 					settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
 				));
+				schedule.filters.Add(new LiveBroadcastFilter<Broadcast>() { isOpposite = true });
 			}
 
 			public override void Add(Video video)
@@ -81,8 +86,10 @@ namespace Holoverse.Data.YouTube
 				anime.filters.Add(new ChannelMatchFilter<Video>(channel));
 
 				live.filters.Add(new ChannelIdFilter<Broadcast>(channel));
+				live.filters.Add(new LiveBroadcastFilter<Broadcast>());
 				
 				schedule.filters.Add(new ChannelIdFilter<Broadcast>(channel));
+				schedule.filters.Add(new LiveBroadcastFilter<Broadcast>() { isOpposite = true });
 			}
 		}
 
@@ -105,15 +112,15 @@ namespace Holoverse.Data.YouTube
 
 			public virtual void Add(Video video)
 			{
-				discover.Add(video);
-				community.Add(video);
-				anime.Add(video);
+				discover.Add(video, (Video v) => v.description = string.Empty);
+				community.Add(video, (Video v) => v.description = string.Empty);
+				anime.Add(video, (Video v) => v.description = string.Empty);
 			}
 
 			public virtual void Add(Broadcast broadcast)
 			{
-				live.Add(broadcast);
-				schedule.Add(broadcast);
+				live.Add(broadcast, (Broadcast b) => b.description = string.Empty);
+				schedule.Add(broadcast, (Broadcast b) => b.description = string.Empty);
 			}
 
 			public virtual void Save()

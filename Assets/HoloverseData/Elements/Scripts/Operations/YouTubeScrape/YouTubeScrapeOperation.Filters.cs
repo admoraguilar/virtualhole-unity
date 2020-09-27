@@ -4,6 +4,14 @@ namespace Holoverse.Data.YouTube
 {
 	public partial class YouTubeScrapeOperation
 	{
+		public class LiveBroadcastFilter<T> : Filter<Broadcast>
+		{
+			protected override bool IsValidImpl(Broadcast broadcast)
+			{
+				return broadcast.IsLive;
+			}
+		}
+
 		public class ChannelIdFilter<T> : ChannelFilter<T>
 			where T : Video
 		{

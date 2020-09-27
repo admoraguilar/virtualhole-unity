@@ -5,7 +5,7 @@ namespace Holoverse.Data
 	{
 		public bool isOpposite = false;
 
-		public bool IsValid(T item) => IsValidImpl(item) && !isOpposite;
+		public bool IsValid(T item) => isOpposite ? !IsValidImpl(item) : IsValidImpl(item);
 
 		protected abstract bool IsValidImpl(T item);
 	}

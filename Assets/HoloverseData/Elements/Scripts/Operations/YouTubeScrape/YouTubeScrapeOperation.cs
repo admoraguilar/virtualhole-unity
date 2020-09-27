@@ -14,17 +14,20 @@ using System.Linq;
 
 namespace Holoverse.Data.YouTube
 {
+	using ExChannel = YoutubeExplode.Channels.Channel;
+	using ExVideo = YoutubeExplode.Videos.Video;
+	using ExBroadcast = YoutubeExplode.Videos.Broadcast;
+
 	public partial class YouTubeScrapeOperation
 	{
+		private YoutubeClient _client = null;
 		private YouTubeScraperSettings _settings = null;
-		private YouTubeScraper _scraper = null;
 		private AggregateMap _map = null;
 
 		public YouTubeScrapeOperation(YouTubeScraperSettings settings)
 		{
+			_client = new YoutubeClient();
 			_settings = settings;
-			_scraper = new YouTubeScraper();
-
 			_map = new AggregateMap(
 				PathUtilities.CreateDataPath("Holoverse", "", PathType.Data),
 				settings
@@ -49,21 +52,21 @@ namespace Holoverse.Data.YouTube
 
 			foreach(string channelUrl in channelUrls) {
 				MLog.Log($"VIDEOS: {channelUrl}");
-				List<Video> videos = await Retry(() => _scraper.GetChannelVideos(channelUrl));
+				List<Video> videos = await Retry(() => GetChannelVideos(channelUrl));
 				videos.ForEach((Video video) => {
 					MLog.Log($"Scraping ARCHIVE video: {video.channel} | {video.title}");
 					_map.Add(video);
 				});
 
 				MLog.Log($"UPCOMING broadcast: {channelUrl}");
-				List<Broadcast> upcomingBroadcasts = await Retry(() => _scraper.GetChannelUpcomingBroadcasts(channelUrl));
+				List<Broadcast> upcomingBroadcasts = await Retry(() => GetChannelUpcomingBroadcasts(channelUrl));
 				upcomingBroadcasts.ForEach((Broadcast broadcast) => {
 					MLog.Log($"Scraping UPCOMING broadcast: {broadcast.channel} | {broadcast.title}");
 					_map.Add(broadcast);
 				});
 
 				MLog.Log($"NOW broadcast: {channelUrl}");
-				List<Broadcast> liveBroadcasts = await Retry(() => _scraper.GetChannelLiveBroadcasts(channelUrl));
+				List<Broadcast> liveBroadcasts = await Retry(() => GetChannelLiveBroadcasts(channelUrl));
 				liveBroadcasts.ForEach((Broadcast broadcast) => {
 					MLog.Log($"Scraping NOW broadcast: {broadcast.channel} | {broadcast.title}");
 					_map.Add(broadcast);
@@ -90,6 +93,87 @@ namespace Holoverse.Data.YouTube
 		{
 			MLog.Log("Saving scraped data...");
 			_map.Save();
+		}
+
+		public async Task<Channel> GetChannelInfo(string channelUrl)
+		{
+			ExChannel channel = await _client.Channels.GetAsync(channelUrl);
+			return new Channel {
+				url = channel.Url,
+				id = channel.Id,
+				name = channel.Title,
+				avatarUrl = channel.LogoUrl
+			};
+		}
+
+		public async Task<List<Video>> GetChannelVideos(string channelUrl)
+		{
+			List<Video> results = new List<Video>();
+
+			IReadOnlyList<ExVideo> videos = await _client.Channels.GetUploadsAsync(channelUrl);
+			DateTimeOffset lastVideoDate = default;
+			foreach(ExVideo video in videos) {
+				// We process the video date because sometimes
+				// the dates are messed up, so we run a correction to
+				// fix it
+				ExVideo processedVideo = video;
+				if(lastVideoDate != default && processedVideo.UploadDate.Subtract(lastVideoDate).TotalDays > 60) {
+					MLog.Log($"Wrong date detected! Fixing {processedVideo.Title}...");
+					processedVideo = await _client.Videos.GetAsync(processedVideo.Url);
+				}
+				lastVideoDate = processedVideo.UploadDate;
+
+				results.Add(new Video {
+					url = processedVideo.Url,
+					id = processedVideo.Id,
+					title = processedVideo.Title,
+					description = processedVideo.Description,
+					duration = processedVideo.Duration.ToString(),
+					viewCount = processedVideo.Engagement.ViewCount,
+					mediumResThumbnailUrl = processedVideo.Thumbnails.MediumResUrl,
+					channel = processedVideo.Author,
+					channelId = processedVideo.ChannelId,
+					uploadDate = processedVideo.UploadDate.ToString()
+				});
+			}
+
+			return results;
+		}
+
+		public async Task<List<Broadcast>> GetChannelLiveBroadcasts(string channelUrl)
+		{
+			return await GetChannelBroadcasts(channelUrl, BroadcastType.Now);
+		}
+
+		public async Task<List<Broadcast>> GetChannelUpcomingBroadcasts(string channelUrl)
+		{
+			return await GetChannelBroadcasts(channelUrl, BroadcastType.Upcoming);
+		}
+
+		private async Task<List<Broadcast>> GetChannelBroadcasts(string channelUrl, BroadcastType type)
+		{
+			List<Broadcast> results = new List<Broadcast>();
+
+			IReadOnlyList<ExVideo> broadcasts = await _client.Channels.GetBroadcastsAsync(channelUrl, type);
+			foreach(ExBroadcast broadcast in broadcasts.Select(v => v as ExBroadcast)) {
+				results.Add(new Broadcast {
+					url = broadcast.Url,
+					id = broadcast.Id,
+					title = broadcast.Title,
+					description = broadcast.Description,
+					duration = broadcast.Duration.ToString(),
+					viewCount = broadcast.Engagement.ViewCount,
+					mediumResThumbnailUrl = broadcast.Thumbnails.MediumResUrl,
+					channel = broadcast.Author,
+					channelId = broadcast.ChannelId,
+					uploadDate = broadcast.UploadDate.ToString(),
+					IsLive = broadcast.IsLive,
+					viewerCount = broadcast.ViewerCount,
+					schedule = broadcast.Schedule.ToString()
+				});
+			}
+
+			return results;
 		}
 	}
 }

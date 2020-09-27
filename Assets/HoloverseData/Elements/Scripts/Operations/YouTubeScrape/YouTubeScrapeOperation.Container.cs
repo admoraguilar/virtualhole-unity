@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Midnight;
 
@@ -25,10 +26,16 @@ namespace Holoverse.Data.YouTube
 
 			public void Add(T item)
 			{
+				Add(item, null);
+			}
+
+			public void Add(T item, Action<T> onProcess = null)
+			{
 				foreach(Filter<T> filter in filters) {
 					if(!filter.IsValid(item)) { return; }
 				}
 
+				if(onProcess != null) { onProcess?.Invoke(item); }
 				_allList.Add(item);
 			}
 
