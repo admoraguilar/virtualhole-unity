@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Midnight;
 
 namespace Holoverse.Data.YouTube
@@ -9,7 +10,7 @@ namespace Holoverse.Data.YouTube
 	{
 		public class Container<T> : IList<T>
 		{
-			public List<Filter<T>> filters = new List<Filter<T>>();
+			public List<Func<T, bool>> filters = new List<Func<T, bool>>();
 			public string savePath = string.Empty;
 
 			private List<T> _allList = new List<T>();
@@ -29,14 +30,19 @@ namespace Holoverse.Data.YouTube
 				Add(item, null);
 			}
 
-			public void Add(T item, Action<T> onProcess = null)
+			public void Add(T item, Action<T> onPostProcess = null)
 			{
-				foreach(Filter<T> filter in filters) {
-					if(!filter.IsValid(item)) { return; }
+				foreach(Func<T, bool> filter in filters) {
+					if(!filter(item)) { return; }
 				}
 
-				if(onProcess != null) { onProcess?.Invoke(item); }
+				if(onPostProcess != null) { onPostProcess?.Invoke(item); }
 				_allList.Add(item);
+			}
+
+			public void AddRange(IEnumerable<T> items)
+			{
+				_allList.AddRange(items);
 			}
 
 			public void Save()

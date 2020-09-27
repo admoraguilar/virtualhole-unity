@@ -52,40 +52,25 @@ namespace Holoverse.Data.YouTube
 
 			foreach(string channelUrl in channelUrls) {
 				MLog.Log($"VIDEOS: {channelUrl}");
-				List<Video> videos = await Retry(() => GetChannelVideos(channelUrl));
+				List<Video> videos = await TaskExt.Retry(() => GetChannelVideos(channelUrl), TimeSpan.FromSeconds(3));
 				videos.ForEach((Video video) => {
 					MLog.Log($"Scraping ARCHIVE video: {video.channel} | {video.title}");
 					_map.Add(video);
 				});
 
 				MLog.Log($"UPCOMING broadcast: {channelUrl}");
-				List<Broadcast> upcomingBroadcasts = await Retry(() => GetChannelUpcomingBroadcasts(channelUrl));
+				List<Broadcast> upcomingBroadcasts = await TaskExt.Retry(() => GetChannelUpcomingBroadcasts(channelUrl), TimeSpan.FromSeconds(3));
 				upcomingBroadcasts.ForEach((Broadcast broadcast) => {
 					MLog.Log($"Scraping UPCOMING broadcast: {broadcast.channel} | {broadcast.title}");
 					_map.Add(broadcast);
 				});
 
 				MLog.Log($"NOW broadcast: {channelUrl}");
-				List<Broadcast> liveBroadcasts = await Retry(() => GetChannelLiveBroadcasts(channelUrl));
+				List<Broadcast> liveBroadcasts = await TaskExt.Retry(() => GetChannelLiveBroadcasts(channelUrl), TimeSpan.FromSeconds(3));
 				liveBroadcasts.ForEach((Broadcast broadcast) => {
 					MLog.Log($"Scraping NOW broadcast: {broadcast.channel} | {broadcast.title}");
 					_map.Add(broadcast);
 				});
-			}
-
-			async Task<T> Retry<T>(Func<Task<T>> task)
-			{
-				T result = default;
-
-				try {
-					result = await task();
-				} catch(Exception e) {
-					MLog.LogError($"Encountered error: {e.Message}");
-					MLog.LogWarning($"Retrying....");
-					result = await Retry(task);
-				}
-
-				return result;
 			}
 		}
 

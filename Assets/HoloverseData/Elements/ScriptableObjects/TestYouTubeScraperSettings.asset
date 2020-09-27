@@ -27,6 +27,13 @@ MonoBehaviour:
       url: https://www.youtube.com/channel/UCvzGlP9oQwU--Y0r9id_jnA
       avatarUrl: 
       customKeywords: []
+  - name: hololive 3rd Gen
+    channels:
+    - name: "Flare Ch. \u4E0D\u77E5\u706B\u30D5\u30EC\u30A2"
+      id: UCvInZx9h3jC2JzsIzoOebWg
+      url: https://www.youtube.com/channel/UCvInZx9h3jC2JzsIzoOebWg
+      avatarUrl: 
+      customKeywords: []
   - name: hololive EN 1st Gen
     channels:
     - name: Ninomae Ina'nis
@@ -45,5 +52,12 @@ MonoBehaviour:
     - name: Sushi [Hololive and Vtubers]
       id: UC4Fh9OcvIEWK405Cvg25jDw
       url: https://www.youtube.com/channel/UC4Fh9OcvIEWK405Cvg25jDw
+      avatarUrl: 
+      customKeywords: []
+  - name: Anime
+    channels:
+    - name: "hololive \u30DB\u30ED\u30E9\u30A4\u30D6 - VTuber Group"
+      id: UCJFZiqLMntJufDCHc6bQixg
+      url: https://www.youtube.com/channel/UCJFZiqLMntJufDCHc6bQixg/
       avatarUrl: 
       customKeywords: []
