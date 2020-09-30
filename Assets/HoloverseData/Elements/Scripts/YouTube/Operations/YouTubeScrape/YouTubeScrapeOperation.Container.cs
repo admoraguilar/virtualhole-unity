@@ -27,16 +27,10 @@ namespace Holoverse.Data.YouTube
 
 			public void Add(T item)
 			{
-				Add(item, null);
-			}
-
-			public void Add(T item, Action<T> onPostProcess = null)
-			{
 				foreach(Func<T, bool> filter in filters) {
 					if(!filter(item)) { return; }
 				}
 
-				if(onPostProcess != null) { onPostProcess?.Invoke(item); }
 				_allList.Add(item);
 			}
 

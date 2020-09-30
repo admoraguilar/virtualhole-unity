@@ -139,15 +139,15 @@ namespace Holoverse.Data.YouTube
 
 			public virtual void Add(Video video)
 			{
-				discover.Add(video, (Video v) => v.description = string.Empty);
-				community.Add(video, (Video v) => v.description = string.Empty);
-				anime.Add(video, (Video v) => v.description = string.Empty);
+				discover.Add(video);
+				community.Add(video);
+				anime.Add(video);
 			}
 
 			public virtual void Add(Broadcast broadcast)
 			{
-				live.Add(broadcast, (Broadcast b) => b.description = string.Empty);
-				schedule.Add(broadcast, (Broadcast b) => b.description = string.Empty);
+				live.Add(broadcast);
+				schedule.Add(broadcast);
 			}
 
 			public virtual void Save()
@@ -170,11 +170,25 @@ namespace Holoverse.Data.YouTube
 				//live.AddRange(orderedLive);
 				//schedule.AddRange(orderedSchedule);
 
+				PostProcess(discover);
+				PostProcess(community);
+				PostProcess(anime);
+				PostProcess(live);
+				PostProcess(schedule);
+
 				discover.Save();
 				community.Save();
 				anime.Save();
 				live.Save();
 				schedule.Save();
+
+				void PostProcess<T>(Container<T> container)
+					where T : Video
+				{
+					foreach(T video in container) {
+						video.description = string.Empty;
+					}
+				}
 			}
 		}
 
