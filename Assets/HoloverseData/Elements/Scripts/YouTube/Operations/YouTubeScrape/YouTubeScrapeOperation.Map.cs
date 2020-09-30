@@ -152,23 +152,11 @@ namespace Holoverse.Data.YouTube
 
 			public virtual void Save()
 			{
-				//IOrderedEnumerable<Video> orderedDiscover = discover.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate));
-				//IOrderedEnumerable<Video> orderedCommuniy = community.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate));
-				//IOrderedEnumerable<Video> orderedAnime = anime.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate));
-				//IOrderedEnumerable<Broadcast> orderedLive = live.OrderByDescending((Broadcast broadcast) => DateTimeOffset.Parse(broadcast.schedule));
-				//IOrderedEnumerable<Broadcast> orderedSchedule = schedule.OrderByDescending((Broadcast broadcast) => DateTimeOffset.Parse(broadcast.schedule));
-
-				//discover.Clear();
-				//community.Clear();
-				//anime.Clear();
-				//live.Clear();
-				//schedule.Clear();
-
-				//discover.AddRange(orderedDiscover);
-				//community.AddRange(orderedCommuniy);
-				//anime.AddRange(orderedAnime);
-				//live.AddRange(orderedLive);
-				//schedule.AddRange(orderedSchedule);
+				discover.Replace(discover.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate)).ToArray());
+				community.Replace(community.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate)).ToArray());
+				anime.Replace(anime.OrderByDescending((Video video) => DateTimeOffset.Parse(video.uploadDate)).ToArray());
+				live.Replace(live.OrderByDescending((Broadcast broadcast) => DateTimeOffset.Parse(broadcast.schedule)).ToArray());
+				schedule.Replace(schedule.OrderByDescending((Broadcast broadcast) => DateTimeOffset.Parse(broadcast.schedule)).ToArray());
 
 				PostProcess(discover);
 				PostProcess(community);

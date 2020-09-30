@@ -24,6 +24,14 @@ namespace Holoverse.Data.YouTube
 			public int Count => _allList.Count;
 
 			public bool IsReadOnly => ((ICollection<T>)_allList).IsReadOnly;
+			
+			public Container() { }
+
+			public Container(IEnumerable<T> items)
+			{
+				_allList.Clear();
+				_allList.AddRange(items);
+			}
 
 			public void Add(T item)
 			{
@@ -37,6 +45,12 @@ namespace Holoverse.Data.YouTube
 			public void AddRange(IEnumerable<T> items)
 			{
 				_allList.AddRange(items);
+			}
+
+			public void Replace(IEnumerable<T> items)
+			{
+				Clear();
+				AddRange(items);
 			}
 
 			public void Save()
