@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Midnight;
 using Midnight.Concurrency;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
-using System.Linq;
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
+	using Api.Data.YouTube;
+
 	using ExChannel = YoutubeExplode.Channels.Channel;
 	using ExVideo = YoutubeExplode.Videos.Video;
 	using ExBroadcast = YoutubeExplode.Videos.Broadcast;

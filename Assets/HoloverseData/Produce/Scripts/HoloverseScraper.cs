@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
 using Midnight.Concurrency;
-using Holoverse.Data.YouTube;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
 using YoutubeExplode.Channels;
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
+	using Api.Data.YouTube;
+
 	using ExChannel = YoutubeExplode.Channels.Channel;
 	using ExVideo = YoutubeExplode.Videos.Video;
 	using ExBroadcast = YoutubeExplode.Videos.Broadcast;

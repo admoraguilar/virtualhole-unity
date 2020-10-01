@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
+	using Api.Data.YouTube;
+
 	public partial class YouTubeScrapeOperation
 	{
 		[Serializable]

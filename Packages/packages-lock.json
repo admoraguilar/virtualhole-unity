@@ -7,6 +7,14 @@
       "dependencies": {},
       "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry"
     },
+    "com.midnight-cigarettes.holoverse-data-api-unity": {
+      "version": "file:com.midnight-cigarettes.holoverse-data-api-unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.midnight-cigarettes.midnight-unity": "0.1.0"
+      }
+    },
     "com.midnight-cigarettes.midnight-unity": {
       "version": "file:com.midnight-cigarettes.midnight-unity",
       "depth": 0,

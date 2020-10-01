@@ -7,7 +7,7 @@ using Midnight;
 using UnityEditor;
 #endif
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
 	[CreateAssetMenu(menuName = "Holoverse/Data/YouTube/Scraper Settings")]
 	public partial class YouTubeScraperSettings : ScriptableObject

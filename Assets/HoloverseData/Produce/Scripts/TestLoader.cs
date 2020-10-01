@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
-using Holoverse.Data.YouTube;
 using Newtonsoft.Json;
 
-namespace Holoverse.Data
+namespace Holoverse.Scraper
 {
+	using Api.Data.YouTube;
+
 	public class TestLoader : MonoBehaviour
 	{
 		[Header("Single")]

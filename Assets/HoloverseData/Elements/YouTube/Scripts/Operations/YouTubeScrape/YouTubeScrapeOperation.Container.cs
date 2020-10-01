@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Midnight;
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
 	public partial class YouTubeScrapeOperation
 	{

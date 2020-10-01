@@ -4,12 +4,12 @@ using UnityEngine;
 using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
-using Holoverse.Data;
-using Holoverse.Data.YouTube;
-using Holoverse.Client.UI;
 
 namespace Holoverse.Client
 {
+	using Api.Data.YouTube;
+	using Client.UI;
+
 	public class VideoLoader : MonoBehaviour
 	{
 		private static string _debugPrepend => $"[{nameof(VideoLoader)}]";

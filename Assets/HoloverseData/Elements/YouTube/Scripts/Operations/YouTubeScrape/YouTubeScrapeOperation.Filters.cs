@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace Holoverse.Data.YouTube
+namespace Holoverse.Scraper
 {
+	using Api.Data.YouTube;
+
 	public partial class YouTubeScrapeOperation
 	{
 		public static class Filters
