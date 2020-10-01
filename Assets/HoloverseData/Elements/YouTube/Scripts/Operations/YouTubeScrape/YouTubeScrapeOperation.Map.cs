@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Midnight;
 
 namespace Holoverse.Data.YouTube
 {
@@ -13,17 +11,17 @@ namespace Holoverse.Data.YouTube
 		{
 			public List<ChannelMap> channels { get; private set; } = new List<ChannelMap>();
 
-			public AggregateMap(string saveDirectoryPath, YouTubeScraperSettings settings) : base(saveDirectoryPath)
+			public AggregateMap(string saveDirectoryPath, Settings settings) : base(saveDirectoryPath)
 			{
 				channels.AddRange(
-					settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => 
+					settings.idols.SelectMany((ChannelGroup cg) => 
 						cg.channels.Select((Channel ch) => {
 							return new ChannelMap(Path.Combine(this.saveDirectoryPath, ch.id), ch);
 						})
 					)
 				);
 				channels.AddRange(
-					settings.community.SelectMany((YouTubeScraperSettings.ChannelGroup cg) =>
+					settings.community.SelectMany((ChannelGroup cg) =>
 						cg.channels.Select((Channel ch) => {
 							return new ChannelMap(Path.Combine(this.saveDirectoryPath, ch.id), ch);
 						})
@@ -33,20 +31,20 @@ namespace Holoverse.Data.YouTube
 				discover.filters.Add((Video video) => 
 					Filters.IsChannelIdMatch(
 						video,
-						settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+						settings.idols.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 
 				community.filters.Add((Video video) =>
 					Filters.IsChannelIdMatch(
 						video,
-						settings.community.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+						settings.community.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 				community.filters.Add((Video video) =>
 					Filters.IsChannelMatch(
 						video,
-						settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+						settings.idols.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 
@@ -54,8 +52,8 @@ namespace Holoverse.Data.YouTube
 					Filters.IsChannelIdMatch(
 						video,
 						settings.community
-							.Where((YouTubeScraperSettings.ChannelGroup cg) => cg.name.Contains("Anime"))
-							.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+							.Where((ChannelGroup cg) => cg.name.Contains("Anime"))
+							.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 				anime.filters.Add((Video video) => Filters.ContainsTextInTitle(video, "【アニメ】"));
@@ -63,7 +61,7 @@ namespace Holoverse.Data.YouTube
 				live.filters.Add((Broadcast broadcast) =>
 					Filters.IsChannelIdMatch(
 						broadcast,
-						settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+						settings.idols.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 				live.filters.Add((Broadcast broadcast) => Filters.IsLive(broadcast));
@@ -71,7 +69,7 @@ namespace Holoverse.Data.YouTube
 				schedule.filters.Add((Broadcast broadcast) =>
 					Filters.IsChannelIdMatch(
 						broadcast,
-						settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => cg.channels)
+						settings.idols.SelectMany((ChannelGroup cg) => cg.channels)
 					)
 				);
 				schedule.filters.Add((Broadcast broadcast) => !Filters.IsLive(broadcast));

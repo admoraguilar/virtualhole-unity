@@ -1,15 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Midnight;
-using Midnight.Web;
 using Midnight.Concurrency;
 using YoutubeExplode;
 using YoutubeExplode.Videos;
-using YoutubeExplode.Channels;
 using System.Linq;
 
 namespace Holoverse.Data.YouTube
@@ -21,10 +16,10 @@ namespace Holoverse.Data.YouTube
 	public partial class YouTubeScrapeOperation
 	{
 		private YoutubeClient _client = null;
-		private YouTubeScraperSettings _settings = null;
+		private Settings _settings = null;
 		private AggregateMap _map = null;
 
-		public YouTubeScrapeOperation(YouTubeScraperSettings settings)
+		public YouTubeScrapeOperation(Settings settings)
 		{
 			_client = new YoutubeClient();
 			_settings = settings;
@@ -40,12 +35,12 @@ namespace Holoverse.Data.YouTube
 
 			List<string> channelUrls = new List<string>();
 			channelUrls.AddRange(
-				_settings.idols.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => {
+				_settings.idols.SelectMany((ChannelGroup cg) => {
 					return cg.channels.Select((Channel ch) => ch.url);
 				})
 			);
 			channelUrls.AddRange(
-				_settings.community.SelectMany((YouTubeScraperSettings.ChannelGroup cg) => {
+				_settings.community.SelectMany((ChannelGroup cg) => {
 					return cg.channels.Select((Channel ch) => ch.url);
 				})
 			);
