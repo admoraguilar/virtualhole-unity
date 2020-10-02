@@ -7,7 +7,7 @@ using Midnight.Concurrency;
 
 namespace Holoverse.Client
 {
-	using Api.Data.YouTube;
+	using Api.Data;
 	using Client.UI;
 
 	public class VideoLoader : MonoBehaviour
