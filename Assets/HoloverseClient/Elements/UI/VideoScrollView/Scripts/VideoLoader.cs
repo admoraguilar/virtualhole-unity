@@ -51,9 +51,9 @@ namespace Holoverse.Client
 
 			foreach(Video videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
 				_cellData.Add(new VideoScrollViewCellData {
-					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.mediumResThumbnailUrl),
+					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.thumbnailUrl),
 					title = videoInfo.title,
-					channel = videoInfo.channel,
+					channel = videoInfo.author,
 					onClick = () => Application.OpenURL(videoInfo.url)
 				});
 				scrollView.UpdateData(_cellData);
