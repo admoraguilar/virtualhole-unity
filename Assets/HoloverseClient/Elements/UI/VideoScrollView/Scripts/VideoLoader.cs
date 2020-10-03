@@ -53,7 +53,7 @@ namespace Holoverse.Client
 				_cellData.Add(new VideoScrollViewCellData {
 					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.thumbnailUrl),
 					title = videoInfo.title,
-					channel = videoInfo.author,
+					channel = videoInfo.creator,
 					onClick = () => Application.OpenURL(videoInfo.url)
 				});
 				scrollView.UpdateData(_cellData);
