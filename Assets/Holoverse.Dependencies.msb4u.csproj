@@ -33,7 +33,7 @@
   <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.props" />
 
   <ItemGroup>
-  <!-- <PackageReference Include="YoutubeExplode" Version="5.1.5.1" /> -->
+	  <PackageReference Include="MongoDB.Driver" Version="2.11.2" />
   </ItemGroup>
 
 	<!-- SDK.targets is imported inside this props file -->

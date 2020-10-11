@@ -8,7 +8,10 @@ using Midnight.Concurrency;
 namespace Holoverse.Client
 {
 	using Api.Data;
+	using Api.Data.Contents.Creators;
+	using Api.Data.Contents.Videos;
 	using Client.UI;
+	using Holoverse.Api.Data.Common;
 
 	public class VideoLoader : MonoBehaviour
 	{
@@ -20,8 +23,12 @@ namespace Holoverse.Client
 		public bool isLoadOnStart = true;
 
 		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
-		private Container<Video> _videoSource = null;
 		private bool _isLoading = false;
+
+		private HoloverseDataClient _client = null;
+		private FindResults<Broadcast> _broadcastsResults = null;
+
+		private Container<Video> _videoSource = null;
 
 		private void OnScrollerPositionChanged(float position)
 		{
@@ -40,26 +47,65 @@ namespace Holoverse.Client
 
 			MLog.Log($"{_debugPrepend} Loading of videos started");
 
-			if(_videoSource == null) {
-				_videoSource = new Container<Video>(
-					PathUtilities.CreateDataPath(
-						string.Empty, "videos.json", 
-						PathType.StreamingAssets
-					)
-				);
-			}
-
-			foreach(Video videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
-				_cellData.Add(new VideoScrollViewCellData {
-					thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.thumbnailUrl),
-					title = videoInfo.title,
-					channel = videoInfo.creator,
-					onClick = () => Application.OpenURL(videoInfo.url)
-				});
-				scrollView.UpdateData(_cellData);
-			}
+			await LoadVideosUsingApi();
+			//await LoadVideosUsingUrl();
 
 			_isLoading = false;
+
+			async Task LoadVideosUsingApi()
+			{
+				if(_client == null) {
+					_client = new HoloverseDataClient(
+						"mongodb+srv://<username>:<password>@us-east-1-free.41hlb.mongodb.net/test",
+						"holoverse-client",
+						"xKxKY4Nd2EBKwWN9");
+				}
+
+				if(_broadcastsResults == null) {
+					_broadcastsResults = await _client
+						.contents.videos
+						.FindVideosAsync<Broadcast>(
+							new FindVideosFilterSettings {
+								isBroadcast = true
+							});
+				}
+
+				if(await _broadcastsResults.MoveNextAsync()) {
+					foreach(Broadcast broadcast in _broadcastsResults.current) {
+						VideoScrollViewCellData cellData = new VideoScrollViewCellData {
+							thumbnail = await ImageGetWebRequest.GetAsync(broadcast.thumbnailUrl),
+							title = broadcast.title,
+							channel = broadcast.creator,
+							onClick = () => Application.OpenURL(broadcast.url)
+						};
+						_cellData.Add(cellData);
+					}
+
+					scrollView.UpdateData(_cellData);
+				}
+			}
+
+			async Task LoadVideosUsingUrl()
+			{
+				if(_videoSource == null) {
+					_videoSource = new Container<Video>(
+						PathUtilities.CreateDataPath(
+							string.Empty, "videos.json",
+							PathType.StreamingAssets
+						)
+					);
+				}
+
+				foreach(Video videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
+					_cellData.Add(new VideoScrollViewCellData {
+						thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.thumbnailUrl),
+						title = videoInfo.title,
+						channel = videoInfo.creator,
+						onClick = () => Application.OpenURL(videoInfo.url)
+					});
+					scrollView.UpdateData(_cellData);
+				}
+			}
 		}
 
 		private void Start()

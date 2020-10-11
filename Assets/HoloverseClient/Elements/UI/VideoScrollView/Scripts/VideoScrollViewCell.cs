@@ -24,6 +24,11 @@ namespace Holoverse.Client.UI
 		private Vector2 _baseTitleTextSize = Vector2.zero;
 		private Vector2 _baseChannelTextSize = Vector2.zero;
 
+		private void OnButtonClicked(VideoScrollViewCellData itemData)
+		{
+			itemData.onClick.Invoke();
+		}
+
 		public override void UpdateContent(VideoScrollViewCellData itemData)
 		{
 			_thumbnailImage.sprite = itemData.thumbnail;
@@ -31,7 +36,7 @@ namespace Holoverse.Client.UI
 			_channelText.text = itemData.channel;
 
 			_button.onClick.RemoveAllListeners();
-			_button.onClick.AddListener(itemData.onClick.Invoke);
+			_button.onClick.AddListener(() => OnButtonClicked(itemData));
 		}
 
 		private void Awake()

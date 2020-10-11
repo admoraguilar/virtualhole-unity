@@ -25,6 +25,9 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private GameObject _cellPrefab = null;
 
+		[SerializeField]
+		private GameObject _scrollCover = null;
+
 		public void UpdateData(IList<VideoScrollViewCellData> items)
 		{
 			UpdateContents(items);
@@ -34,6 +37,9 @@ namespace Holoverse.Client.UI
 		{
 			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {
 				OnScrollerPositionChanged?.Invoke(_prevScrollerPosition = scrollerPosition);
+				_scrollCover?.SetActive(true);
+			} else {
+				_scrollCover?.SetActive(false);
 			}
 		}
 	}

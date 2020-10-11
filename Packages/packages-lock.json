@@ -8,18 +8,23 @@
       "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry"
     },
     "com.midnight-cigarettes.holoverse-data-api-unity": {
-      "version": "file:com.midnight-cigarettes.holoverse-data-api-unity",
+      "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.holoverse-data-api-unity.git#develop",
       "depth": 0,
-      "source": "embedded",
+      "source": "git",
       "dependencies": {
         "com.midnight-cigarettes.midnight-unity": "0.1.0"
-      }
+      },
+      "hash": "83c0db92c8d06be9bb00c8c4f60d6410db82d1db"
     },
     "com.midnight-cigarettes.midnight-unity": {
-      "version": "file:com.midnight-cigarettes.midnight-unity",
+      "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.midnight-unity.git#develop",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "1.11.2",
+        "jillejr.newtonsoft.json-for-unity": "12.0.301"
+      },
+      "hash": "869686f06b6049e56ea7ed7a84a43c5d860201a0"
     },
     "com.unity.2d.animation": {
       "version": "4.2.5",
