@@ -7,7 +7,6 @@ using Midnight.Concurrency;
 
 namespace Holoverse.Client
 {
-	using Api.Data;
 	using Api.Data.Common;
 	using Api.Data.Contents.Videos;
 	using Client.UI;
@@ -15,6 +14,9 @@ namespace Holoverse.Client
 	public class VideoLoader : MonoBehaviour
 	{
 		private static string _debugPrepend => $"[{nameof(VideoLoader)}]";
+
+		[SerializeField]
+		private HoloverseDataClientObject _client = null;
 
 		public VideoScrollView scrollView = null;
 		public int amountPerLoad = 15;
@@ -24,10 +26,7 @@ namespace Holoverse.Client
 		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
 		private bool _isLoading = false;
 
-		private HoloverseDataClient _client = null;
 		private FindResults<Broadcast> _broadcastsResults = null;
-
-		private Container<Video> _videoSource = null;
 
 		private void OnScrollerPositionChanged(float position)
 		{
@@ -51,18 +50,9 @@ namespace Holoverse.Client
 
 			async Task LoadVideosUsingApi()
 			{
-				using(new StopwatchScope("Data client connection..", "Start", "End")) {
-					if(_client == null) {
-						_client = new HoloverseDataClient(
-							"mongodb+srv://<username>:<password>@us-east-1-free.41hlb.mongodb.net/test",
-							"holoverse-client",
-							"xKxKY4Nd2EBKwWN9");
-					}
-				}
-				
 				using(new StopwatchScope("Getting broadcasts cursor..", "Start", "End")) {
 					if(_broadcastsResults == null) {
-						_broadcastsResults = await _client
+						_broadcastsResults = await _client.client
 							.contents.videos
 							.FindVideosAsync(
 								new FindCreatorVideosSettings<Broadcast> {
