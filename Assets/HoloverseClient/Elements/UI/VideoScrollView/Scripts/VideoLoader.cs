@@ -8,10 +8,9 @@ using Midnight.Concurrency;
 namespace Holoverse.Client
 {
 	using Api.Data;
-	using Api.Data.Contents.Creators;
+	using Api.Data.Common;
 	using Api.Data.Contents.Videos;
 	using Client.UI;
-	using Holoverse.Api.Data.Common;
 
 	public class VideoLoader : MonoBehaviour
 	{
@@ -46,31 +45,40 @@ namespace Holoverse.Client
 			_isLoading = true;
 
 			MLog.Log($"{_debugPrepend} Loading of videos started");
-
 			await LoadVideosUsingApi();
-			//await LoadVideosUsingUrl();
 
 			_isLoading = false;
 
 			async Task LoadVideosUsingApi()
 			{
-				if(_client == null) {
-					_client = new HoloverseDataClient(
-						"mongodb+srv://<username>:<password>@us-east-1-free.41hlb.mongodb.net/test",
-						"holoverse-client",
-						"xKxKY4Nd2EBKwWN9");
+				using(new StopwatchScope("Data client connection..", "Start", "End")) {
+					if(_client == null) {
+						_client = new HoloverseDataClient(
+							"mongodb+srv://<username>:<password>@us-east-1-free.41hlb.mongodb.net/test",
+							"holoverse-client",
+							"xKxKY4Nd2EBKwWN9");
+					}
+				}
+				
+				using(new StopwatchScope("Getting broadcasts cursor..", "Start", "End")) {
+					if(_broadcastsResults == null) {
+						_broadcastsResults = await _client
+							.contents.videos
+							.FindVideosAsync(
+								new FindCreatorVideosSettings<Broadcast> {
+									isBroadcast = true,
+									sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
+									isSortAscending = false,
+								});
+					}
 				}
 
-				if(_broadcastsResults == null) {
-					_broadcastsResults = await _client
-						.contents.videos
-						.FindVideosAsync<Broadcast>(
-							new FindVideosFilterSettings {
-								isBroadcast = true
-							});
+				bool canMoveNext = false;
+				using(new StopwatchScope("Getting broadcasts data..", "Start", "End")) {
+					canMoveNext = await _broadcastsResults.MoveNextAsync();
 				}
 
-				if(await _broadcastsResults.MoveNextAsync()) {
+				if(canMoveNext) {
 					foreach(Broadcast broadcast in _broadcastsResults.current) {
 						VideoScrollViewCellData cellData = new VideoScrollViewCellData {
 							thumbnail = await ImageGetWebRequest.GetAsync(broadcast.thumbnailUrl),
@@ -81,28 +89,6 @@ namespace Holoverse.Client
 						_cellData.Add(cellData);
 					}
 
-					scrollView.UpdateData(_cellData);
-				}
-			}
-
-			async Task LoadVideosUsingUrl()
-			{
-				if(_videoSource == null) {
-					_videoSource = new Container<Video>(
-						PathUtilities.CreateDataPath(
-							string.Empty, "videos.json",
-							PathType.StreamingAssets
-						)
-					);
-				}
-
-				foreach(Video videoInfo in await _videoSource.LoadAsync(amountPerLoad)) {
-					_cellData.Add(new VideoScrollViewCellData {
-						thumbnail = await ImageGetWebRequest.GetAsync(videoInfo.thumbnailUrl),
-						title = videoInfo.title,
-						channel = videoInfo.creator,
-						onClick = () => Application.OpenURL(videoInfo.url)
-					});
 					scrollView.UpdateData(_cellData);
 				}
 			}
