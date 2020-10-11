@@ -8,6 +8,7 @@ using Midnight.Concurrency;
 namespace Holoverse.Client
 {
 	using Api.Data.Common;
+	using Api.Data.Contents.Creators;
 	using Api.Data.Contents.Videos;
 	using Client.UI;
 
@@ -26,7 +27,9 @@ namespace Holoverse.Client
 		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
 		private bool _isLoading = false;
 
+		private List<Creator> _creators = null;
 		private FindResults<Broadcast> _broadcastsResults = null;
+		private FindResults<Video> _videoResults = null;
 
 		private void OnScrollerPositionChanged(float position)
 		{
@@ -44,11 +47,67 @@ namespace Holoverse.Client
 			_isLoading = true;
 
 			MLog.Log($"{_debugPrepend} Loading of videos started");
-			await LoadVideosUsingApi();
+			//await LoadBroadcasts();
+			await LoadVideosFromCreator();
 
 			_isLoading = false;
 
-			async Task LoadVideosUsingApi()
+			async Task LoadVideosFromCreator()
+			{
+				using(new StopwatchScope("Getting creators data..", "Start", "End")) {
+					if(_creators == null) {
+						_creators = new List<Creator>();
+
+						FindResults<Creator> creators = await _client
+							.client.contents
+							.creators.FindCreatorsAsync(
+								new FindCreatorsSettings {
+									isCheckForAffiliations = true,
+									affiliations = new List<string> {
+										"hololiveJapan"
+									}
+								});
+
+						while(await creators.MoveNextAsync()) {
+							_creators.AddRange(creators.current);
+						}
+					}
+				}
+
+				using(new StopwatchScope("Getting creator related videos data..", "Start", "End")) {
+					if(_videoResults == null) {
+						_videoResults = await _client.client
+							.contents.videos
+							.FindVideosAsync(
+								new FindCreatorRelatedVideosSettings<Video> {
+									creators = _creators,
+									sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
+									isSortAscending = false
+								});
+					}
+				}
+
+				bool canMoveNext = false;
+				using(new StopwatchScope("Getting videos data..", "Start", "End")) {
+					canMoveNext = await _videoResults.MoveNextAsync();
+				}
+
+				if(canMoveNext) {
+					foreach(Video video in _videoResults.current) {
+						VideoScrollViewCellData cellData = new VideoScrollViewCellData {
+							thumbnail = await ImageGetWebRequest.GetAsync(video.thumbnailUrl),
+							title = video.title,
+							channel = video.creator,
+							onClick = () => Application.OpenURL(video.url)
+						};
+						_cellData.Add(cellData);
+					}
+
+					scrollView.UpdateData(_cellData);
+				}
+			}
+
+			async Task LoadBroadcasts()
 			{
 				using(new StopwatchScope("Getting broadcasts cursor..", "Start", "End")) {
 					if(_broadcastsResults == null) {
