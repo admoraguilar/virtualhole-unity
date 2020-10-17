@@ -6,7 +6,7 @@ using Midnight;
 
 namespace Holoverse.Client.UI
 {
-	public class VideoScrollViewCell : FancyScrollRectCell<VideoScrollViewCellData, VideoScrollRectContext>
+	public class VideoScrollRectCell : FancyScrollRectCell<VideoScrollRectCellData, VideoScrollRectContext>
 	{
 		[SerializeField]
 		private Image _thumbnailImage = null;
@@ -24,12 +24,12 @@ namespace Holoverse.Client.UI
 		private Vector2 _baseTitleTextSize = Vector2.zero;
 		private Vector2 _baseChannelTextSize = Vector2.zero;
 
-		private void OnButtonClicked(VideoScrollViewCellData itemData)
+		private void OnButtonClicked(VideoScrollRectCellData itemData)
 		{
 			itemData.onClick.Invoke();
 		}
 
-		public override void UpdateContent(VideoScrollViewCellData itemData)
+		public override void UpdateContent(VideoScrollRectCellData itemData)
 		{
 			_thumbnailImage.sprite = itemData.thumbnail;
 			_titleText.text = itemData.title;

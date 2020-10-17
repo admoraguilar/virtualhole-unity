@@ -5,7 +5,7 @@ using FancyScrollView;
 
 namespace Holoverse.Client.UI 
 {
-	public class VideoScrollView : FancyScrollRect<VideoScrollViewCellData, VideoScrollRectContext>
+	public class VideoScrollRect : FancyScrollRect<VideoScrollRectCellData, VideoScrollRectContext>
 	{
 		public event Action<float> OnScrollerPositionChanged = delegate { };
 
@@ -28,7 +28,7 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private GameObject _scrollCover = null;
 
-		public void UpdateData(IList<VideoScrollViewCellData> items)
+		public void UpdateData(IList<VideoScrollRectCellData> items)
 		{
 			UpdateContents(items);
 		}

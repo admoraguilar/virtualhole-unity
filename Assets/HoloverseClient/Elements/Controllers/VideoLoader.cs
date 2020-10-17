@@ -19,12 +19,12 @@ namespace Holoverse.Client
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
-		public VideoScrollView scrollView = null;
+		public VideoScrollRect scrollView = null;
 		public int amountPerLoad = 15;
 		public int cellDistanceToLoad = 7;
 		public bool isLoadOnStart = true;
 
-		private List<VideoScrollViewCellData> _cellData = new List<VideoScrollViewCellData>();
+		private List<VideoScrollRectCellData> _cellData = new List<VideoScrollRectCellData>();
 		private bool _isLoading = false;
 
 		private List<Creator> _creators = null;
@@ -94,7 +94,7 @@ namespace Holoverse.Client
 
 				if(canMoveNext) {
 					foreach(Video video in _videoResults.current) {
-						VideoScrollViewCellData cellData = new VideoScrollViewCellData {
+						VideoScrollRectCellData cellData = new VideoScrollRectCellData {
 							thumbnail = await ImageGetWebRequest.GetAsync(video.thumbnailUrl),
 							title = video.title,
 							channel = video.creator,
@@ -129,7 +129,7 @@ namespace Holoverse.Client
 
 				if(canMoveNext) {
 					foreach(Broadcast broadcast in _broadcastsResults.current) {
-						VideoScrollViewCellData cellData = new VideoScrollViewCellData {
+						VideoScrollRectCellData cellData = new VideoScrollRectCellData {
 							thumbnail = await ImageGetWebRequest.GetAsync(broadcast.thumbnailUrl),
 							title = broadcast.title,
 							channel = broadcast.creator,
