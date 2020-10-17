@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c91404f0d3009d4695af172e16a22ed, type: 3}
   m_Name: HoloverseDataClientObject
   m_EditorClassIdentifier: 
-  _connectionString: mongodb+srv://<username>:<password>@us-east-1-free.41hlb.mongodb.net/test
+  _connectionString: mongodb://<username>:<password>@us-east-1-free-shard-00-00.41hlb.mongodb.net:27017,us-east-1-free-shard-00-01.41hlb.mongodb.net:27017,us-east-1-free-shard-00-02.41hlb.mongodb.net:27017/?ssl=true&replicaSet=atlas-ql67mo-shard-0&authSource=admin&retryWrites=true&w=majority
   _userName: holoverse-client
   _password: xKxKY4Nd2EBKwWN9
