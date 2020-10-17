@@ -26,19 +26,24 @@ namespace Holoverse.Client
 			List<Creator> creators = new List<Creator>();
 
 			using(new StopwatchScope("Getting creators data..", "Start", "End")) {
+				FindCreatorsSettings findCreatorsSettings =
+					new FindCreatorsSettings {
+						isCheckForAffiliations = true,
+						affiliations = new List<string>() {
+							"hololiveProduction"
+						},
+						batchSize = 100
+					};
+
 				FindResults<Creator> resultCreators = await _client
-						.client.contents
-						.creators.FindCreatorsAsync(
-							new FindCreatorsSettings {
-								isCheckForAffiliations = true,
-								affiliations = new List<string> {
-									"hololiveProduction"
-								}
-							});
+					.client.contents
+					.creators.FindCreatorsAsync(findCreatorsSettings);
 
 				while(await resultCreators.MoveNextAsync()) {
 					creators.AddRange(resultCreators.current);
 				}
+
+				resultCreators.Dispose();
 			}
 
 			VideoFeedSection videoFeed = _homePage.GetSection<VideoFeedSection>();
@@ -61,14 +66,25 @@ namespace Holoverse.Client
 					}
 				},
 				new VideoFeedSection.ContentInfo {
-					type = "Broadcasts",
+					type = "Live",
 					query = new FindCreatorVideosSettings<Video> {
 						isBroadcast = true,
+						isLive = true,
 						creators = creators,
-						sortMode = FindCreatorVideosSettings<Video>.SortMode.ByCreationDate,
+						sortMode = FindCreatorVideosSettings<Video>.SortMode.BySchedule,
 						isSortAscending = false
 					}
 				},
+				new VideoFeedSection.ContentInfo {
+					type  = "Scheduled",
+					query = new FindCreatorVideosSettings<Video> {
+						isBroadcast = true,
+						isLive = false,
+						creators = creators,
+						sortMode = FindVideosSettings<Video>.SortMode.BySchedule,
+						isSortAscending = false
+					}
+				}
 			};
 			videoFeed.Initialize(contentInfos);
 

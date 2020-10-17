@@ -8,6 +8,7 @@ using TMPro;
 using Midnight;
 using Midnight.Web;
 using Midnight.Pages;
+using Midnight.Concurrency;
 
 namespace Holoverse.Client.Pages
 {
@@ -43,6 +44,7 @@ namespace Holoverse.Client.Pages
 		private FindSettings<Video> _findSettings = null;
 		private FindResults<Video> _findResults = null;
 
+		private Dictionary<string, Sprite> _thumbnailsLookup = new Dictionary<string, Sprite>();
 		private CancellationTokenSource _cts = new CancellationTokenSource();
 		private bool _isLoading = false;
 
@@ -92,15 +94,24 @@ namespace Holoverse.Client.Pages
 
 		private async Task LoadMoreContentAsync(CancellationToken cancellationToken = default)
 		{
+			if(_findResults == null) { return; }
+
 			_isLoading = true;
 
 			if(!await _findResults.MoveNextAsync(cancellationToken)) {
 				MLog.Log(nameof(VideoFeedSection), $"No more videos found!");
+				_findResults.Dispose();
+				_findResults = null;
 				return; 
 			}
+
+			await Concurrent.ForEachAsync(_findResults.current.ToList(), LoadThumbnails, 3);
+
 			foreach(Video video in _findResults.current) {
+				_thumbnailsLookup.TryGetValue(video.thumbnailUrl, out Sprite thumbnail);
+
 				VideoScrollRectCellData cellData = new VideoScrollRectCellData {
-					thumbnail = await ImageGetWebRequest.GetAsync(video.thumbnailUrl),
+					thumbnail = thumbnail,
 					title = video.title,
 					channel = video.creator,
 					onClick = () => Application.OpenURL(video.url)
@@ -111,6 +122,16 @@ namespace Holoverse.Client.Pages
 			_videoScroll.UpdateData(_cellData);
 
 			_isLoading = false;
+
+			async Task LoadThumbnails(Video video)
+			{
+				if(_thumbnailsLookup.ContainsKey(video.thumbnailUrl)) {
+					await Task.CompletedTask;
+					return;
+				}
+
+				_thumbnailsLookup[video.thumbnailUrl] = await ImageGetWebRequest.GetAsync(video.thumbnailUrl);
+			}
 		}
 
 		protected override async Task UnloadContentAsync()
