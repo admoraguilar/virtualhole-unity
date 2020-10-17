@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88c0eea5117a1940a4eae5cce455b6e, type: 3}
+  m_Name: PagesSettings
+  m_EditorClassIdentifier: 
+  _defaultLoadingIndicatorDisplay: {fileID: 3771116582065121902, guid: 94ea195bf95a37b4eb412e3f44bea9c3,
+    type: 3}
+  _defaultGenericErrorDisplay: {fileID: 8785264488680765028, guid: 2ba65955898bd4840bbb7da3361ab544,
+    type: 3}
+  _defaultInternetErrorDisplay: {fileID: 8196532188724661066, guid: a8319f53d8db6314a8b478f68f9f849d,
+    type: 3}
+  _defaultAppIncompatibleErrorDisplay: {fileID: 7218797636239765257, guid: b34cacc4ec07dc447b1fa5bcf037541d,
+    type: 3}
