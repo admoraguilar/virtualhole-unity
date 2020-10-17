@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d88c0eea5117a1940a4eae5cce455b6e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0bc52067ced988d41a2ba34f49c2456a, type: 3}
   m_Name: PagesSettings
   m_EditorClassIdentifier: 
-  _defaultLoadingIndicatorDisplay: {fileID: 3771116582065121902, guid: 94ea195bf95a37b4eb412e3f44bea9c3,
+  _defaultLoadingIndicatorDisplay: {fileID: 3771116582065121902, guid: 85963228e25c3dd44a9ccf4d5f2a4556,
     type: 3}
-  _defaultGenericErrorDisplay: {fileID: 8785264488680765028, guid: 2ba65955898bd4840bbb7da3361ab544,
+  _defaultGenericErrorDisplay: {fileID: 8785264488680765028, guid: c03b0f79d109cd0478dee5d59476f7ef,
     type: 3}
-  _defaultInternetErrorDisplay: {fileID: 8196532188724661066, guid: a8319f53d8db6314a8b478f68f9f849d,
+  _defaultInternetErrorDisplay: {fileID: 8196532188724661066, guid: 3245853fb41fdae4c98d45e64483fcb9,
     type: 3}
-  _defaultAppIncompatibleErrorDisplay: {fileID: 7218797636239765257, guid: b34cacc4ec07dc447b1fa5bcf037541d,
+  _defaultAppIncompatibleErrorDisplay: {fileID: 7218797636239765257, guid: f2ad431aacc4a9547b743a80b5356778,
     type: 3}

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using TMPro;
+using Midnight;
 using Midnight.Web;
 using Midnight.Pages;
 
@@ -14,7 +15,6 @@ namespace Holoverse.Client.Pages
 	using Api.Data.Contents.Videos;
 
 	using Client.UI;
-	using Midnight;
 
 	public class VideoFeedSection : Section
 	{

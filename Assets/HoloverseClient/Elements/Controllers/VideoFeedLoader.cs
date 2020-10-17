@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
@@ -15,7 +12,6 @@ namespace Holoverse.Client
 	using Api.Data.Contents.Videos;
 
 	using Client.Pages;
-	using MongoDB.Bson;
 
 	public class VideoFeedLoader : MonoBehaviour
 	{
@@ -36,7 +32,7 @@ namespace Holoverse.Client
 							new FindCreatorsSettings {
 								isCheckForAffiliations = true,
 								affiliations = new List<string> {
-									"hololiveJapan"
+									"hololiveProduction"
 								}
 							});
 
@@ -50,7 +46,7 @@ namespace Holoverse.Client
 				new VideoFeedSection.ContentInfo {
 					type = "Discover",
 					query = new FindCreatorVideosSettings<Video> {
-						creatorIdsUniversal = creators.Select(c => c.universalId).ToList(),
+						creators = creators,
 						sortMode = FindCreatorVideosSettings<Video>.SortMode.ByCreationDate,
 						isSortAscending = false
 					}
@@ -68,7 +64,7 @@ namespace Holoverse.Client
 					type = "Broadcasts",
 					query = new FindCreatorVideosSettings<Video> {
 						isBroadcast = true,
-						creatorIdsUniversal = creators.Select(c => c.universalId).ToList(),
+						creators = creators,
 						sortMode = FindCreatorVideosSettings<Video>.SortMode.ByCreationDate,
 						isSortAscending = false
 					}
@@ -80,7 +76,7 @@ namespace Holoverse.Client
 				MLog.Log($"Type: {info.type} | Query: {info.query.GetFilterDocument().ToString()}");
 			}
 
-			//await _homePage.LoadAsync();
+			await _homePage.LoadAsync();
 		}
 
 		private void Start()
