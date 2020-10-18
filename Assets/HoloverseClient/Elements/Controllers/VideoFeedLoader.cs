@@ -5,7 +5,7 @@ using Midnight;
 using Midnight.Pages;
 using Midnight.Concurrency;
 
-namespace Holoverse.Client
+namespace Holoverse.Client.Controllers
 {
 	using Api.Data.Common;
 	using Api.Data.Contents.Creators;

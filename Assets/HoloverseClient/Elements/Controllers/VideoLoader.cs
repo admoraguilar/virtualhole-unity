@@ -5,7 +5,7 @@ using Midnight;
 using Midnight.Web;
 using Midnight.Concurrency;
 
-namespace Holoverse.Client
+namespace Holoverse.Client.Controllers
 {
 	using Api.Data.Common;
 	using Api.Data.Contents.Creators;
@@ -14,8 +14,6 @@ namespace Holoverse.Client
 
 	public class VideoLoader : MonoBehaviour
 	{
-		private static string _debugPrepend => $"[{nameof(VideoLoader)}]";
-
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
@@ -46,7 +44,7 @@ namespace Holoverse.Client
 			}
 			_isLoading = true;
 
-			MLog.Log($"{_debugPrepend} Loading of videos started");
+			MLog.Log(nameof(VideoLoader), "Loading of videos started");
 			//await LoadBroadcasts();
 			await LoadVideosFromCreator();
 
