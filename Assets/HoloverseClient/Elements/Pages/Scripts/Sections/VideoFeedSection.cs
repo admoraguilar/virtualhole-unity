@@ -68,6 +68,11 @@ namespace Holoverse.Client.Pages
 			_findSettings = _contentInfo[index].query;
 		}
 
+		public void ScrollToTop()
+		{
+			_videoScroll.ScrollToTop();
+		}
+
 		public void Clear()
 		{
 			_cellData.Clear();
@@ -108,7 +113,15 @@ namespace Holoverse.Client.Pages
 			await Concurrent.ForEachAsync(_findResults.current.ToList(), LoadThumbnails, 3);
 
 			foreach(Video video in _findResults.current) {
-				_thumbnailsLookup.TryGetValue(video.thumbnailUrl, out Sprite thumbnail);
+				if(!_thumbnailsLookup.TryGetValue(video.thumbnailUrl, out Sprite thumbnail)) {
+					continue;
+				}
+
+				// Skip videos without thumbnails, possible reasons for these are
+				// they maybe privated or deleted.
+				// Mostly observed on scheduled videos or livestreams that are already
+				// finished.
+				if(thumbnail == null) { continue; }
 
 				VideoScrollRectCellData cellData = new VideoScrollRectCellData {
 					thumbnail = thumbnail,

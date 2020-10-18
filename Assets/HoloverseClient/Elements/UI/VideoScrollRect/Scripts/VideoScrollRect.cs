@@ -33,6 +33,11 @@ namespace Holoverse.Client.UI
 			UpdateContents(items);
 		}
 
+		public void ScrollToTop()
+		{
+			Scroller.ScrollTo(0, 1f);
+		}
+
 		private void Update()
 		{
 			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {

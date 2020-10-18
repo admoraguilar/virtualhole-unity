@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
 using Midnight.Pages;
+using Midnight.FlowTree;
 using Midnight.Concurrency;
 
 namespace Holoverse.Client.Controllers
@@ -17,6 +18,9 @@ namespace Holoverse.Client.Controllers
 	{
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
+
+		[SerializeField]
+		private FlowTree _flowTree = null;
 
 		[SerializeField]
 		private Page _homePage = null;
@@ -97,9 +101,26 @@ namespace Holoverse.Client.Controllers
 			await _homePage.LoadAsync();
 		}
 
+		private void OnAttemptSetNodeSameAsCurrent(Node node)
+		{
+			if(_homePage.transform.IsChildOf(node.transform)) {
+				_homePage.GetSection<VideoFeedSection>().ScrollToTop();
+			}
+		}
+
 		private void Start()
 		{
 			TaskExt.FireForget(InitializeFeedAsync());
+		}
+
+		private void OnEnable()
+		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetNodeSameAsCurrent;
+		}
+
+		private void OnDisable()
+		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetNodeSameAsCurrent;
 		}
 	}
 }
