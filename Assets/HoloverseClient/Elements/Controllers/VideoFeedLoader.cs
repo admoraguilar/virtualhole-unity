@@ -23,6 +23,8 @@ namespace Holoverse.Client
 
 		private async Task InitializeFeedAsync()
 		{
+			_homePage.Prewarm();
+
 			List<Creator> creators = new List<Creator>();
 
 			using(new StopwatchScope("Getting creators data..", "Start", "End")) {
