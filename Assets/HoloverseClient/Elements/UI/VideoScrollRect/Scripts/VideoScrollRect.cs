@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Midnight;
 using FancyScrollView;
 
 namespace Holoverse.Client.UI 
@@ -25,8 +26,12 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private GameObject _cellPrefab = null;
 
+		public CanvasGroup canvasGroup => this.GetComponent(ref _canvasGroup, () => GetComponent<CanvasGroup>());
+		private CanvasGroup _canvasGroup = null;
+
 		[SerializeField]
-		private GameObject _scrollCover = null;
+		private float _antiMistapTime = .1f;
+		private float _antiMistapTimer = 0f;
 
 		public void UpdateData(IList<VideoScrollRectCellData> items)
 		{
@@ -38,13 +43,18 @@ namespace Holoverse.Client.UI
 			Scroller.ScrollTo(0, 1f);
 		}
 
-		private void Update()
+		private void FixedUpdate()
 		{
 			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {
 				OnScrollerPositionChanged?.Invoke(_prevScrollerPosition = scrollerPosition);
-				_scrollCover?.SetActive(true);
+				if(canvasGroup != null) { canvasGroup.interactable = false; }
+				_antiMistapTimer = 0f;
 			} else {
-				_scrollCover?.SetActive(false);
+				if(_antiMistapTimer > _antiMistapTime) {
+					if(canvasGroup != null) { canvasGroup.interactable = true; }
+				} else {
+					_antiMistapTimer += Time.fixedDeltaTime;
+				}
 			}
 		}
 	}
