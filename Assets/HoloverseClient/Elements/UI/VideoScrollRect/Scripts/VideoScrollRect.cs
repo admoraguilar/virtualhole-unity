@@ -26,8 +26,8 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private GameObject _cellPrefab = null;
 
-		public CanvasGroup canvasGroup => this.GetComponent(ref _canvasGroup, () => GetComponent<CanvasGroup>());
-		private CanvasGroup _canvasGroup = null;
+		[SerializeField]
+		private GameObject _antiMistapImage = null;
 
 		[SerializeField]
 		private float _antiMistapTime = .1f;
@@ -47,11 +47,11 @@ namespace Holoverse.Client.UI
 		{
 			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {
 				OnScrollerPositionChanged?.Invoke(_prevScrollerPosition = scrollerPosition);
-				if(canvasGroup != null) { canvasGroup.interactable = false; }
+				_antiMistapImage?.SetActive(true);
 				_antiMistapTimer = 0f;
 			} else {
 				if(_antiMistapTimer > _antiMistapTime) {
-					if(canvasGroup != null) { canvasGroup.interactable = true; }
+					_antiMistapImage?.SetActive(false);
 				} else {
 					_antiMistapTimer += Time.fixedDeltaTime;
 				}
