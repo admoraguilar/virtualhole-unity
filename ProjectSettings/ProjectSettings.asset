@@ -803,7 +803,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    7: 
+    7: MLOG
   platformArchitecture: {}
   scriptingBackend:
     Android: 0
