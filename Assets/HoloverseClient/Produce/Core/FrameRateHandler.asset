@@ -16,7 +16,7 @@ MonoBehaviour:
   targetFramerate: 60
   activeRenderFrameInterval: 1
   idleRenderFrameInterval: 4
-  idleSwitchSeconds: 1
+  idleSwitchSeconds: 7
   debugRenderFrameInterval: 1
   debugEffectiveRenderFrameRate: 60
   debugWillCurrentFrameRender: 1
