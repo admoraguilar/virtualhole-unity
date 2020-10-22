@@ -110,7 +110,7 @@ namespace Holoverse.Client.Controllers
 
 		private void Start()
 		{
-			TaskExt.FireForget(InitializeFeedAsync());
+			//TaskExt.FireForget(InitializeFeedAsync());
 		}
 
 		private void OnEnable()
