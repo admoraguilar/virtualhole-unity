@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
 using FancyScrollView;
 
 namespace Holoverse.Client.UI 
@@ -38,9 +37,9 @@ namespace Holoverse.Client.UI
 			UpdateContents(items);
 		}
 
-		public void ScrollToTop()
+		public void ScrollTo(float position, float duration, Action onComplete = null)
 		{
-			Scroller.ScrollTo(0, 1f);
+			Scroller.ScrollTo(position, duration, onComplete);
 		}
 
 		private void FixedUpdate()

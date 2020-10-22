@@ -70,7 +70,7 @@ namespace Holoverse.Client.Pages
 
 		public void ScrollToTop()
 		{
-			_videoScroll.ScrollToTop();
+			_videoScroll.ScrollTo(0f, 1f);
 		}
 
 		public void Clear()
@@ -133,6 +133,7 @@ namespace Holoverse.Client.Pages
 			}
 
 			_videoScroll.UpdateData(_cellData);
+			_videoScroll.ScrollTo(0f, 0f);
 
 			_isLoading = false;
 
