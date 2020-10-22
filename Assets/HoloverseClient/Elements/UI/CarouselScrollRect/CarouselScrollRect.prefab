@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 4129913525985559660}
   - component: {fileID: 7673106514653162641}
   - component: {fileID: 4560152193177206879}
+  - component: {fileID: 4539521035337207738}
   m_Layer: 5
   m_Name: CarouselScrollRect
   m_TagString: Untagged
@@ -376,6 +377,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4539521035337207738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3878601530769429986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a843751d0ed044881802138f4c8d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5230439711115137474
 GameObject:
   m_ObjectHideFlags: 0
