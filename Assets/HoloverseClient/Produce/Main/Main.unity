@@ -1598,15 +1598,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 590136849}
     m_Modifications:
+    - target: {fileID: 222186687233498716, guid: d7f010382abf15c40bbe66561a6fbea4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 222186687233498716, guid: d7f010382abf15c40bbe66561a6fbea4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: cellInterval
-      value: 0.42302126
+      value: 0.2761763
       objectReference: {fileID: 0}
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: scrollOffset
-      value: 0.42302126
+      value: 0.2761763
       objectReference: {fileID: 0}
     - target: {fileID: 6265047690015544360, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
@@ -2169,11 +2179,6 @@ PrefabInstance:
     - target: {fileID: 2121406029, guid: 015d69e0214c535479e92c088c436fc8, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7059387588490619275, guid: 015d69e0214c535479e92c088c436fc8,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 309.05347
       objectReference: {fileID: 0}
     - target: {fileID: 7059387590088154421, guid: 015d69e0214c535479e92c088c436fc8,
         type: 3}
