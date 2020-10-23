@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
-using TMPro;
 using Midnight;
 using Midnight.Web;
 using Midnight.Pages;
@@ -30,14 +29,10 @@ namespace Holoverse.Client.Pages
 		private HoloverseDataClientObject _clientObject = null;
 
 		[SerializeField]
-		private VideoScrollRect _videoScroll = null;
+		private VideoFeed _videoFeed = null;
 
 		public int amountPerLoad = 15;
 		public int cellRemainingToLoadMoreCount = 7;
-
-		[Space]
-		[SerializeField]
-		private TMP_Dropdown _dropdown = null;
 
 		private List<ContentInfo> _contentInfo = new List<ContentInfo>();
 		private List<VideoScrollRectCellData> _cellData = new List<VideoScrollRectCellData>();
@@ -57,8 +52,8 @@ namespace Holoverse.Client.Pages
 
 			_contentInfo.AddRange(contentInfo);
 
-			_dropdown.ClearOptions();
-			_dropdown.AddOptions(contentInfo.Select(c => c.type).ToList());
+			_videoFeed.dropdown.ClearOptions();
+			_videoFeed.dropdown.AddOptions(contentInfo.Select(c => c.type).ToList());
 
 			SetContent(0);
 		}
@@ -70,13 +65,13 @@ namespace Holoverse.Client.Pages
 
 		public void ScrollToTop()
 		{
-			_videoScroll.ScrollTo(0f, 1f);
+			_videoFeed.videoScroll.ScrollTo(0f, 1f);
 		}
 
 		public void Clear()
 		{
 			_cellData.Clear();
-			_videoScroll.UpdateData(_cellData);
+			_videoFeed.videoScroll.UpdateData(_cellData);
 		}
 
 		protected override async Task LoadContentAsync(CancellationToken cancellationToken = default)
@@ -89,8 +84,8 @@ namespace Holoverse.Client.Pages
 				.contents.videos
 				.FindVideosAsync(_findSettings, cancellationToken);
 
-			_videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
-			_dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+			_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 
 			await LoadMoreContentAsync(cancellationToken);
 
@@ -132,8 +127,8 @@ namespace Holoverse.Client.Pages
 				_cellData.Add(cellData);
 			}
 
-			_videoScroll.UpdateData(_cellData);
-			_videoScroll.ScrollTo(0f, 0f);
+			_videoFeed.videoScroll.UpdateData(_cellData);
+			_videoFeed.videoScroll.ScrollTo(0f, 0f);
 
 			_isLoading = false;
 
@@ -153,8 +148,8 @@ namespace Holoverse.Client.Pages
 			await Task.CompletedTask;
 			Clear();
 
-			_videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
-			_dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
+			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
 		}
 
 		private CancellationTokenSource CreateCancelToken()
@@ -174,7 +169,7 @@ namespace Holoverse.Client.Pages
 
 		private async void OnScrollerPositionChanged(float position)
 		{
-			if(position >= _videoScroll.itemCount - cellRemainingToLoadMoreCount) {
+			if(position >= _videoFeed.videoScroll.itemCount - cellRemainingToLoadMoreCount) {
 				if(!_isLoading) { await LoadMoreContentAsync(); }
 			}
 		}
