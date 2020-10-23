@@ -9,21 +9,31 @@ namespace Midnight.SOM
 	{
 		private static Dictionary<int, List<SceneObjectModel>> _sceneObjectModels = new Dictionary<int, List<SceneObjectModel>>();
 
+		public static SceneObjectModel Get(MonoBehaviour mono)
+		{
+			return Get(mono.gameObject);
+		}
+
+		public static SceneObjectModel Get(GameObject go)
+		{
+			return Get(go.scene.handle);
+		}
+
 		public static SceneObjectModel Get(int sceneHandle)
 		{
 			SceneObjectModel result = null;
-			
+
 			List<SceneObjectModel> models = GetModelList(sceneHandle);
 			if(models.Count > 0) { result = models[0]; }
 
 			return result;
 		}
 
-		public static SceneObjectModel Get(SceneObject sceneObject)
+		internal static SceneObjectModel Get(SceneObject sceneObject)
 		{
 			SceneObjectModel result = null;
 
-			List<SceneObjectModel> models = GetModelList(sceneObject.GetInstanceID());
+			List<SceneObjectModel> models = GetModelList(sceneObject.gameObject.scene.handle);
 			foreach(SceneObjectModel model in models) {
 				if(sceneObject.transform.IsChildOf(model.transform)) {
 					result = model;
@@ -71,13 +81,19 @@ namespace Midnight.SOM
 
 			if(_componentCacheLookup.TryGetValue(type, out List<Component> cache)) {
 				result = cache[0];
-			} else {
+			}
+
+			if(result == null) {
 				foreach(SceneObject sceneObject in _sceneObjects) {
 					if(sceneObject.TryGetComponent(type, out Component component)) {
 						AddComponentsToCache(component);
 						result = component;
 					}
 				}
+			}
+
+			if(result == null) {
+				result = GetComponentInChildren(type, true);
 			}
 
 			return result;

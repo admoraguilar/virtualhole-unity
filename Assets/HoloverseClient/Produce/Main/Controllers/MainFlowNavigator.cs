@@ -1,81 +1,53 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Midnight.SOM;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
+	using Client.UI;
+
 	public class MainFlowNavigator : MonoBehaviour
 	{
-		[Header("Node Objects")]
-		[SerializeField]
-		private NodeObject _homeNodeObject = null;
-
-		[SerializeField]
-		private NodeObject _feedNodeObject = null;
-
-		[SerializeField]
-		private NodeObject _searchNodeObject = null;
-
-		[SerializeField]
-		private NodeObject _supportNodeObject = null;
-
-		[Header("UI")]
-		[SerializeField]
-		private Button _backwardButton = null;
-
-		[SerializeField]
-		private Button _homeButton = null;
-
-		[SerializeField]
-		private Button _feedButton = null;
-
-		[SerializeField]
-		private Button _searchButton = null;
-
-		[SerializeField]
-		private Button _supportButton = null;
-
-		private void OnBackwardButtonClick()
+		[Serializable]
+		public class NavigationItem
 		{
-			_homeNodeObject.Backward();
+			public Sprite sprite = null;
+			public string text = null;
+			public NodeObject node = null;
 		}
 
-		private void OnHomeButtonClick()
+		[SerializeField]
+		private SceneObjectModel _som = null;
+
+		[Header("Navigations")]
+		[SerializeField]
+		private NavigationItem[] _navigationItems = null;
+
+		private FlowTree _flowTree = null;
+		private NavigationBar _navigationBar = null;
+
+		private void Awake()
 		{
-			_homeNodeObject.Set();
+			if(_som == null) { _som = SceneObjectModel.Get(this); }
+			_flowTree = _som.GetSceneObjectComponent<FlowTree>();
+			_navigationBar = _som.GetSceneObjectComponent<NavigationBar>();
 		}
 
-		private void OnFeedButtonClick()
+		private void Start()
 		{
-			_feedNodeObject.Set();
-		}
+			List<NavigationBar.ItemData> itemData = new List<NavigationBar.ItemData>();
+			foreach(NavigationItem item in _navigationItems) {
+				itemData.Add(new NavigationBar.ItemData {
+					sprite = item.sprite,
+					text = item.text,
+					onClick = item.node.Set
+				});
+			}
+			_navigationBar.UpdateEntries(itemData);
 
-		private void OnSearchButtonClick()
-		{
-			_searchNodeObject.Set();
-		}
-
-		private void OnSupportButtonClick()
-		{
-			_supportNodeObject.Set();
-		}
-
-		private void OnEnable()
-		{
-			_backwardButton.onClick.AddListener(OnBackwardButtonClick);
-			_homeButton.onClick.AddListener(OnHomeButtonClick);
-			_feedButton.onClick.AddListener(OnFeedButtonClick);
-			_searchButton.onClick.AddListener(OnSearchButtonClick);
-			_supportButton.onClick.AddListener(OnSupportButtonClick);
-		}
-
-		private void OnDisable()
-		{
-			_backwardButton.onClick.RemoveListener(OnBackwardButtonClick);
-			_homeButton.onClick.RemoveListener(OnHomeButtonClick);
-			_feedButton.onClick.RemoveListener(OnFeedButtonClick);
-			_searchButton.onClick.RemoveListener(OnSearchButtonClick);
-			_supportButton.onClick.RemoveListener(OnSupportButtonClick);
+			_navigationBar.backButton.onClick.AddListener(_flowTree.Backward);
 		}
 	}
 }
