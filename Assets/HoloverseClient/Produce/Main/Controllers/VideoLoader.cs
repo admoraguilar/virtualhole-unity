@@ -93,10 +93,10 @@ namespace Holoverse.Client.Controllers
 				if(canMoveNext) {
 					foreach(Video video in _videoResults.current) {
 						VideoScrollRectCellData cellData = new VideoScrollRectCellData {
-							thumbnail = await ImageGetWebRequest.GetAsync(video.thumbnailUrl),
+							thumbnailSprite = await ImageGetWebRequest.GetAsync(video.thumbnailUrl),
 							title = video.title,
-							channel = video.creator,
-							onClick = () => Application.OpenURL(video.url)
+							creatorName = video.creator,
+							onCellClick = () => Application.OpenURL(video.url)
 						};
 						_cellData.Add(cellData);
 					}
@@ -128,10 +128,10 @@ namespace Holoverse.Client.Controllers
 				if(canMoveNext) {
 					foreach(Broadcast broadcast in _broadcastsResults.current) {
 						VideoScrollRectCellData cellData = new VideoScrollRectCellData {
-							thumbnail = await ImageGetWebRequest.GetAsync(broadcast.thumbnailUrl),
+							thumbnailSprite = await ImageGetWebRequest.GetAsync(broadcast.thumbnailUrl),
 							title = broadcast.title,
-							channel = broadcast.creator,
-							onClick = () => Application.OpenURL(broadcast.url)
+							creatorName = broadcast.creator,
+							onCellClick = () => Application.OpenURL(broadcast.url)
 						};
 						_cellData.Add(cellData);
 					}

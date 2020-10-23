@@ -5,10 +5,15 @@ namespace Holoverse.Client.UI
 {
 	public class VideoScrollRectCellData
 	{
-		public Sprite thumbnail = null;
+		public Sprite thumbnailSprite = null;
+		public Sprite indicatorSprite = null;
 		public string title = string.Empty;
-		public string channel = string.Empty;
+		public string date = string.Empty;
 
-		public Action onClick = delegate { };
+		public Sprite creatorSprite = null;
+		public string creatorName = string.Empty;
+
+		public Action onCellClick = delegate { };
+		public Action onOptionsClick = delegate { };
 	}
 }

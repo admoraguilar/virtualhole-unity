@@ -119,10 +119,10 @@ namespace Holoverse.Client.Pages
 				if(thumbnail == null) { continue; }
 
 				VideoScrollRectCellData cellData = new VideoScrollRectCellData {
-					thumbnail = thumbnail,
+					thumbnailSprite = thumbnail,
 					title = video.title,
-					channel = video.creator,
-					onClick = () => Application.OpenURL(video.url)
+					creatorName = video.creator,
+					onCellClick = () => Application.OpenURL(video.url)
 				};
 				_cellData.Add(cellData);
 			}
