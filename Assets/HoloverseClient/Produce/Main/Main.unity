@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 567076697}
   - component: {fileID: 567076698}
   m_Layer: 0
-  m_Name: FlowNavigator
+  m_Name: AndroidBackwardNavigator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,6 +562,7 @@ Transform:
   m_Children:
   - {fileID: 1485358772}
   - {fileID: 567076697}
+  - {fileID: 1374777562}
   - {fileID: 1218277635}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1037,7 +1038,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 776012849}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1218277636
 MonoBehaviour:
@@ -1105,6 +1106,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nodeObject: {fileID: 11400000, guid: 56226fc8eb1139c4da93a4c0899010b7, type: 2}
   _isHandleGameObjectActive: 1
+--- !u!1 &1374777561
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1374777562}
+  - component: {fileID: 1374777563}
+  m_Layer: 0
+  m_Name: MainFlowNavigator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1374777562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374777561}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 776012849}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1374777563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374777561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72db9cf8263e3f4e981ddef37d7dc01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _homeNodeObject: {fileID: 11400000, guid: 248ec9077d575ff4c968badc7dd244ab, type: 2}
+  _feedNodeObject: {fileID: 11400000, guid: cc32de15d3c14ce43b4b58246f85bfdb, type: 2}
+  _searchNodeObject: {fileID: 11400000, guid: 73a82e5a8fee58f4bb746c8def91c767, type: 2}
+  _supportNodeObject: {fileID: 11400000, guid: 56226fc8eb1139c4da93a4c0899010b7, type: 2}
+  _backwardButton: {fileID: 3016608252109548367}
+  _homeButton: {fileID: 3016608252109548366}
+  _feedButton: {fileID: 3016608252109548365}
+  _searchButton: {fileID: 3016608252109548364}
+  _supportButton: {fileID: 3016608252109548363}
 --- !u!1 &1424740554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,7 +1225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1485358772
 Transform:
   m_ObjectHideFlags: 0
@@ -2360,22 +2413,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3174613721395644732, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: 248ec9077d575ff4c968badc7dd244ab,
-        type: 2}
-    - target: {fileID: 3174613721395644732, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Set
-      objectReference: {fileID: 0}
-    - target: {fileID: 3174613721395644732, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Midnight.FlowTree.NodeObject, Midnight
-      objectReference: {fileID: 0}
     - target: {fileID: 3174613721395644733, guid: bde8ea9fdd124a04e85c051a6505e2d0,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2405,21 +2442,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 5120518010512597050, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 480715571}
-    - target: {fileID: 5120518010512597050, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Backward
-      objectReference: {fileID: 0}
-    - target: {fileID: 5120518010512597050, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Midnight.FlowTree.FlowTree, Midnight
       objectReference: {fileID: 0}
     - target: {fileID: 5462253616594826034, guid: bde8ea9fdd124a04e85c051a6505e2d0,
         type: 3}
@@ -2451,38 +2473,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 110
       objectReference: {fileID: 0}
-    - target: {fileID: 5462253616594826035, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: 56226fc8eb1139c4da93a4c0899010b7,
-        type: 2}
-    - target: {fileID: 5462253616594826035, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Set
-      objectReference: {fileID: 0}
-    - target: {fileID: 5462253616594826035, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Midnight.FlowTree.NodeObject, Midnight
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748139094225729976, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: cc32de15d3c14ce43b4b58246f85bfdb,
-        type: 2}
-    - target: {fileID: 6748139094225729976, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Set
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748139094225729976, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Midnight.FlowTree.NodeObject, Midnight
-      objectReference: {fileID: 0}
     - target: {fileID: 6748139094225729977, guid: bde8ea9fdd124a04e85c051a6505e2d0,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2513,11 +2503,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 110
       objectReference: {fileID: 0}
-    - target: {fileID: 6748139094508766954, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_text
-      value: My Feed
-      objectReference: {fileID: 0}
     - target: {fileID: 8200165338404252402, guid: bde8ea9fdd124a04e85c051a6505e2d0,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2547,25 +2532,69 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 8200165338404252403, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 11400000, guid: 73a82e5a8fee58f4bb746c8def91c767,
-        type: 2}
-    - target: {fileID: 8200165338404252403, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Set
-      objectReference: {fileID: 0}
-    - target: {fileID: 8200165338404252403, guid: bde8ea9fdd124a04e85c051a6505e2d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Midnight.FlowTree.NodeObject, Midnight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bde8ea9fdd124a04e85c051a6505e2d0, type: 3}
+--- !u!114 &3016608252109548363 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5462253616594826035, guid: bde8ea9fdd124a04e85c051a6505e2d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3016608252109548362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3016608252109548364 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8200165338404252403, guid: bde8ea9fdd124a04e85c051a6505e2d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3016608252109548362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3016608252109548365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6748139094225729976, guid: bde8ea9fdd124a04e85c051a6505e2d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3016608252109548362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3016608252109548366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3174613721395644732, guid: bde8ea9fdd124a04e85c051a6505e2d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3016608252109548362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3016608252109548367 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5120518010512597050, guid: bde8ea9fdd124a04e85c051a6505e2d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 3016608252109548362}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6265047689543596472
 PrefabInstance:
   m_ObjectHideFlags: 0

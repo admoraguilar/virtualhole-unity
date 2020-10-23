@@ -3,7 +3,7 @@ using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
-	public class FlowNavigator : MonoBehaviour
+	public class AndroidBackwardNavigator : MonoBehaviour
 	{
 		[SerializeField]
 		private FlowTree _flowTree = null;
