@@ -20,4 +20,4 @@ MonoBehaviour:
   debugRenderFrameInterval: 1
   debugEffectiveRenderFrameRate: 60
   debugWillCurrentFrameRender: 1
-  debugIsSameFrame: 0
+  debugIsSameFrame: 1
