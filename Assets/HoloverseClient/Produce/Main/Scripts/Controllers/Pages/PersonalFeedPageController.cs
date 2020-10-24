@@ -1,27 +1,31 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
+using Midnight.Pages;
 
 namespace Holoverse.Client.Controllers
 {
-	using Api.Data.Contents.Creators;
-
 	using Client.Data;
-
-	public class HomePageController : FeedPageController
+	
+	public class PersonalFeedPageController : FeedPageController
 	{
-		protected override VideoFeedData CreateVideoFeedData() =>
-			new VideoFeedData(
-				client,
-				new FindCreatorsSettings {
-					isCheckForAffiliations = true,
-					affiliations = new List<string>() {
-						"hololiveProduction"
-					},
-					batchSize = 100
-				});
+		[Space]
+		[Header("References")]
+		[SerializeField]
+		private Section _emptyFeedSection = null;
+
+		protected override VideoFeedData CreateVideoFeedData() => null;
 
 		private async void OnNodeVisit()
 		{
-			await InitializeAsync();
+			if(CreateVideoFeedData() == null) {
+				videoFeedSection.gameObject.SetActive(false);
+				_emptyFeedSection.gameObject.SetActive(true);
+			} else {
+				videoFeedSection.gameObject.SetActive(true);
+				_emptyFeedSection.gameObject.SetActive(false);
+
+				await InitializeAsync();
+			}			
 		}
 
 		private void OnNodeLeave()
