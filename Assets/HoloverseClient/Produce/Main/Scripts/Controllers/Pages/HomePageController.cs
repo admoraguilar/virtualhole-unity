@@ -2,13 +2,14 @@
 
 namespace Holoverse.Client.Controllers
 {
+	using Api.Data;
 	using Api.Data.Contents.Creators;
 
 	using Client.Data;
 
 	public class HomePageController : FeedPageController
 	{
-		protected override VideoFeedData CreateVideoFeedData() =>
+		protected override VideoFeedData CreateVideoFeedData(HoloverseDataClient client) =>
 			new VideoFeedData(
 				client,
 				new FindCreatorsSettings {
@@ -18,15 +19,5 @@ namespace Holoverse.Client.Controllers
 					},
 					batchSize = 100
 				});
-
-		private async void OnNodeVisit()
-		{
-			await InitializeAsync(CreateCancelToken().Token);
-		}
-
-		private async void OnNodeLeave()
-		{
-			await page.UnloadAsync();
-		}
 	}
 }

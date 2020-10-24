@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Midnight.Pages;
 
 namespace Holoverse.Client.Controllers
 {
+	using Api.Data;
+
 	using Client.Data;
-	
+
 	public class PersonalFeedPageController : FeedPageController
 	{
 		[Space]
@@ -13,24 +16,19 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private Section _emptyFeedSection = null;
 
-		protected override VideoFeedData CreateVideoFeedData() => null;
+		protected override VideoFeedData CreateVideoFeedData(HoloverseDataClient client) => null;
 
-		private async void OnNodeVisit()
+		protected override async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
-			if(CreateVideoFeedData() == null) {
-				videoFeedSection.gameObject.SetActive(false);
-				_emptyFeedSection.gameObject.SetActive(true);
-			} else {
-				videoFeedSection.gameObject.SetActive(true);
-				_emptyFeedSection.gameObject.SetActive(false);
+			//if(CreateVideoFeedData() == null) {
+			//	_emptyFeedSection.gameObject.SetActive(true);
+			//} else {
+			//	_emptyFeedSection.gameObject.SetActive(false);
+			//	await base.InitializeAsync(cancellationToken);
+			//}
 
-				await InitializeAsync();
-			}			
-		}
-
-		private void OnNodeLeave()
-		{
-
+			await Task.CompletedTask;
+			_emptyFeedSection.gameObject.SetActive(true);
 		}
 	}
 }

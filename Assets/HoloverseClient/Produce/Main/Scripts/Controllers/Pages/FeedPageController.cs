@@ -18,7 +18,6 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private Node _node = null;
 
-		protected HoloverseDataClient client => _client.client;
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
@@ -44,18 +43,17 @@ namespace Holoverse.Client.Controllers
 
 		protected List<VideoScrollRectCellData> _videoFeedCells { get; private set; } = new List<VideoScrollRectCellData>();
 		protected VideoFeedData _videoFeedData { get; private set; } = null;
-		protected bool _isLoading { get; private set; } = false;
 
 		protected CancellationTokenSource _cts { get; private set; } = new CancellationTokenSource();
 
-		protected abstract VideoFeedData CreateVideoFeedData();
+		protected abstract VideoFeedData CreateVideoFeedData(HoloverseDataClient client);
 
-		protected async Task InitializeAsync(CancellationToken cancellationToken = default)
+		protected virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
 			_page.Prewarm();
 
 			if(_videoFeedData == null) {
-				_videoFeedData = CreateVideoFeedData();
+				_videoFeedData = CreateVideoFeedData(_client.client);
 				await _videoFeedData.InitializeAsync();
 
 				_videoFeed.dropdown.ClearOptions();
@@ -68,12 +66,10 @@ namespace Holoverse.Client.Controllers
 			await _page.LoadAsync(cancellationToken);
 		}
 
-		protected async Task LoadContentAsync(CancellationToken cancellationToken = default)
+		private async Task LoadContentAsync(CancellationToken cancellationToken = default)
 		{
 			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
-
-			if(_isLoading || feed.isDone) { return; }
-			_isLoading = true;
+			if(feed.isDone) { return; }
 
 			bool isFirstLoad = _videoFeedCells.Count <= 0;
 
@@ -90,11 +86,9 @@ namespace Holoverse.Client.Controllers
 			if(isFirstLoad) {
 				_videoFeed.videoScroll.ScrollTo(0f, 0f);
 			}
-
-			_isLoading = false;
 		}
 
-		protected async Task UnloadContentAsync()
+		private async Task UnloadContentAsync()
 		{
 			await Task.CompletedTask;
 
@@ -102,7 +96,7 @@ namespace Holoverse.Client.Controllers
 			CancelToken();
 		}
 
-		protected void ClearFeed()
+		private void ClearFeed()
 		{
 			_videoFeedCells.Clear();
 			_videoFeed.videoScroll.UpdateData(_videoFeedCells);
@@ -111,18 +105,18 @@ namespace Holoverse.Client.Controllers
 			feed.Clear();
 		}
 
-		protected void ScrollToTop()
+		private void ScrollToTop()
 		{
 			_videoFeed.videoScroll.ScrollTo(0f, 1f);
 		}
 
-		protected CancellationTokenSource CreateCancelToken()
+		private CancellationTokenSource CreateCancelToken()
 		{
 			CancelToken();
 			return _cts = new CancellationTokenSource();
 		}
 
-		protected void CancelToken()
+		private void CancelToken()
 		{
 			if(_cts != null) {
 				_cts.Cancel();
@@ -167,8 +161,8 @@ namespace Holoverse.Client.Controllers
 			_node.OnVisit += OnNodeVisit;
 			_node.OnLeave += OnNodeLeave;
 
-			_videoFeedSection.LoadContentTaskFactory += LoadContentAsync;
-			_videoFeedSection.UnloadContentTaskFactory += UnloadContentAsync;
+			_videoFeedSection.LoadTaskFactory += LoadContentAsync;
+			_videoFeedSection.UnloadTaskFactory += UnloadContentAsync;
 
 			_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
 			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
@@ -181,8 +175,8 @@ namespace Holoverse.Client.Controllers
 			_node.OnVisit -= OnNodeVisit;
 			_node.OnLeave -= OnNodeLeave;
 
-			_videoFeedSection.LoadContentTaskFactory -= LoadContentAsync;
-			_videoFeedSection.UnloadContentTaskFactory -= UnloadContentAsync;
+			_videoFeedSection.LoadTaskFactory -= LoadContentAsync;
+			_videoFeedSection.UnloadTaskFactory -= UnloadContentAsync;
 
 			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
 			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
