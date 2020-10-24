@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.Assertions;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
 	public class AndroidBackwardNavigator : MonoBehaviour
 	{
+		[Header("References")]
 		[SerializeField]
-		private GameObject _rootReference = null;
-
 		private FlowTree _flowTree = null;
 
 		private void OnEscapeButton()
@@ -25,13 +23,6 @@ namespace Holoverse.Client.Controllers
 			} else {
 				_flowTree.Backward();
 			}
-		}
-
-		private void Awake()
-		{
-			Assert.IsNotNull(_rootReference);
-
-			_flowTree = _rootReference.GetComponentInChildren<FlowTree>();
 		}
 
 		private void Update()

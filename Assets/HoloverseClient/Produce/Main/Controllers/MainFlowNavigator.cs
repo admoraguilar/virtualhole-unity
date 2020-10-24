@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight.SOM;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
@@ -15,25 +14,19 @@ namespace Holoverse.Client.Controllers
 		{
 			public Sprite sprite = null;
 			public string text = null;
-			public NodeObject node = null;
+			public Node node = null;
 		}
-
-		[SerializeField]
-		private SceneObjectModel _som = null;
 
 		[Header("Navigations")]
 		[SerializeField]
 		private NavigationItem[] _navigationItems = null;
 
+		[Header("References")]
+		[SerializeField]
 		private FlowTree _flowTree = null;
+		
+		[SerializeField]
 		private NavigationBar _navigationBar = null;
-
-		private void Awake()
-		{
-			if(_som == null) { _som = SceneObjectModel.Get(this); }
-			_flowTree = _som.GetSceneObjectComponent<FlowTree>();
-			_navigationBar = _som.GetSceneObjectComponent<NavigationBar>();
-		}
 
 		private void Start()
 		{

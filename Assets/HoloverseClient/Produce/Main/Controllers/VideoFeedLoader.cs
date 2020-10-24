@@ -25,102 +25,102 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private Page _homePage = null;
 
-		private async Task InitializeFeedAsync()
-		{
-			_homePage.Prewarm();
+		//private async Task InitializeFeedAsync()
+		//{
+		//	_homePage.Prewarm();
 
-			List<Creator> creators = new List<Creator>();
+		//	List<Creator> creators = new List<Creator>();
 
-			using(new StopwatchScope("Getting creators data..", "Start", "End")) {
-				FindCreatorsSettings findCreatorsSettings =
-					new FindCreatorsSettings {
-						isCheckForAffiliations = true,
-						affiliations = new List<string>() {
-							"hololiveProduction"
-						},
-						batchSize = 100
-					};
+		//	using(new StopwatchScope("Getting creators data..", "Start", "End")) {
+		//		FindCreatorsSettings findCreatorsSettings =
+		//			new FindCreatorsSettings {
+		//				isCheckForAffiliations = true,
+		//				affiliations = new List<string>() {
+		//					"hololiveProduction"
+		//				},
+		//				batchSize = 100
+		//			};
 
-				FindResults<Creator> resultCreators = await _client
-					.client.contents
-					.creators.FindCreatorsAsync(findCreatorsSettings);
+		//		FindResults<Creator> resultCreators = await _client
+		//			.client.contents
+		//			.creators.FindCreatorsAsync(findCreatorsSettings);
 
-				while(await resultCreators.MoveNextAsync()) {
-					creators.AddRange(resultCreators.current);
-				}
+		//		while(await resultCreators.MoveNextAsync()) {
+		//			creators.AddRange(resultCreators.current);
+		//		}
 
-				resultCreators.Dispose();
-			}
+		//		resultCreators.Dispose();
+		//	}
 
-			VideoFeedSection videoFeed = _homePage.GetSection<VideoFeedSection>();
-			VideoFeedSection.ContentInfo[] contentInfos = new VideoFeedSection.ContentInfo[] {
-				new VideoFeedSection.ContentInfo {
-					type = "Discover",
-					query = new FindCreatorVideosSettings<Video> {
-						creators = creators,
-						sortMode = FindCreatorVideosSettings<Video>.SortMode.ByCreationDate,
-						isSortAscending = false
-					}
-				},
+		//	VideoFeedSection videoFeed = _homePage.GetSection<VideoFeedSection>();
+		//	VideoFeedSection.ContentInfo[] contentInfos = new VideoFeedSection.ContentInfo[] {
+		//		new VideoFeedSection.ContentInfo {
+		//			type = "Discover",
+		//			query = new FindCreatorVideosSettings<Video> {
+		//				creators = creators,
+		//				sortMode = FindCreatorVideosSettings<Video>.SortMode.ByCreationDate,
+		//				isSortAscending = false
+		//			}
+		//		},
 
-				new VideoFeedSection.ContentInfo {
-					type = "Community",
-					query = new FindCreatorRelatedVideosSettings<Video> {
-						creators = creators,
-						sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
-						isSortAscending = false
-					}
-				},
-				new VideoFeedSection.ContentInfo {
-					type = "Live",
-					query = new FindCreatorVideosSettings<Video> {
-						isBroadcast = true,
-						isLive = true,
-						creators = creators,
-						sortMode = FindCreatorVideosSettings<Video>.SortMode.BySchedule,
-						isSortAscending = false
-					}
-				},
-				new VideoFeedSection.ContentInfo {
-					type  = "Scheduled",
-					query = new FindCreatorVideosSettings<Video> {
-						isBroadcast = true,
-						isLive = false,
-						creators = creators,
-						sortMode = FindVideosSettings<Video>.SortMode.BySchedule,
-						isSortAscending = false
-					}
-				}
-			};
-			videoFeed.Initialize(contentInfos);
+		//		new VideoFeedSection.ContentInfo {
+		//			type = "Community",
+		//			query = new FindCreatorRelatedVideosSettings<Video> {
+		//				creators = creators,
+		//				sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
+		//				isSortAscending = false
+		//			}
+		//		},
+		//		new VideoFeedSection.ContentInfo {
+		//			type = "Live",
+		//			query = new FindCreatorVideosSettings<Video> {
+		//				isBroadcast = true,
+		//				isLive = true,
+		//				creators = creators,
+		//				sortMode = FindCreatorVideosSettings<Video>.SortMode.BySchedule,
+		//				isSortAscending = false
+		//			}
+		//		},
+		//		new VideoFeedSection.ContentInfo {
+		//			type  = "Scheduled",
+		//			query = new FindCreatorVideosSettings<Video> {
+		//				isBroadcast = true,
+		//				isLive = false,
+		//				creators = creators,
+		//				sortMode = FindVideosSettings<Video>.SortMode.BySchedule,
+		//				isSortAscending = false
+		//			}
+		//		}
+		//	};
+		//	videoFeed.Initialize(contentInfos);
 
-			foreach(VideoFeedSection.ContentInfo info in contentInfos) {
-				MLog.Log($"Type: {info.type} | Query: {info.query.GetFilterDocument().ToString()}");
-			}
+		//	foreach(VideoFeedSection.ContentInfo info in contentInfos) {
+		//		MLog.Log($"Type: {info.type} | Query: {info.query.GetFilterDocument().ToString()}");
+		//	}
 
-			await _homePage.LoadAsync();
-		}
+		//	await _homePage.LoadAsync();
+		//}
 
-		private void OnAttemptSetNodeSameAsCurrent(Node node)
-		{
-			if(_homePage.transform.IsChildOf(node.transform)) {
-				_homePage.GetSection<VideoFeedSection>().ScrollToTop();
-			}
-		}
+		//private void OnAttemptSetNodeSameAsCurrent(Node node)
+		//{
+		//	if(_homePage.transform.IsChildOf(node.transform)) {
+		//		_homePage.GetSection<VideoFeedSection>().ScrollToTop();
+		//	}
+		//}
 
-		private void Start()
-		{
-			//TaskExt.FireForget(InitializeFeedAsync());
-		}
+		//private void Start()
+		//{
+		//	//TaskExt.FireForget(InitializeFeedAsync());
+		//}
 
-		private void OnEnable()
-		{
-			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetNodeSameAsCurrent;
-		}
+		//private void OnEnable()
+		//{
+		//	_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetNodeSameAsCurrent;
+		//}
 
-		private void OnDisable()
-		{
-			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetNodeSameAsCurrent;
-		}
+		//private void OnDisable()
+		//{
+		//	_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetNodeSameAsCurrent;
+		//}
 	}
 }
