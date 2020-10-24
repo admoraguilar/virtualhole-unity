@@ -32,29 +32,5 @@ namespace Holoverse.Client.Controllers
 		{
 
 		}
-
-		private void OnEnable()
-		{
-			flowTree.OnAttemptSetSameNodeAsCurrent += ScrollToTopIfSame;
-
-			node.OnVisit += OnNodeVisit;
-			node.OnLeave += OnNodeLeave;
-
-			videoFeedSection.LoadContentTaskFactory += LoadContentAsync;
-
-			videoFeed.videoScroll.OnScrollerPositionChanged += LoadIfNearEndScroll;
-			videoFeed.dropdown.onValueChanged.AddListener(ClearAndRefreshFeed);
-		}
-
-		private void OnDisable()
-		{
-			flowTree.OnAttemptSetSameNodeAsCurrent -= ScrollToTopIfSame;
-
-			node.OnVisit -= OnNodeVisit;
-			node.OnLeave -= OnNodeLeave;
-
-			videoFeed.videoScroll.OnScrollerPositionChanged -= LoadIfNearEndScroll;
-			videoFeed.dropdown.onValueChanged.RemoveListener(ClearAndRefreshFeed);
-		}
 	}
 }

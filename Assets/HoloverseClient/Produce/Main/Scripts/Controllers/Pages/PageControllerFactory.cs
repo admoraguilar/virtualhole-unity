@@ -73,8 +73,6 @@ namespace Holoverse.Client.Controllers
 							await ImageGetWebRequest.GetAsync(creator.avatarUrl));
 					}
 				}
-
-				await Task.CompletedTask;
 			}
 		}
 

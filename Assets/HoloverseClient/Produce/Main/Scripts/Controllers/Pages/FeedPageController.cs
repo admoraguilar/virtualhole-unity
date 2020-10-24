@@ -15,7 +15,6 @@ namespace Holoverse.Client.Controllers
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
-		protected Node node => _node;
 		[SerializeField]
 		private Node _node = null;
 
@@ -30,20 +29,16 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		protected Node _optionsNode = null;
 
-		protected FlowTree flowTree => _flowTree;
 		[Header("References")]
 		[SerializeField]
 		private FlowTree _flowTree = null;
 
-		protected Page page => _page;
 		[SerializeField]
 		private Page _page = null;
 
-		protected Section videoFeedSection => _videoFeedSection;
 		[SerializeField]
 		private Section _videoFeedSection = null;
 
-		protected VideoFeed videoFeed => _videoFeed;
 		[SerializeField]
 		private VideoFeed _videoFeed = null;
 
@@ -73,25 +68,6 @@ namespace Holoverse.Client.Controllers
 			await _page.LoadAsync(cancellationToken);
 		}
 
-		protected void ScrollToTopIfSame(Node node)
-		{
-			if(node != _node) { return; }
-			ScrollToTop();
-		}
-
-		protected async void LoadIfNearEndScroll(float position)
-		{
-			if(position >= _videoFeed.videoScroll.itemCount - _cellRemainingThreshold) {
-				await LoadContentAsync();
-			}
-		}
-
-		protected async void ClearAndRefreshFeed(int value)
-		{
-			ClearFeed();
-			await _page.RefreshAsync();
-		}
-
 		protected async Task LoadContentAsync(CancellationToken cancellationToken = default)
 		{
 			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
@@ -116,6 +92,14 @@ namespace Holoverse.Client.Controllers
 			}
 
 			_isLoading = false;
+		}
+
+		protected async Task UnloadContentAsync()
+		{
+			await Task.CompletedTask;
+
+			ClearFeed();
+			CancelToken();
 		}
 
 		protected void ClearFeed()
@@ -147,5 +131,61 @@ namespace Holoverse.Client.Controllers
 			}
 		}
 
+		private async void OnNodeVisit()
+		{
+			await InitializeAsync(CreateCancelToken().Token);
+		}
+
+		private async void OnNodeLeave()
+		{
+			await _page.UnloadAsync();
+		}
+
+		private void OnAttemptSetSameNodeAsCurrent(Node node)
+		{
+			if(node != _node) { return; }
+			ScrollToTop();
+		}
+
+		private async void OnScrollerPositionChanged(float position)
+		{
+			if(position >= _videoFeed.videoScroll.itemCount - _cellRemainingThreshold) {
+				await LoadContentAsync();
+			}
+		}
+
+		private async void OnDropdownValueChanged(int value)
+		{
+			ClearFeed();
+			await _page.RefreshAsync();
+		}
+
+		private void OnEnable()
+		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
+
+			_node.OnVisit += OnNodeVisit;
+			_node.OnLeave += OnNodeLeave;
+
+			_videoFeedSection.LoadContentTaskFactory += LoadContentAsync;
+			_videoFeedSection.UnloadContentTaskFactory += UnloadContentAsync;
+
+			_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+		}
+
+		private void OnDisable()
+		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
+
+			_node.OnVisit -= OnNodeVisit;
+			_node.OnLeave -= OnNodeLeave;
+
+			_videoFeedSection.LoadContentTaskFactory -= LoadContentAsync;
+			_videoFeedSection.UnloadContentTaskFactory -= UnloadContentAsync;
+
+			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
+		}
 	}
 }

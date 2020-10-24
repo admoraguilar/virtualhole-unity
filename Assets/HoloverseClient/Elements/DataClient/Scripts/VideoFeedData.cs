@@ -8,8 +8,8 @@ namespace Holoverse.Client.Data
 {
 	using Api.Data;
 	using Api.Data.Common;
-	using Api.Data.Contents.Creators;
 	using Api.Data.Contents.Videos;
+	using Api.Data.Contents.Creators;
 	
 	public class VideoFeedData
 	{
@@ -50,10 +50,9 @@ namespace Holoverse.Client.Data
 
 			public override async Task<IEnumerable<Video>> LoadVideosAsync(CancellationToken cancellationToken = default)
 			{
-				if(_isLoading || isDone) {
-					await Task.CompletedTask;
-					return default;
-				}
+				cancellationToken.ThrowIfCancellationRequested();
+
+				if(_isLoading || isDone) { return default; }
 				_isLoading = true;
 
 				if(_findVideoResults == null) {
@@ -61,7 +60,7 @@ namespace Holoverse.Client.Data
 						.contents.videos
 						.FindVideosAsync(_findVideosSettings, cancellationToken);
 
-					if(!await _findVideoResults.MoveNextAsync(cancellationToken)) { SetEndOfCursor(); }
+					if(!await _findVideoResults.MoveNextAsync()) { SetEndOfCursor(); }
 				}
 
 				IEnumerable<T> results = null;
@@ -69,7 +68,7 @@ namespace Holoverse.Client.Data
 					results = _findVideoResults.current;
 					_videos.AddRange(results);
 
-					if(!await _findVideoResults.MoveNextAsync(cancellationToken)) { SetEndOfCursor(); }
+					if(!await _findVideoResults.MoveNextAsync()) { SetEndOfCursor(); }
 				}
 
 				_isLoading = false;
@@ -107,11 +106,12 @@ namespace Holoverse.Client.Data
 			_creatorSettings = creatorSettings;
 		}
 
-		public async Task InitializeAsync()
+		public async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
 			using(new StopwatchScope(nameof(VideoFeedData), "Start Getting creators data...", "End")) {
 				using(FindResults<Creator> results = await _client
-					.contents.creators.FindCreatorsAsync(_creatorSettings)) {
+					.contents.creators.FindCreatorsAsync(
+						_creatorSettings, cancellationToken)) {
 					while(await results.MoveNextAsync()) {
 						foreach(Creator result in results.current) {
 							_creatorLookup[result.universalId] = result;

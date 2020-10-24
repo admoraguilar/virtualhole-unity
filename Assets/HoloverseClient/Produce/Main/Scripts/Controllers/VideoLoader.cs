@@ -38,10 +38,7 @@ namespace Holoverse.Client.Controllers
 
 		private async Task LoadVideos()
 		{
-			if(_isLoading) {
-				await Task.CompletedTask;
-				return; 
-			}
+			if(_isLoading) { return; }
 			_isLoading = true;
 
 			MLog.Log(nameof(VideoLoader), "Loading of videos started");
