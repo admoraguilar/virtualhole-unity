@@ -15,6 +15,7 @@ namespace Holoverse.Client.Pages
 	using Api.Data.Contents.Videos;
 
 	using Client.UI;
+	using Client.Caching;
 
 	public class VideoFeedSection : Section
 	{
@@ -118,12 +119,26 @@ namespace Holoverse.Client.Pages
 				// finished.
 				if(thumbnail == null) { continue; }
 
-				VideoScrollRectCellData cellData = new VideoScrollRectCellData {
-					thumbnailSprite = thumbnail,
-					title = video.title,
-					creatorName = video.creator,
-					onCellClick = () => Application.OpenURL(video.url)
-				};
+				//VideoScrollRectCellData cellData = new VideoScrollRectCellData {
+				//	thumbnailSprite = thumbnail,
+				//	title = video.title,
+				//	creatorName = video.creator,
+				//	onCellClick = () => Application.OpenURL(video.url)
+				//};
+				VideoScrollRectCellData cellData = new VideoScrollRectCellData();
+				cellData.thumbnailSprite = thumbnail;
+				cellData.indicatorSprite = null;
+				cellData.title = video.title;
+				cellData.date = video.creationDate.ToString();
+
+				if(!DataCache.TryGet("Thumbnails", video.creatorIdUniversal, out Sprite value)) {
+					cellData.creatorSprite = value;
+				}
+
+				cellData.creatorName = video.creator;
+				cellData.onOptionsClick = null;
+				cellData.onCellClick = () => Application.OpenURL(video.url);
+
 				_cellData.Add(cellData);
 			}
 
