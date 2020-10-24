@@ -18,17 +18,11 @@ namespace Holoverse.Client.Controllers
 
 		protected override VideoFeedData CreateVideoFeedData(HoloverseDataClient client) => null;
 
-		protected override async Task InitializeAsync(CancellationToken cancellationToken = default)
+		protected override async void OnNodeVisit()
 		{
-			//if(CreateVideoFeedData() == null) {
-			//	_emptyFeedSection.gameObject.SetActive(true);
-			//} else {
-			//	_emptyFeedSection.gameObject.SetActive(false);
-			//	await base.InitializeAsync(cancellationToken);
-			//}
-
 			await Task.CompletedTask;
 			_emptyFeedSection.gameObject.SetActive(true);
+			await _emptyFeedSection.LoadAsync();
 		}
 	}
 }

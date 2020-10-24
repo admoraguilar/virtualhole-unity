@@ -44,7 +44,7 @@ namespace Holoverse.Client.UI
 
 		private void FixedUpdate()
 		{
-			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0f) {
+			if(Mathf.Abs(scrollerPosition - _prevScrollerPosition) > 0.1f) {
 				OnScrollerPositionChanged?.Invoke(_prevScrollerPosition = scrollerPosition);
 				_antiMistapImage?.SetActive(true);
 				_antiMistapTimer = 0f;

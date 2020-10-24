@@ -25,7 +25,10 @@ namespace Holoverse.Client.Controllers
 		{
 			List<VideoScrollRectCellData> results = new List<VideoScrollRectCellData>();
 
-			List<Video> videos = (await feed.LoadVideosAsync(cancellationToken)).ToList();
+			IEnumerable<Video> videoResult = await feed.LoadVideosAsync(cancellationToken);
+			if(videoResult == null) { return results; }
+
+			List<Video> videos = videoResult.ToList();
 			await Concurrent.ForEachAsync(videos, PreloadResources, cancellationToken);
 
 			foreach(Video video in videos) {
