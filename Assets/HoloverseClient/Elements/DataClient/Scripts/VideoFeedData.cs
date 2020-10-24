@@ -20,12 +20,15 @@ namespace Holoverse.Client.Data
 			public IReadOnlyList<Video> videos => _videos;
 			protected List<Video> _videos = new List<Video>();
 
+			public bool isDone { get; protected set; } = false;
+
 			public Feed(string name)
 			{
 				this.name = name;
 			}
 
-			public abstract Task<IEnumerable<Video>> LoadVideosAsync(CancellationToken cancellationToken = default); 
+			public abstract Task<IEnumerable<Video>> LoadVideosAsync(CancellationToken cancellationToken = default);
+			public abstract void Clear();
 		}
 
 		private class Feed<T> : Feed where T : Video
@@ -47,7 +50,7 @@ namespace Holoverse.Client.Data
 
 			public override async Task<IEnumerable<Video>> LoadVideosAsync(CancellationToken cancellationToken = default)
 			{
-				if(_isLoading) {
+				if(_isLoading || isDone) {
 					await Task.CompletedTask;
 					return default;
 				}
@@ -57,27 +60,35 @@ namespace Holoverse.Client.Data
 					_findVideoResults = await _client
 						.contents.videos
 						.FindVideosAsync(_findVideosSettings, cancellationToken);
+
+					if(!await _findVideoResults.MoveNextAsync(cancellationToken)) { SetEndOfCursor(); }
 				}
 
-				if(!await _findVideoResults.MoveNextAsync(cancellationToken)) {
+				IEnumerable<T> results = null;
+				if(_findVideoResults != null) {
+					results = _findVideoResults.current;
+					_videos.AddRange(results);
+
+					if(!await _findVideoResults.MoveNextAsync(cancellationToken)) { SetEndOfCursor(); }
+				}
+
+				_isLoading = false;
+				return results;
+
+				void SetEndOfCursor()
+				{
 					MLog.Log(nameof(Feed<T>), $"No more videos found!");
 					_findVideoResults.Dispose();
 					_findVideoResults = null;
-					return default;
+					isDone = true;
 				}
-
-				IEnumerable<T> results = _findVideoResults.current;
-				_videos.AddRange(results);
-
-				_isLoading = false;
-
-				return results;
 			}
 
-			public void Clear()
+			public override void Clear()
 			{
 				_videos.Clear();
 				_findVideoResults = null;
+				isDone = false;
 			}
 		}
 
@@ -134,7 +145,7 @@ namespace Holoverse.Client.Data
 				_client, "Live",
 				new FindCreatorVideosSettings<Broadcast> {
 					isBroadcast = true,
-					isLive = false,
+					isLive = true,
 					creators = creators,
 					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
 					isSortAscending = false
@@ -144,7 +155,7 @@ namespace Holoverse.Client.Data
 				_client, "Schedule",
 				new FindCreatorVideosSettings<Broadcast> {
 					isBroadcast = true,
-					isLive = true,
+					isLive = false,
 					creators = creators,
 					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
 					isSortAscending = false

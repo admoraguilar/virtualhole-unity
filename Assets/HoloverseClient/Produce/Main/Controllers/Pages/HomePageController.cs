@@ -14,6 +14,8 @@ namespace Holoverse.Client.Controllers
 
 	using Client.UI;
 	using Client.Data;
+	using TMPro;
+	using Midnight;
 
 	public class HomePageController : MonoBehaviour
 	{
@@ -67,45 +69,38 @@ namespace Holoverse.Client.Controllers
 
 				await _videoFeedData.InitializeAsync();
 
+				_videoFeed.dropdown.ClearOptions();
 				_videoFeed.dropdown.AddOptions(_videoFeedData.feeds.Select(f => f.name).ToList());
 			}
 
 			ClearFeed();
 			_videoFeed.dropdown.value = 0;
-			_videoFeedSection.LoadContentTaskFactory += LoadContentAsync;
 
 			await _homePage.LoadAsync(cancellationToken);
 		}
 
 		private async Task LoadContentAsync(CancellationToken cancellationToken = default)
 		{
-			if(_isLoading) { return; }
+			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
+
+			if(_isLoading || feed.isDone) { return; }
 			_isLoading = true;
 
 			bool isFirstLoad = _videoFeedCells.Count <= 0;
 
-			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
-			_videoFeedCells.AddRange(await PageControllerFactory.ProcessVideoFeed(_videoFeedData, feed));
+			IEnumerable<VideoScrollRectCellData> cellData = await PageControllerFactory.CreateCellData(_videoFeedData, feed);
+			foreach(VideoScrollRectCellData cell in cellData) {
+				cell.onOptionsClick = () => MLog.Log("Hello");
+			}
 
+			_videoFeedCells.AddRange(cellData);
 			_videoFeed.videoScroll.UpdateData(_videoFeedCells);
 
 			if(isFirstLoad) {
 				_videoFeed.videoScroll.ScrollTo(0f, 0f);
-
-				_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
-				_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 			}
 
 			_isLoading = false;
-		}
-
-		private async Task UnloadContentAsync()
-		{
-			await Task.CompletedTask;
-			ClearFeed();
-
-			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
-			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
 		}
 
 		private void ScrollToTop()
@@ -117,6 +112,9 @@ namespace Holoverse.Client.Controllers
 		{
 			_videoFeedCells.Clear();
 			_videoFeed.videoScroll.UpdateData(_videoFeedCells);
+
+			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
+			feed.Clear();
 		}
 
 		private async void OnHomeVisit()
@@ -144,6 +142,7 @@ namespace Holoverse.Client.Controllers
 
 		private async void OnDropdownValueChanged(int value)
 		{
+			ClearFeed();
 			await _homePage.RefreshAsync();
 		}
 
@@ -153,6 +152,11 @@ namespace Holoverse.Client.Controllers
 
 			_homeNode.OnVisit += OnHomeVisit;
 			_homeNode.OnLeave += OnHomeLeave;
+
+			_videoFeedSection.LoadContentTaskFactory += LoadContentAsync;
+
+			_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 		}
 
 		private void OnDisable()
@@ -161,6 +165,9 @@ namespace Holoverse.Client.Controllers
 
 			_homeNode.OnVisit -= OnHomeVisit;
 			_homeNode.OnLeave -= OnHomeLeave;
+
+			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
+			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
 		}
 	}
 }
