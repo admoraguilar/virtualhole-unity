@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Midnight.Web;
 
 namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents;
 	using Api.Data.Contents.Creators;
-	using Midnight.Web;
+	
 
 	public class CreatorView : MonoBehaviour
 	{
