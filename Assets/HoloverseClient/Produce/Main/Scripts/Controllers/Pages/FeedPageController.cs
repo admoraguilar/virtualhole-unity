@@ -3,72 +3,66 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using Midnight.SOM;
 using Midnight.Pages;
 using Midnight.FlowTree;
+using Midnight.Concurrency;
 
 namespace Holoverse.Client.Controllers
 {
 	using Api.Data;
 
 	using Client.UI;
+	using Client.SOM;
 	using Client.Data;
+	using Midnight;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
-		[SerializeField]
-		private Node _node = null;
-
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
 		[Space]
 		[SerializeField]
-		protected int _cellRemainingThreshold = 7;
+		private int _cellRemainingThreshold = 7;
 
-		[SerializeField]
-		protected Node _optionsNode = null;
+		private List<VideoScrollRectCellData> _videoFeedCells = new List<VideoScrollRectCellData>();
+		private VideoFeedData _videoFeedData = null;
 
-		[Header("References")]
-		[SerializeField]
-		private FlowTree _flowTree = null;
+		private CancellationTokenSource _cts = new CancellationTokenSource();
 
-		[SerializeField]
+		private SceneObjectModel _som = null;
+		private Node _mainNode = null;
+		private Node _optionsNode = null;
 		private Page _page = null;
-
-		[SerializeField]
 		private Section _videoFeedSection = null;
-
-		[SerializeField]
 		private VideoFeed _videoFeed = null;
-
-		protected List<VideoScrollRectCellData> _videoFeedCells { get; private set; } = new List<VideoScrollRectCellData>();
-		protected VideoFeedData _videoFeedData { get; private set; } = null;
-
-		protected CancellationTokenSource _cts { get; private set; } = new CancellationTokenSource();
 
 		protected abstract VideoFeedData CreateVideoFeedData(HoloverseDataClient client);
 
-		private async Task LoadContentAsync(CancellationToken cancellationToken = default)
+		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
-			if(_videoFeedData == null) {
-				VideoFeedData data = CreateVideoFeedData(_client.client);
-				if(data == null) { return; }
+			_videoFeedData = CreateVideoFeedData(_client.client);
+			if(_videoFeedData == null) { return; }
+			
+			await _videoFeedData.InitializeAsync(cancellationToken);
 
-				await data.InitializeAsync(cancellationToken);
+			_videoFeed.dropdown.ClearOptions();
+			_videoFeed.dropdown.AddOptions(_videoFeedData.feeds.Select(f => f.name).ToList());
 
-				_videoFeed.dropdown.ClearOptions();
-				_videoFeed.dropdown.AddOptions(data.feeds.Select(f => f.name).ToList());
-
-				ClearFeed();
-				_videoFeed.dropdown.value = 0;
-
-				_videoFeedData = data;
-			}
+			ClearFeed();
+			_videoFeed.dropdown.value = 0;
 
 			cancellationToken.ThrowIfCancellationRequested();
+			await LoadAsync(cancellationToken);
+		}
+
+		private async Task LoadAsync(CancellationToken cancellationToken = default)
+		{
+			if(_videoFeedData == null) { return; }
 
 			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
-			if(feed.isDone) { return; }
+			if(feed.isDone) { return;  }
 
 			IEnumerable<VideoScrollRectCellData> cellData = await PageControllerFactory.CreateCellData(
 				_videoFeedData, feed, cancellationToken);
@@ -79,14 +73,14 @@ namespace Holoverse.Client.Controllers
 			bool isFromTop = _videoFeedCells.Count <= 0;
 
 			_videoFeedCells.AddRange(cellData);
-			_videoFeed.videoScroll.UpdateData(_videoFeedCells);
+			_videoFeed.scroll.UpdateData(_videoFeedCells);
 
 			if(isFromTop) {
-				_videoFeed.videoScroll.ScrollTo(0f, 0f);
+				_videoFeed.scroll.ScrollTo(0f, 0f);
 			}
 		}
 
-		private async Task UnloadContentAsync()
+		private async Task UnloadAsync()
 		{
 			await Task.CompletedTask;
 			ClearFeed();
@@ -95,88 +89,70 @@ namespace Holoverse.Client.Controllers
 		private void ClearFeed()
 		{
 			_videoFeedCells.Clear();
-			_videoFeed.videoScroll.UpdateData(_videoFeedCells);
+			_videoFeed.scroll.UpdateData(_videoFeedCells);
 
-			if(_videoFeedData != null && _videoFeedData.feeds.Count > _videoFeed.dropdown.value) {
+			if(_videoFeedData == null) {
 				VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
 				feed.Clear();
 			}
 		}
 
-		private void ScrollToTop()
-		{
-			_videoFeed.videoScroll.ScrollTo(0f, 1f);
-		}
-
-		private CancellationTokenSource CreateCancelToken()
-		{
-			CancelToken();
-			return _cts = new CancellationTokenSource();
-		}
-
-		private void CancelToken()
-		{
-			if(_cts != null) {
-				_cts.Cancel();
-				_cts.Dispose();
-				_cts = null;
-			}
-		}
-
 		protected virtual async void OnNodeVisit()
 		{
-			await _page.LoadAsync(CreateCancelToken().Token);
-		}
-
-		private async void OnNodeLeave()
-		{
-			await _page.UnloadAsync();
-			CancelToken();
-		}
-
-		private void OnAttemptSetSameNodeAsCurrent(Node node)
-		{
-			if(node != _node) { return; }
-			ScrollToTop();
+			await _page.InitializeAsync();
 		}
 
 		private async void OnScrollerPositionChanged(float position)
 		{
-			if(position >= _videoFeed.videoScroll.itemCount - _cellRemainingThreshold) {
-				await _videoFeedSection.LoadAsync();
+			if(position >= _videoFeed.scroll.itemCount - _cellRemainingThreshold) {
+				await _page.LoadAsync();
 			}
 		}
 
 		private async void OnDropdownValueChanged(int value)
 		{
-			await _page.RefreshAsync(CreateCancelToken().Token);
+			ClearFeed();
+
+			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.LoadingIndicator), true);
+			await _videoFeedSection.LoadAsync();
+			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.Content), true);
+		}
+
+		protected virtual void SetReferences(
+			ref Page page, ref Section videoFeedSection,
+			ref VideoFeed videoFeed, ref Node mainNode) { }
+
+		private void Awake()
+		{
+			_som = SceneObjectModel.Get(this);
+			_optionsNode = _som.GetCachedComponent<MainFlowMap>().videoOptionsNode;
+
+			SetReferences(
+				ref _page, ref _videoFeedSection, 
+				ref _videoFeed, ref _mainNode);
 		}
 
 		private void OnEnable()
 		{
-			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
+			_mainNode.OnVisit += OnNodeVisit;
 
-			_node.OnVisit += OnNodeVisit;
-			_node.OnLeave += OnNodeLeave;
+			_videoFeedSection.InitializeTaskFactory += InitializeAsync;
+			_videoFeedSection.LoadTaskFactory += LoadAsync;
+			_videoFeedSection.UnloadTaskFactory += UnloadAsync;
 
-			_videoFeedSection.LoadTaskFactory += LoadContentAsync;
-			_videoFeedSection.UnloadTaskFactory += UnloadContentAsync;
-
-			_videoFeed.videoScroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
+			_videoFeed.scroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
 			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 		}
 
 		private void OnDisable()
 		{
-			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
+			_mainNode.OnVisit -= OnNodeVisit;
 
-			_node.OnVisit -= OnNodeVisit;
-			_node.OnLeave -= OnNodeLeave;
+			_videoFeedSection.InitializeTaskFactory -= InitializeAsync;
+			_videoFeedSection.LoadTaskFactory -= LoadAsync;
+			_videoFeedSection.UnloadTaskFactory -= UnloadAsync;
 
-			_videoFeedSection.LoadTaskFactory -= LoadContentAsync;
-			_videoFeedSection.UnloadTaskFactory -= UnloadContentAsync;
-
-			_videoFeed.videoScroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
+			_videoFeed.scroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
 			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
 		}
 	}
