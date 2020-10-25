@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Midnight;
 
-namespace Holoverse.Client
+namespace Holoverse.Client.Utilities
 {
 	public class Rotator : MonoBehaviour
 	{

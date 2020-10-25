@@ -444,7 +444,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Subscribe
+  m_text: Follow
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0d0665ad93896604f88aa209cd70bc3a, type: 2}
   m_sharedMaterial: {fileID: -4478415084831729098, guid: 0d0665ad93896604f88aa209cd70bc3a,
@@ -527,7 +527,7 @@ GameObject:
   - component: {fileID: 261884416225736746}
   - component: {fileID: 261884416225736747}
   m_Layer: 5
-  m_Name: SubscribeButton
+  m_Name: FollowButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1315,7 +1315,7 @@ PrefabInstance:
     - target: {fileID: 5923252445800244349, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}
       propertyPath: m_Name
-      value: CreatorPage
+      value: CreatorView
       objectReference: {fileID: 0}
     - target: {fileID: 5923252445800244350, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}

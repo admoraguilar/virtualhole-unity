@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
 using Midnight.Web;
 using Midnight.Caching;
 using Midnight.Concurrency;
@@ -16,8 +15,7 @@ namespace Holoverse.Client.Controllers
 	using Client.Data;
 	using Client.UI;
 
-	[CreateAssetMenu(menuName = "Holoverse/Controllers/Page Controller Factory")]
-	public class PageControllerFactory : SingletonObject<PageControllerFactory>
+	public static class PageControllerFactory
 	{
 		public static async Task<IEnumerable<VideoScrollRectCellData>> CreateCellData(
 			VideoFeedData feedData, VideoFeedData.Feed feed, 
@@ -52,8 +50,8 @@ namespace Holoverse.Client.Controllers
 				};
 
 				if(video is Broadcast broadcast) {
-					if(broadcast.isLive) { cellData.indicatorSprite = _instance.liveIndicator; }
-					else { cellData.indicatorSprite = _instance.scheduledIndicator; }
+					if(broadcast.isLive) { cellData.indicatorSprite = UIResources.GetIndicatorSprite(true); }
+					else { cellData.indicatorSprite = UIResources.GetIndicatorSprite(false); }
 				}
 
 				results.Add(cellData);
@@ -78,13 +76,5 @@ namespace Holoverse.Client.Controllers
 				}
 			}
 		}
-
-		public Sprite liveIndicator { get => _liveIndicator; set => _liveIndicator = value; }
-		[SerializeField]
-		private Sprite _liveIndicator = null;
-
-		public Sprite scheduledIndicator { get => _scheduledIndicator; set => _scheduledIndicator = value; }
-		[SerializeField]
-		private Sprite _scheduledIndicator = null;
 	}
 }

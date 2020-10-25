@@ -1,0 +1,46 @@
+﻿using System;
+using UnityEngine;
+using Midnight;
+
+namespace Holoverse.Client.UI
+{
+	using Api.Data.Contents;
+	
+
+	[CreateAssetMenu(menuName = "Holoverse/UI Resources")]
+	public class UIResources : SingletonObject<UIResources>
+	{
+		[Serializable]
+		public class PlatformUI
+		{
+			public Platform platform = default;
+			public Sprite logo = null;
+		}
+
+		public static Sprite GetIndicatorSprite(bool isLive)
+		{
+			if(isLive) { return _instance._liveIndicator; }
+			else { return _instance._scheduledIndicator; }
+		}
+
+		public static PlatformUI GetPlatformUI(Platform platform)
+		{
+			foreach(PlatformUI platformUI in _instance._platformUIs) {
+				if(platformUI.platform != platform) { continue; }
+				return platformUI;
+			}
+
+			return null;
+		}
+
+		[Header("Indicators")]
+		[SerializeField]
+		private Sprite _liveIndicator = null;
+
+		[SerializeField]
+		private Sprite _scheduledIndicator = null;
+
+		[SerializeField]
+		private PlatformUI[] _platformUIs;
+	}
+}
