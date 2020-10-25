@@ -220,7 +220,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5270453569594788561}
   m_Layer: 5
-  m_Name: PeekContentScrollRect
+  m_Name: PeekContentScroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -514,7 +514,7 @@ PrefabInstance:
     - target: {fileID: 3878601530769429986, guid: 851c8e9e991d2424ebd2936b44d6802c,
         type: 3}
       propertyPath: m_Name
-      value: CarouselScrollRect
+      value: CarouselScroll
       objectReference: {fileID: 0}
     - target: {fileID: 4129913525985559660, guid: 851c8e9e991d2424ebd2936b44d6802c,
         type: 3}

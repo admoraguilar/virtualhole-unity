@@ -1315,7 +1315,7 @@ PrefabInstance:
     - target: {fileID: 5923252445800244349, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}
       propertyPath: m_Name
-      value: CreatorPageScrollRect
+      value: CreatorPage
       objectReference: {fileID: 0}
     - target: {fileID: 5923252445800244350, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}
@@ -2002,7 +2002,7 @@ PrefabInstance:
     - target: {fileID: 3472598313908526630, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
       propertyPath: m_Name
-      value: LiveNowPeekContentScrollRect
+      value: LiveNowPeekContentScroll
       objectReference: {fileID: 0}
     - target: {fileID: 5270453569594788561, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
@@ -2271,7 +2271,7 @@ PrefabInstance:
     - target: {fileID: 3472598313908526630, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
       propertyPath: m_Name
-      value: DiscoverPeekContentScrollRect (1)
+      value: DiscoverPeekContentScroll
       objectReference: {fileID: 0}
     - target: {fileID: 5270453569594788561, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
@@ -2401,7 +2401,7 @@ PrefabInstance:
     - target: {fileID: 3472598313908526630, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
       propertyPath: m_Name
-      value: CommunityPeekContentScrollRect (2)
+      value: CommunityPeekContentScroll
       objectReference: {fileID: 0}
     - target: {fileID: 5270453569594788561, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}

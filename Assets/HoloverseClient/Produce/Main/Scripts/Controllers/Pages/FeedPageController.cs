@@ -125,7 +125,7 @@ namespace Holoverse.Client.Controllers
 		private void Awake()
 		{
 			_som = SceneObjectModel.Get(this);
-			_optionsNode = _som.GetCachedComponent<MainFlowMap>().videoOptionsNode;
+			_optionsNode = _som.GetCachedComponent<MainFlowMap>().creatorPageNode;
 
 			SetReferences(
 				ref _page, ref _videoFeedSection, 
