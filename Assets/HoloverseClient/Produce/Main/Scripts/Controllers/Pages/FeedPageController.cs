@@ -23,7 +23,7 @@ namespace Holoverse.Client.Controllers
 		private Node _optionsNode = null;
 		private Page _page = null;
 		private Section _videoFeedSection = null;
-		private VideoFeed _videoFeed = null;
+		private VideoFeedScroll _videoFeed = null;
 
 		protected abstract VideoFeedData CreateVideoFeedData(HoloverseDataClient client);
 
@@ -70,7 +70,7 @@ namespace Holoverse.Client.Controllers
 
 		protected virtual void SetReferences(
 			ref Page page, ref Section videoFeedSection,
-			ref VideoFeed videoFeed, ref Node mainNode) { }
+			ref VideoFeedScroll videoFeed, ref Node mainNode) { }
 
 		private void Awake()
 		{

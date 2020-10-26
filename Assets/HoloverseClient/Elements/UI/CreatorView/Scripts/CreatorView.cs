@@ -36,7 +36,7 @@ namespace Holoverse.Client.UI
 		private RectTransform _peekContentContainer = null;
 
 		[SerializeField]
-		private PeekContent _peekContentTemplate = null;
+		private VideoPeekScroll _peekContentTemplate = null;
 
 
 		public async Task LoadCreator(Creator creator, CancellationToken cancellationToken = default)

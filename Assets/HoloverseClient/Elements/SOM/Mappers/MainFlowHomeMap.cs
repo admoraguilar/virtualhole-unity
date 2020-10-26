@@ -16,8 +16,8 @@ namespace Holoverse.Client.SOM
 		[SerializeField]
 		private Section _videoSection = null;
 
-		public VideoFeed videoFeed => _videoFeed;
+		public VideoFeedScroll videoFeed => _videoFeed;
 		[SerializeField]
-		private VideoFeed _videoFeed = null;
+		private VideoFeedScroll _videoFeed = null;
 	}
 }

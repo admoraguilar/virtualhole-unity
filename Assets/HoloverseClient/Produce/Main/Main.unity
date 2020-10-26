@@ -1684,7 +1684,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
-  _cellRemainingThreshold: 7
 --- !u!224 &1599135657 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 261884416377793858, guid: 52226a3b54c7471449f2f2ca57edec2b,
@@ -1938,7 +1937,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
-  _cellRemainingThreshold: 7
 --- !u!1001 &2003048901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1959,12 +1957,12 @@ PrefabInstance:
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: scrollOffset
-      value: 0.29733807
+      value: 0.122090526
       objectReference: {fileID: 0}
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: cellInterval
-      value: 0.29733807
+      value: 0.122090526
       objectReference: {fileID: 0}
     - target: {fileID: 6265047690015544360, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
@@ -3666,12 +3664,12 @@ PrefabInstance:
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: scrollOffset
-      value: 0.29733807
+      value: 0.122090526
       objectReference: {fileID: 0}
     - target: {fileID: 6265047689976624929, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: cellInterval
-      value: 0.29733807
+      value: 0.122090526
       objectReference: {fileID: 0}
     - target: {fileID: 6265047690015544360, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}

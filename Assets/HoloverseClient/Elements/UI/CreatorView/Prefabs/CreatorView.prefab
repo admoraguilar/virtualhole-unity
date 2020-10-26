@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 3467247318327733155}
   - component: {fileID: 6586630380668950380}
   m_Layer: 5
-  m_Name: PeekContents
+  m_Name: VideoPeekScrolls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

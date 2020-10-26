@@ -75,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 5523841116486246624, guid: 331e3941c49079e47b4cabf5e085153b,
         type: 3}
       propertyPath: m_Name
-      value: VideoFeed
+      value: VideoFeedScroll
       objectReference: {fileID: 0}
     - target: {fileID: 5523841116486246639, guid: 331e3941c49079e47b4cabf5e085153b,
         type: 3}

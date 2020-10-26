@@ -26,7 +26,7 @@ namespace Holoverse.Client.Controllers
 
 		protected override void SetReferences(
 			ref Page page, ref Section videoFeedSection,
-			ref VideoFeed videoFeed, ref Node mainNode)
+			ref VideoFeedScroll videoFeed, ref Node mainNode)
 		{
 			SceneObjectModel som = SceneObjectModel.Get(this);
 			page = som.GetCachedComponent<MainFlowPersonalFeedMap>().page;

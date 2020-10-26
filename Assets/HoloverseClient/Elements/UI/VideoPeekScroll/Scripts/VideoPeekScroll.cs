@@ -4,7 +4,7 @@ using TMPro;
 
 namespace Holoverse.Client.UI
 {
-	public class PeekContent : MonoBehaviour
+	public class VideoPeekScroll : MonoBehaviour
 	{
 		public Image background => _background;
 		[SerializeField]

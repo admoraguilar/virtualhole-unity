@@ -11,7 +11,7 @@ namespace Holoverse.Client.UI
 {
 	using Client.Data;
 
-	public class VideoFeed : MonoBehaviour
+	public class VideoFeedScroll : MonoBehaviour
 	{
 		[Serializable]
 		public class ContextButton
