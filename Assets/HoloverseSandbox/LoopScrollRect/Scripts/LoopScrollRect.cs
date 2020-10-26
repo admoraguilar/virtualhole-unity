@@ -271,6 +271,9 @@ namespace UnityEngine.UI
 
         private bool m_Dragging;
 
+		private float m_DragTime;
+		public float dragTime { get { return m_DragTime; } }
+
         private Vector2 m_PrevPosition = Vector2.zero;
         private Bounds m_PrevContentBounds;
         private Bounds m_PrevViewBounds;
@@ -877,6 +880,7 @@ namespace UnityEngine.UI
             RectTransformUtility.ScreenPointToLocalPointInRectangle(viewRect, eventData.position, eventData.pressEventCamera, out m_PointerStartLocalCursor);
             m_ContentStartPosition = m_Content.anchoredPosition;
             m_Dragging = true;
+			m_DragTime = 0f;
         }
 
         public virtual void OnEndDrag(PointerEventData eventData)
@@ -985,6 +989,8 @@ namespace UnityEngine.UI
 
             if (m_Dragging && m_Inertia)
             {
+				m_DragTime += deltaTime;
+
                 Vector3 newVelocity = (m_Content.anchoredPosition - m_PrevPosition) / deltaTime;
                 m_Velocity = Vector3.Lerp(m_Velocity, newVelocity, deltaTime * 10);
             }
