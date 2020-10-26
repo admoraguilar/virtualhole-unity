@@ -9,7 +9,6 @@ namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents;
 	using Api.Data.Contents.Creators;
-	
 
 	public class CreatorView : MonoBehaviour
 	{
@@ -22,14 +21,23 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private TMP_Text _nameText = null;
 
+		[Space]
+		[SerializeField]
+		private RectTransform _socialButtonContainer = null;
+
 		[SerializeField]
 		private Button _socialButtonTemplate = null;
 
 		[SerializeField]
-		private RectTransform _socialButtonsContainer = null;
+		private Button _followButton = null;
+
+		[Space]
+		[SerializeField]
+		private RectTransform _peekContentContainer = null;
 
 		[SerializeField]
-		private Button _followButton = null;
+		private PeekContent _peekContentTemplate = null;
+
 
 		public async Task LoadCreator(Creator creator, CancellationToken cancellationToken = default)
 		{
@@ -38,12 +46,12 @@ namespace Holoverse.Client.UI
 			_avatarImage.sprite = await ImageGetWebRequest.GetAsync(creator.avatarUrl, null, cancellationToken);
 			_nameText.text = creator.universalName;
 
-			while(_socialButtonsContainer.childCount > 0) {
-				Destroy(_socialButtonsContainer.GetChild(0).gameObject);
+			while(_socialButtonContainer.childCount > 0) {
+				Destroy(_socialButtonContainer.GetChild(0).gameObject);
 			}
 
 			foreach(Social social in creator.socials) {
-				Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonsContainer, false);
+				Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonContainer, false);
 				socialButton.name = $"{social.platform}-{social.name}";
 				socialButton.image.sprite = UIResources.GetPlatformUI(social.platform).logo;
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));

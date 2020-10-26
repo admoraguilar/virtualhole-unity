@@ -6,7 +6,6 @@ namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents;
 	
-
 	[CreateAssetMenu(menuName = "Holoverse/UI Resources")]
 	public class UIResources : SingletonObject<UIResources>
 	{

@@ -15,9 +15,9 @@ namespace Holoverse.Client.Controllers
 	using Client.Data;
 	using Client.UI;
 
-	public static class PageControllerFactory
+	public static class UIFactory
 	{
-		public static async Task<IEnumerable<VideoScrollRectCellData>> CreateCellData(
+		public static async Task<IEnumerable<VideoScrollRectCellData>> CreateVideoScrollRectCellData(
 			VideoFeedData feedData, VideoFeedData.Feed feed, 
 			CancellationToken cancellationToken = default)
 		{

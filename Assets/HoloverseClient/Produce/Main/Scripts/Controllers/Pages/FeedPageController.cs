@@ -64,7 +64,7 @@ namespace Holoverse.Client.Controllers
 			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
 			if(feed.isDone) { return;  }
 
-			IEnumerable<VideoScrollRectCellData> cellData = await PageControllerFactory.CreateCellData(
+			IEnumerable<VideoScrollRectCellData> cellData = await UIFactory.CreateVideoScrollRectCellData(
 				_videoFeedData, feed, cancellationToken);
 			foreach(VideoScrollRectCellData cell in cellData) {
 				cell.onOptionsClick = () => { if(_optionsNode != null) { _optionsNode.Push(); } };

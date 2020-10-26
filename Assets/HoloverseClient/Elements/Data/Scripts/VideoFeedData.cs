@@ -106,15 +106,21 @@ namespace Holoverse.Client.Data
 			_creatorSettings = creatorSettings;
 		}
 
+		public VideoFeedData(HoloverseDataClient client, IEnumerable<Creator> creators)
+		{
+			_client = client;
+			AddCreatorsToLookup(creators);
+		}
+
 		public async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
-			using(new StopwatchScope(nameof(VideoFeedData), "Start Getting creators data...", "End")) {
-				using(FindResults<Creator> results = await _client
-					.contents.creators.FindCreatorsAsync(
-						_creatorSettings, cancellationToken)) {
-					while(await results.MoveNextAsync()) {
-						foreach(Creator result in results.current) {
-							_creatorLookup[result.universalId] = result;
+			if(_creatorSettings != null) {
+				using(new StopwatchScope(nameof(VideoFeedData), "Start Getting creators data...", "End")) {
+					using(FindResults<Creator> results = await _client
+						.contents.creators.FindCreatorsAsync(
+							_creatorSettings, cancellationToken)) {
+						while(await results.MoveNextAsync()) {
+							AddCreatorsToLookup(results.current);
 						}
 					}
 				}
@@ -160,6 +166,13 @@ namespace Holoverse.Client.Data
 					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
 					isSortAscending = false
 				}));
+		}
+
+		private void AddCreatorsToLookup(IEnumerable<Creator> creators)
+		{
+			foreach(Creator result in creators) {
+				_creatorLookup[result.universalId] = result;
+			}
 		}
 	}
 }
