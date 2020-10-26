@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using UnityEngine;
 using Midnight.SOM;
 using Midnight.Pages;
 using Midnight.FlowTree;
-using Midnight.Concurrency;
 
 namespace Holoverse.Client.Controllers
 {
@@ -15,21 +12,11 @@ namespace Holoverse.Client.Controllers
 	using Client.UI;
 	using Client.SOM;
 	using Client.Data;
-	using Midnight;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
-
-		[Space]
-		[SerializeField]
-		private int _cellRemainingThreshold = 7;
-
-		private List<VideoScrollRectCellData> _videoFeedCells = new List<VideoScrollRectCellData>();
-		private VideoFeedData _videoFeedData = null;
-
-		private CancellationTokenSource _cts = new CancellationTokenSource();
 
 		private SceneObjectModel _som = null;
 		private Node _mainNode = null;
@@ -42,59 +29,19 @@ namespace Holoverse.Client.Controllers
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
-			_videoFeedData = CreateVideoFeedData(_client.client);
-			if(_videoFeedData == null) { return; }
-			
-			await _videoFeedData.InitializeAsync(cancellationToken);
-
-			_videoFeed.dropdown.ClearOptions();
-			_videoFeed.dropdown.AddOptions(_videoFeedData.feeds.Select(f => f.name).ToList());
-
-			ClearFeed();
-			_videoFeed.dropdown.value = 0;
-
-			cancellationToken.ThrowIfCancellationRequested();
-			await LoadAsync(cancellationToken);
+			await _videoFeed.InitializeAsync(
+				CreateVideoFeedData(_client.client), OnVideoScrollRectCellDataCreated, 
+				cancellationToken);
 		}
 
 		private async Task LoadAsync(CancellationToken cancellationToken = default)
 		{
-			if(_videoFeedData == null) { return; }
-
-			VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
-			if(feed.isDone) { return;  }
-
-			IEnumerable<VideoScrollRectCellData> cellData = await UIFactory.CreateVideoScrollRectCellData(
-				_videoFeedData, feed, cancellationToken);
-			foreach(VideoScrollRectCellData cell in cellData) {
-				cell.onOptionsClick = () => { if(_optionsNode != null) { _optionsNode.Push(); } };
-			}
-
-			bool isFromTop = _videoFeedCells.Count <= 0;
-
-			_videoFeedCells.AddRange(cellData);
-			_videoFeed.scroll.UpdateData(_videoFeedCells);
-
-			if(isFromTop) {
-				_videoFeed.scroll.ScrollTo(0f, 0f);
-			}
+			await _videoFeed.LoadAsync(OnVideoScrollRectCellDataCreated, cancellationToken);
 		}
 
 		private async Task UnloadAsync()
 		{
-			await Task.CompletedTask;
-			ClearFeed();
-		}
-
-		private void ClearFeed()
-		{
-			_videoFeedCells.Clear();
-			_videoFeed.scroll.UpdateData(_videoFeedCells);
-
-			if(_videoFeedData == null) {
-				VideoFeedData.Feed feed = _videoFeedData.feeds[_videoFeed.dropdown.value];
-				feed.Clear();
-			}
+			await _videoFeed.UnloadAsync();
 		}
 
 		protected virtual async void OnNodeVisit()
@@ -102,20 +49,23 @@ namespace Holoverse.Client.Controllers
 			await _page.InitializeAsync();
 		}
 
-		private async void OnScrollerPositionChanged(float position)
+		private void OnVideoScrollRectCellDataCreated(VideoScrollRectCellData cellData)
 		{
-			if(position >= _videoFeed.scroll.itemCount - _cellRemainingThreshold) {
-				await _page.LoadAsync();
-			}
+			cellData.onOptionsClick += _optionsNode.Push;
 		}
 
 		private async void OnDropdownValueChanged(int value)
 		{
-			ClearFeed();
+			_videoFeed.ClearFeed();
 
 			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.LoadingIndicator), true);
 			await _videoFeedSection.LoadAsync();
 			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.Content), true);
+		}
+
+		private async void OnNearScrollEnd()
+		{
+			await _page.LoadAsync();
 		}
 
 		protected virtual void SetReferences(
@@ -140,8 +90,8 @@ namespace Holoverse.Client.Controllers
 			_videoFeedSection.LoadTaskFactory += LoadAsync;
 			_videoFeedSection.UnloadTaskFactory += UnloadAsync;
 
-			_videoFeed.scroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
-			_videoFeed.dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+			_videoFeed.OnDropdownValueChangedCallback += OnDropdownValueChanged;
+			_videoFeed.OnNearScrollEnd += OnNearScrollEnd;
 		}
 
 		private void OnDisable()
@@ -152,8 +102,8 @@ namespace Holoverse.Client.Controllers
 			_videoFeedSection.LoadTaskFactory -= LoadAsync;
 			_videoFeedSection.UnloadTaskFactory -= UnloadAsync;
 
-			_videoFeed.scroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
-			_videoFeed.dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
+			_videoFeed.OnDropdownValueChangedCallback -= OnDropdownValueChanged;
+			_videoFeed.OnNearScrollEnd -= OnNearScrollEnd;
 		}
 	}
 }

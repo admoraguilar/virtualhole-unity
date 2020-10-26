@@ -7,13 +7,12 @@ using Midnight.Web;
 using Midnight.Caching;
 using Midnight.Concurrency;
 
-namespace Holoverse.Client.Controllers
+namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents.Videos;
 	using Api.Data.Contents.Creators;
 
 	using Client.Data;
-	using Client.UI;
 
 	public static class UIFactory
 	{

@@ -9,10 +9,10 @@ namespace Holoverse.Client.UI
 	{
 		public event Action<float> OnScrollerPositionChanged = delegate { };
 
-		public float itemCount => ItemsSource.Count;
-
 		public float scrollerPosition => Scroller.Position;
 		private float _prevScrollerPosition = 0f;
+
+		public float itemCount => ItemsSource.Count;
 
 		protected override float CellSize {
 			get {
