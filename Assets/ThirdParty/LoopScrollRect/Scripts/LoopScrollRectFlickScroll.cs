@@ -7,7 +7,7 @@ namespace Holoverse.Client.UI
 	[RequireComponent(typeof(LoopScrollRect))]
 	public class LoopScrollRectFlickScroll : MonoBehaviour, IEndDragHandler
 	{
-		public float scrollMultiplierApex = 3f;
+		public float scrollMultiplierApex = 2.5f;
 		public int flickCountToReachApex = 5;
 
 		private Vector2 _lastVelocity = Vector2.zero;
@@ -47,8 +47,8 @@ namespace Holoverse.Client.UI
 					float ySine = Mathf.InverseLerp(0f, flickCountToReachApex, _flickCounter.y);
 
 					Vector2 finalVelocity = loopScrollRect.velocity;
-					finalVelocity.x *= scrollMultiplierApex * EaseInSine(xSine);
-					finalVelocity.y *= scrollMultiplierApex * EaseInSine(ySine);
+					finalVelocity.x *= scrollMultiplierApex * EaseOutCirc(xSine);
+					finalVelocity.y *= scrollMultiplierApex * EaseOutCirc(ySine);
 					loopScrollRect.velocity = finalVelocity;
 					_lastVelocity = finalVelocity;
 
@@ -57,6 +57,7 @@ namespace Holoverse.Client.UI
 			}
 
 			float EaseInSine(float x) => 1f - Mathf.Cos(x * Mathf.PI / 2f);
+			float EaseOutCirc(float x) => Mathf.Sqrt(1f - Mathf.Pow(x - 1, 2));
 		}
 
 		private void FixedUpdate()
