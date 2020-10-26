@@ -1,29 +1,37 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UnityEngine.UI
 {
-    [System.Serializable]
-    public class LoopScrollPrefabSource
-    {
-        public string prefabName;
-        public int poolSize = 5;
+	public interface ILoopScrollCellReturnReceiver
+	{
+		void ScrollCellReturn();
+	}
 
-        private bool inited = false;
-        public virtual GameObject GetObject()
-        {
-            if (!inited)
-            {
-                SG.ResourceManager.Instance.InitPool(prefabName, poolSize);
-                inited = true;
-            }
-            return SG.ResourceManager.Instance.GetObjectFromPool(prefabName);
-        }
+	[Serializable]
+	public class LoopScrollPrefabSource
+	{
+		public GameObject prefab;
+		public int poolSize = 5;
 
-        public virtual void ReturnObject(Transform go)
-        {
-            go.SendMessage("ScrollCellReturn", SendMessageOptions.DontRequireReceiver);
-            SG.ResourceManager.Instance.ReturnObjectToPool(go.gameObject);
-        }
-    }
+		private Dictionary<int, ILoopScrollCellReturnReceiver> _cellReturnReceiverLookup = new Dictionary<int, ILoopScrollCellReturnReceiver>();
+		private bool _isInitialized = false;
+
+		public virtual GameObject GetObject()
+		{
+			if(!_isInitialized) {
+				_isInitialized = true;
+				SG.ResourceManager.Instance.InitPool(prefab, poolSize);
+			}
+			return SG.ResourceManager.Instance.GetObjectFromPool(prefab);
+		}
+
+		public virtual void ReturnObject(Transform transform)
+		{
+			ILoopScrollCellReturnReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_cellReturnReceiverLookup, transform);
+			if(receiver != null) { receiver.ScrollCellReturn(); }
+
+			SG.ResourceManager.Instance.ReturnObjectToPool(transform.gameObject);
+		}
+	}
 }
