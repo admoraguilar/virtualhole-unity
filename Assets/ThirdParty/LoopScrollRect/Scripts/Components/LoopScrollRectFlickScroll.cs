@@ -51,12 +51,11 @@ namespace Holoverse.Client.UI
 					finalVelocity.y *= scrollMultiplierApex * EaseOutCirc(ySine);
 					loopScrollRect.velocity = finalVelocity;
 					_lastVelocity = finalVelocity;
-
-					//Debug.Log($"Flick detected: {finalVelocity} - ({scrollMultiplierApex * EaseInSine(xSine)}, {scrollMultiplierApex * EaseInSine(ySine)})");
 				}
 			}
 
-			float EaseInSine(float x) => 1f - Mathf.Cos(x * Mathf.PI / 2f);
+			// https://easings.net/#easeOutCirc
+			//float EaseInSine(float x) => 1f - Mathf.Cos(x * Mathf.PI / 2f);
 			float EaseOutCirc(float x) => Mathf.Sqrt(1f - Mathf.Pow(x - 1, 2));
 		}
 
@@ -65,56 +64,5 @@ namespace Holoverse.Client.UI
 			if(_flickTimer > _flickValidityTime) {_flickCounter = Vector2.zero; } 
 			else { _flickTimer += Time.fixedDeltaTime; }
 		}
-
-		//public void Attempt_OnEndDrag(PointerEventData eventData)
-		//{
-		//	float flickRegisterTime = .13f;
-
-		//	if(loopScrollRect.dragTime <= flickRegisterTime) {
-		//		Vector2 flickDirection = GetFlickDirection();
-
-		//		if(flickDirection != Vector2.zero) {
-		//			bool isHorizontalSameDirection = Mathf.Sign(loopScrollRect.velocity.x) == Mathf.Sign(flickDirection.x);
-		//			bool isVerticalSameDirection = Mathf.Sign(loopScrollRect.velocity.y) == Mathf.Sign(flickDirection.y);
-
-		//			Vector2 finalVelocity = loopScrollRect.velocity;
-		//			finalVelocity.x =
-		//				!isHorizontalSameDirection ? CalculateDirectionalFlickVelocity(flickDirection, true, scrollMultiplier)
-		//				: finalVelocity.x + CalculateDirectionalFlickVelocity(flickDirection, true, scrollMultiplier);
-		//			finalVelocity.y =
-		//				!isVerticalSameDirection ? CalculateDirectionalFlickVelocity(flickDirection, false, scrollMultiplier)
-		//				: finalVelocity.y + CalculateDirectionalFlickVelocity(flickDirection, false, scrollMultiplier);
-
-		//			loopScrollRect.velocity = finalVelocity;
-		//			Debug.Log($"Flick velocity: {loopScrollRect.velocity} - ({CalculateDirectionalFlickVelocity(flickDirection, true, scrollMultiplier)}, {CalculateDirectionalFlickVelocity(flickDirection, false, scrollMultiplier)})");
-		//		}
-
-		//		Vector2 GetFlickDirection() => new Vector2(
-		//			loopScrollRect.horizontal ? -eventData.delta.x : 0f,
-		//			loopScrollRect.vertical ? eventData.delta.y : 0f);
-
-		//		float CalculateDirectionalFlickVelocity(Vector2 direction, bool isHorizontal, float multiplier = 1f)
-		//		{
-		//			float flickDirectionMinCoefficient = .1f;
-		//			float flickDirectionMaxCoefficient = .20f;
-		//			float flickDirectionScreenDeltaRatioMin = .5f;
-		//			float flickDirectionScreenDeltaRatioMax = 15f;
-
-		//			float flickDirectionAbs = Mathf.Abs(isHorizontal ? direction.x : direction.y);
-		//			float flickScreenDeltaRatio = isHorizontal ?
-		//				CalculatePercentage(flickDirectionAbs, Screen.width) :
-		//				CalculatePercentage(flickDirectionAbs, Screen.height);
-
-		//			float lerp = Mathf.InverseLerp(flickDirectionScreenDeltaRatioMin, flickDirectionScreenDeltaRatioMax, flickScreenDeltaRatio);
-		//			float coefficient = Mathf.Lerp(flickDirectionMinCoefficient, flickDirectionMaxCoefficient, lerp);
-
-		//			// 0.4%, 5%, 12%
-		//			//Debug.Log($"FlickDirection: {flickDirection} | FlickRatio: {flickScreenDeltaRatio} | Lerp: {lerp} | Coefficient: {coefficient}");
-		//			return (isHorizontal ? direction.x : direction.y) * coefficient * multiplier;
-		//		}
-
-		//		float CalculatePercentage(float delta, float max) => delta / max * 100f;
-		//	}
-		//}
 	}
 }
