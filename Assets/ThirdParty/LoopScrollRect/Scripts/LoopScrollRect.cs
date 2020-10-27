@@ -324,7 +324,7 @@ namespace UnityEngine.UI
             }
         }
 
-        public void SrollToCell(int index, float speed)
+        public void ScrollToCell(int index, float speed)
         {
             if (totalCount >= 0 && (index < 0 || index >= totalCount))
             {
@@ -554,7 +554,7 @@ namespace UnityEngine.UI
             UpdateScrollbars(Vector2.zero);
         }
 
-        protected float NewItemAtStart()
+		protected float NewItemAtStart()
         {
             if (totalCount >= 0 && itemTypeStart - contentConstraintCount < 0)
             {

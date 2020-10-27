@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Midnight;
 
-
 namespace Holoverse.Client.UI
 {
 	[RequireComponent(typeof(LayoutElement))]
@@ -16,8 +15,18 @@ namespace Holoverse.Client.UI
 		private object _data = null;
 		private int _index = 0;
 
-		protected LoopScrollRectCellDataContainer dataContainer =>
-			this.GetComponent(ref _dataContainer, () => GetComponentInParent<LoopScrollRectCellDataContainer>());
+		protected LoopScrollRectCellDataContainer dataContainer
+		{
+			get {
+				return this.GetComponent(
+					ref _dataContainer,
+					() => {
+						LoopScrollRectCellDataContainer[] cs = GetComponentsInParent<LoopScrollRectCellDataContainer>(true);
+						return cs != null && cs.Length > 0 ? cs[0] : null;
+					});
+			}
+		}
+		[SerializeField]
 		private LoopScrollRectCellDataContainer _dataContainer = null;
 
 		protected LayoutElement layoutElement => 
@@ -31,8 +40,12 @@ namespace Holoverse.Client.UI
 		public void ScrollCellIndex(int index)
 		{
 			_index = index;
-			_data = dataContainer.data[index];
-			Refresh();
+
+			if(_index >= 0 && dataContainer.data.Count > _index) {
+				Debug.Log(_index);
+				_data = dataContainer.data[_index];
+				Refresh();
+			}
 		}
 
 		private void Refresh()
@@ -41,11 +54,8 @@ namespace Holoverse.Client.UI
 				cellItem.rectTrasform.gameObject.SetActive(false);
 			}
 
-			if(_data == null) {
-				layoutElement.preferredHeight = 0f;
-				layoutElement.preferredWidth = 0f;
-				rectTransform.sizeDelta = Vector2.zero;
-				return;
+			if(_data == null) { 
+				return; 
 			}
 
 			Type dataType = _data.GetType();
@@ -54,6 +64,10 @@ namespace Holoverse.Client.UI
 					if(cellPrefab.TryGetComponent(typeof(ILoopScrollCell), out Component c)) {
 						cell = (ILoopScrollCell)c;
 						if(cell.cellDataType == dataType) {
+							Component newCell = Instantiate(c, rectTransform, false);
+							newCell.name = c.name;
+
+							cell = (ILoopScrollCell)newCell;
 							_cellLookup[dataType] = cell;
 							break;
 						} else {
@@ -65,6 +79,11 @@ namespace Holoverse.Client.UI
 
 			if(cell != null) {
 				cell.UpdateData(_data);
+				cell.rectTrasform.gameObject.SetActive(true);
+
+				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
+				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
+				rectTransform.sizeDelta = cell.rectTrasform.sizeDelta;
 			}
 		}
 
@@ -77,16 +96,6 @@ namespace Holoverse.Client.UI
 		private void Start()
 		{
 			OnDataUpdated(dataContainer.data);
-		}
-
-		private void OnEnable()
-		{
-			dataContainer.OnDataUpdated += OnDataUpdated;
-		}
-
-		private void OnDisable()
-		{
-			dataContainer.OnDataUpdated -= OnDataUpdated;
 		}
 	}
 }

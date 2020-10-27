@@ -202,6 +202,16 @@ PrefabInstance:
       propertyPath: paddingTail
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 8207812876308126628, guid: 331e3941c49079e47b4cabf5e085153b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8207812876308126628, guid: 331e3941c49079e47b4cabf5e085153b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 331e3941c49079e47b4cabf5e085153b, type: 3}
 --- !u!1 &6265047690352269327 stripped

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Midnight;
 
 namespace Holoverse.Client.UI
 {
@@ -35,10 +37,10 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private int _cellRemainingThreshold = 7;
 
-		public VideoScrollRect scroll => _scroll;
+		public LoopScrollRect scroll => _scroll;
 		[Header("References")]
 		[SerializeField]
-		private VideoScrollRect _scroll = null;
+		private LoopScrollRect _scroll = null;
 
 		public ContextButton contextButton => _contextButton;
 		[SerializeField]
@@ -85,10 +87,16 @@ namespace Holoverse.Client.UI
 			bool isFromTop = _cellData.Count <= 0;
 
 			_cellData.AddRange(cellData);
-			scroll.UpdateData(_cellData);
+			CoroutineUtilities.Start(DelayFrame());
 
-			if(isFromTop) {
-				scroll.ScrollTo(0f, 0f);
+			IEnumerator DelayFrame()
+			{
+				yield return null;
+				_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
+
+				if(isFromTop) {
+					//scroll.ScrollToCell(0, 3000f);
+				}
 			}
 		}
 
@@ -101,7 +109,7 @@ namespace Holoverse.Client.UI
 		public void ClearFeed()
 		{
 			_cellData.Clear();
-			scroll.UpdateData(_cellData);
+			_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
 
 			if(_videoFeedData != null) {
 				VideoFeedData.Feed feed = _videoFeedData.feeds[dropdown.value];
@@ -114,9 +122,9 @@ namespace Holoverse.Client.UI
 			OnDropdownValueChangedCallback(value);
 		}
 
-		private void OnScrollerPositionChanged(float position)
+		private void OnScrollValueChanged(Vector2 position)
 		{
-			if(position >= scroll.itemCount - _cellRemainingThreshold) {
+			if(position.y >= .8f) {
 				OnNearScrollEnd();
 			}
 		}
@@ -124,13 +132,13 @@ namespace Holoverse.Client.UI
 		private void OnEnable()
 		{
 			dropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-			scroll.OnScrollerPositionChanged += OnScrollerPositionChanged;
+			scroll.onValueChanged.AddListener(OnScrollValueChanged);
 		}
 
 		private void OnDisable()
 		{
 			dropdown.onValueChanged.RemoveListener(OnDropdownValueChanged);
-			scroll.OnScrollerPositionChanged -= OnScrollerPositionChanged;
+			scroll.onValueChanged.RemoveListener(OnScrollValueChanged);
 		}
 	}
 }
