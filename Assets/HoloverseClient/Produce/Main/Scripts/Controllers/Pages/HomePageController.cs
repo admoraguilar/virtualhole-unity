@@ -14,8 +14,8 @@ namespace Holoverse.Client.Controllers
 
 	public class HomePageController : FeedPageController
 	{
-		protected override VideoFeedData CreateVideoFeedData(HoloverseDataClient client) =>
-			new VideoFeedData(
+		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) =>
+			new CreatorQuery(
 				client,
 				new FindCreatorsSettings {
 					isCheckForAffiliations = true,

@@ -49,20 +49,17 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private TMP_Dropdown _dropDown = null;
 
+		private List<VideoFeedQuery> _feeds = new List<VideoFeedQuery>();
 		private List<VideoScrollRectCellData> _cellData = new List<VideoScrollRectCellData>();
-		private VideoFeedData _videoFeedData = null;
 
 		public async Task InitializeAsync(
-			VideoFeedData videoFeedData, Action<VideoScrollRectCellData> onCellDataCreated = null,
+			IEnumerable<VideoFeedQuery> feeds, Action<VideoScrollRectCellData> onCellDataCreated = null,
 			CancellationToken cancellationToken = default)
 		{
-			_videoFeedData = videoFeedData;
-			if(_videoFeedData == null) { return; }
-
-			await _videoFeedData.InitializeAsync(cancellationToken);
+			_feeds.AddRange(feeds);
 
 			dropdown.ClearOptions();
-			dropdown.AddOptions(_videoFeedData.feeds.Select(f => f.name).ToList());
+			dropdown.AddOptions(_feeds.Select(f => f.name).ToList());
 			dropdown.value = 0;
 
 			ClearFeed();
@@ -72,13 +69,13 @@ namespace Holoverse.Client.UI
 
 		public async Task LoadAsync(Action<VideoScrollRectCellData> onCellDataCreated = null, CancellationToken cancellationToken = default)
 		{
-			if(_videoFeedData == null) { return; }
+			if(_feeds.Count <= 0) { return; }
 
-			VideoFeedData.Feed feed = _videoFeedData.feeds[dropdown.value];
+			VideoFeedQuery feed = _feeds[dropdown.value];
 			if(feed.isDone) { return; }
 
 			IEnumerable<VideoScrollRectCellData> cellData = await UIFactory.CreateVideoScrollRectCellData(
-				_videoFeedData, feed, cancellationToken);
+				feed, cancellationToken);
 			foreach(VideoScrollRectCellData cell in cellData) {
 				onCellDataCreated?.Invoke(cell);
 			}
@@ -107,8 +104,8 @@ namespace Holoverse.Client.UI
 			_cellData.Clear();
 			_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
 
-			if(_videoFeedData != null) {
-				VideoFeedData.Feed feed = _videoFeedData.feeds[dropdown.value];
+			if(_feeds != null) {
+				VideoFeedQuery feed = _feeds[dropdown.value];
 				feed.Clear();
 			}
 		}

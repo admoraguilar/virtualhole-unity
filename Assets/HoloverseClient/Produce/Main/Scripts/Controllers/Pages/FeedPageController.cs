@@ -25,12 +25,21 @@ namespace Holoverse.Client.Controllers
 		private Section _videoFeedSection = null;
 		private VideoFeedScroll _videoFeed = null;
 
-		protected abstract VideoFeedData CreateVideoFeedData(HoloverseDataClient client);
+		protected abstract CreatorQuery CreateCreatorQuery(HoloverseDataClient client);
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
+			CreatorQuery creatorQuery = CreateCreatorQuery(_client.client);
+			await creatorQuery.LoadAsync(cancellationToken);
+
 			await _videoFeed.InitializeAsync(
-				CreateVideoFeedData(_client.client), OnVideoScrollRectCellDataCreated, 
+				new VideoFeedQuery[] {
+					VideoFeedQuery.CreateDiscoverFeed(_client.client, creatorQuery.creatorLookup.Values),
+					VideoFeedQuery.CreateCommunityFeed(_client.client, creatorQuery.creatorLookup.Values),
+					VideoFeedQuery.CreateLiveFeed(_client.client, creatorQuery.creatorLookup.Values),
+					VideoFeedQuery.CreateScheduledFeed(_client.client, creatorQuery.creatorLookup.Values)
+				},
+				OnVideoScrollRectCellDataCreated, 
 				cancellationToken);
 		}
 

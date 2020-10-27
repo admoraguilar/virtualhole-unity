@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Midnight.Web;
 
 namespace Holoverse.Client.Data
@@ -36,11 +37,13 @@ namespace Holoverse.Client.Data
 
 		public static void Add(IEnumerable<Creator> creators)
 		{
+			if(creators == null) { return; }
 			foreach(Creator creator in creators) { Add(creator); }
 		}
 
 		public static void Add(Creator creator)
 		{
+			Assert.IsNotNull(creator);
 			_creatorLookup[creator.universalId] = creator;
 		}
 	}

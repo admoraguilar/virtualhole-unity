@@ -31,22 +31,26 @@ namespace Holoverse.Client.Data
 			if(_isLoading || isDone) { return default; }
 			_isLoading = true;
 
-			if(_findVideoResults == null) {
-				_findVideoResults = await client
-					.contents.videos
-					.FindVideosAsync(_findVideosSettings, cancellationToken);
-
-				if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
-			}
-
 			IEnumerable<T> results = null;
-			if(_findVideoResults != null) {
-				results = _findVideoResults.current;
-				_videos.AddRange(results);
+			using(new StopwatchScope(nameof(VideoFeedQuery<T>), $"Start load [{name}]...", $"End load [{name}].")) {
+				if(_findVideoResults == null) {
+					_findVideoResults = await client
+						.contents.videos
+						.FindVideosAsync(_findVideosSettings, cancellationToken);
 
-				if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+				}
+
+				if(_findVideoResults != null) {
+					results = _findVideoResults.current;
+					_videos.AddRange(results);
+
+					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+				}
 			}
 
+			VideoCache.Add(results);
+			
 			_isLoading = false;
 			return results;
 		}
@@ -60,7 +64,7 @@ namespace Holoverse.Client.Data
 
 		private void DisposeResults()
 		{
-			MLog.Log(nameof(VideoFeedQuery<T>), $"No more videos found!");
+			MLog.Log(nameof(VideoFeedQuery<T>), $"No more [{name}] videos found!");
 			_findVideoResults.Dispose();
 			_findVideoResults = null;
 			isDone = true;
@@ -70,52 +74,52 @@ namespace Holoverse.Client.Data
 	public abstract class VideoFeedQuery
 	{
 		public static VideoFeedQuery CreateDiscoverFeed(
-			HoloverseDataClient client, List<Creator> creators,
+			HoloverseDataClient client, IEnumerable<Creator> creators,
 			int batchSize = 20) =>
 			new VideoFeedQuery<Video>(
 				client, "Discover",
 				new FindCreatorVideosSettings<Video>() {
-					creators = creators,
+					creators = new List<Creator>(creators),
 					sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
 					isSortAscending = false,
 					batchSize = batchSize
 				});
 
 		public static VideoFeedQuery CreateCommunityFeed(
-			HoloverseDataClient client, List<Creator> creators,
+			HoloverseDataClient client, IEnumerable<Creator> creators,
 			int batchSize = 20) =>
 			new VideoFeedQuery<Video>(
 				client, "Community",
 				new FindCreatorRelatedVideosSettings<Video> {
-					creators = creators,
+					creators = new List<Creator>(creators),
 					sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
 					isSortAscending = false,
 					batchSize = batchSize,
 				});
 
 		public static VideoFeedQuery CreateLiveFeed(
-			HoloverseDataClient client, List<Creator> creators,
+			HoloverseDataClient client, IEnumerable<Creator> creators,
 			int batchSize = 20) =>
 			new VideoFeedQuery<Broadcast>(
 				client, "Live",
 				new FindCreatorVideosSettings<Broadcast> {
 					isBroadcast = true,
 					isLive = true,
-					creators = creators,
+					creators = new List<Creator>(creators),
 					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
 					isSortAscending = false,
 					batchSize = batchSize
 				});
 
 		public static VideoFeedQuery CreateScheduledFeed(
-			HoloverseDataClient client, List<Creator> creators,
+			HoloverseDataClient client, IEnumerable<Creator> creators,
 			int batchSize = 20) =>
 			new VideoFeedQuery<Broadcast>(
 				client, "Schedule",
 				new FindCreatorVideosSettings<Broadcast> {
 					isBroadcast = true,
 					isLive = false,
-					creators = creators,
+					creators = new List<Creator>(creators),
 					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
 					isSortAscending = false,
 					batchSize = batchSize

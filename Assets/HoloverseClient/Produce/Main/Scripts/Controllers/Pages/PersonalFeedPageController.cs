@@ -15,7 +15,7 @@ namespace Holoverse.Client.Controllers
 	{
 		private Section _emptyFeedSection = null;
 
-		protected override VideoFeedData CreateVideoFeedData(HoloverseDataClient client) => null;
+		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) => null;
 
 		protected override async void OnNodeVisit()
 		{

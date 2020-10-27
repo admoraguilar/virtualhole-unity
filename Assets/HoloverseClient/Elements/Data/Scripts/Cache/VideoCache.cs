@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Midnight.Web;
 
 namespace Holoverse.Client.Data
 {
 	using Api.Data.Contents;
 	using Api.Data.Contents.Videos;
-	
 
 	public static class VideoCache
 	{
@@ -39,11 +39,13 @@ namespace Holoverse.Client.Data
 
 		public static void Add(IEnumerable<Video> videos)
 		{
+			if(videos == null) { return; }
 			foreach(Video video in videos) { Add(video); }
 		}
 
 		public static void Add(Video video)
 		{
+			Assert.IsNotNull(video);
 			_videoLookup[CreateLookupKey(video.platform, video.id)] = video;
 		}
 

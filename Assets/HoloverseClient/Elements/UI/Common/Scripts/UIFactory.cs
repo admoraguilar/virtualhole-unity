@@ -3,34 +3,32 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight.Web;
-using Midnight.Caching;
 using Midnight.Concurrency;
 
 namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents.Videos;
-	using Api.Data.Contents.Creators;
 
 	using Client.Data;
 
 	public static class UIFactory
 	{
 		public static async Task<IEnumerable<VideoScrollRectCellData>> CreateVideoScrollRectCellData(
-			VideoFeedData feedData, VideoFeedData.Feed feed, 
-			CancellationToken cancellationToken = default)
+			VideoFeedQuery feed, CancellationToken cancellationToken = default)
 		{
 			List<VideoScrollRectCellData> results = new List<VideoScrollRectCellData>();
 
-			IEnumerable<Video> videoResult = await feed.LoadVideosAsync(cancellationToken);
+			IEnumerable<Video> videoResult = await feed.LoadAsync(cancellationToken);
 			if(videoResult == null) { return results; }
 
 			List<Video> videos = videoResult.ToList();
+			VideoCache.Add(videos);
+
 			await Concurrent.ForEachAsync(videos, PreloadResources, cancellationToken);
 
 			foreach(Video video in videos) {
-				Sprite thumbnail = DataCache.Get<Sprite>(DataCacheKeys.videoThumbnailGroup, video.id);
-				Sprite creatorSprite = DataCache.Get<Sprite>(DataCacheKeys.creatorAvatarGroup, video.creatorIdUniversal);
+				Sprite thumbnail = await VideoCache.GetThumbnailAsync(video.platform, video.id);
+				Sprite creatorSprite = await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
 
 				// Skip videos without thumbnails, possible reasons for these are
 				// they maybe privated or deleted.
@@ -60,19 +58,8 @@ namespace Holoverse.Client.UI
 
 			async Task PreloadResources(Video video)
 			{
-				if(!DataCache.Contains(DataCacheKeys.videoThumbnailGroup, video.id)) {
-					DataCache.Add(
-						DataCacheKeys.videoThumbnailGroup, video.id,
-						await ImageGetWebRequest.GetAsync(video.thumbnailUrl));
-				}
-
-				if(!DataCache.Contains(DataCacheKeys.creatorAvatarGroup, video.creatorIdUniversal)) {
-					if(feedData.creatorLookup.TryGetValue(video.creatorIdUniversal, out Creator creator)) {
-						DataCache.Add(
-							DataCacheKeys.creatorAvatarGroup, video.creatorIdUniversal,
-							await ImageGetWebRequest.GetAsync(creator.avatarUrl));
-					}
-				}
+				await VideoCache.GetThumbnailAsync(video.platform, video.id);
+				await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
 			}
 		}
 	}

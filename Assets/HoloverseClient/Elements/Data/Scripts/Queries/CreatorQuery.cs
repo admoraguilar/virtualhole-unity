@@ -28,7 +28,7 @@ namespace Holoverse.Client.Data
 		{
 			if(_isLoaded) { return; }
 
-			using(new StopwatchScope(nameof(VideoFeedQuery), "Start Getting creators data...", "End")) {
+			using(new StopwatchScope(nameof(CreatorQuery), "Start getting creators...", "End getting creators.")) {
 				CreatorClient creatorClient = _client.contents.creators;
 				using(FindResults<Creator> results = await creatorClient.FindCreatorsAsync(_findCreatorsSettings, cancellationToken)) {
 					while(await results.MoveNextAsync()) {
@@ -45,6 +45,8 @@ namespace Holoverse.Client.Data
 			foreach(Creator result in creators) {
 				_creatorLookup[result.universalId] = result;
 			}
+
+			CreatorCache.Add(creators);
 		}
 	}
 }

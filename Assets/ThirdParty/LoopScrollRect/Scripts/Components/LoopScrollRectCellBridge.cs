@@ -98,8 +98,10 @@ namespace UnityEngine.UI
 
 		private void Start()
 		{
-			_data = dataContainer.data[_index];
-			Refresh();
+			if(_index >= 0 && dataContainer.data.Count > _index) {
+				_data = dataContainer.data[_index];
+				Refresh();
+			}
 		}
 	}
 }
