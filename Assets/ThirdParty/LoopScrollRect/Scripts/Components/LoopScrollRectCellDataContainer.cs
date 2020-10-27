@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Midnight;
 
-namespace Holoverse.Client.UI
+namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(LoopScrollRect))]
 	public class LoopScrollRectCellDataContainer : MonoBehaviour
@@ -11,8 +8,15 @@ namespace Holoverse.Client.UI
 		public IReadOnlyList<object> data => _data;
 		private List<object> _data = new List<object>();
 
-		protected LoopScrollRect loopScrollRect => 
-			this.GetComponent(ref _loopScrollRect, () => GetComponent<LoopScrollRect>());
+		protected LoopScrollRect loopScrollRect
+		{
+			get {
+				if(_loopScrollRect == null) {
+					_loopScrollRect = GetComponent<LoopScrollRect>();
+				}
+				return _loopScrollRect;
+			}
+		}
 		private LoopScrollRect _loopScrollRect = null;
 
 		public void UpdateData(IEnumerable<object> values)
@@ -25,7 +29,7 @@ namespace Holoverse.Client.UI
 				loopScrollRect.totalCount = _data.Count;
 
 				if(wasZeroOrLess) { loopScrollRect.RefillCells(); }
-				else {loopScrollRect.RefreshCells(); }
+				else { loopScrollRect.RefreshCells(); }
 			} else {
 				loopScrollRect.RefreshCells();
 			}

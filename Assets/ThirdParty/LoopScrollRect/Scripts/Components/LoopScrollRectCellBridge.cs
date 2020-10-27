@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using Midnight;
 
-namespace Holoverse.Client.UI
+namespace UnityEngine.UI
 {
+	[RequireComponent(typeof(RectTransform))]
 	[RequireComponent(typeof(LayoutElement))]
 	public class LoopScrollRectCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
 	{
@@ -18,23 +16,36 @@ namespace Holoverse.Client.UI
 		protected LoopScrollRectCellDataContainer dataContainer
 		{
 			get {
-				return this.GetComponent(
-					ref _dataContainer,
-					() => {
-						LoopScrollRectCellDataContainer[] cs = GetComponentsInParent<LoopScrollRectCellDataContainer>(true);
-						return cs != null && cs.Length > 0 ? cs[0] : null;
-					});
+				if(_dataContainer == null) {
+					LoopScrollRectCellDataContainer[] cs = GetComponentsInParent<LoopScrollRectCellDataContainer>(true);
+					_dataContainer = cs != null && cs.Length > 0 ? cs[0] : null;
+				}
+				return _dataContainer;
 			}
 		}
 		[SerializeField]
 		private LoopScrollRectCellDataContainer _dataContainer = null;
 
-		protected LayoutElement layoutElement => 
-			this.GetComponent(ref _layoutElement, () => GetComponent<LayoutElement>());
+		protected LayoutElement layoutElement
+		{
+			get {
+				if(_layoutElement == null) {
+					_layoutElement = GetComponent<LayoutElement>();
+				}
+				return _layoutElement;
+			}
+		}
 		private LayoutElement _layoutElement = null;
 
-		protected RectTransform rectTransform => 
-			this.GetComponent(ref _rectTransform, () => GetComponent<RectTransform>());
+		protected RectTransform rectTransform
+		{
+			get {
+				if(_rectTransform == null) {
+					_rectTransform = GetComponent<RectTransform>();
+				}
+				return _rectTransform;
+			}
+		}
 		private RectTransform _rectTransform = null;
 
 		public void ScrollCellIndex(int index)
@@ -42,7 +53,6 @@ namespace Holoverse.Client.UI
 			_index = index;
 
 			if(_index >= 0 && dataContainer.data.Count > _index) {
-				Debug.Log(_index);
 				_data = dataContainer.data[_index];
 				Refresh();
 			}
@@ -83,19 +93,13 @@ namespace Holoverse.Client.UI
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
 				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
-				rectTransform.sizeDelta = cell.rectTrasform.sizeDelta;
 			}
-		}
-
-		private void OnDataUpdated(IReadOnlyList<object> values)
-		{
-			_data = values[_index];
-			Refresh();
 		}
 
 		private void Start()
 		{
-			OnDataUpdated(dataContainer.data);
+			_data = dataContainer.data[_index];
+			Refresh();
 		}
 	}
 }

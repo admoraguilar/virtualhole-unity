@@ -32,13 +32,13 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private Button _optionsButton = null;
 
+		public Type cellDataType => typeof(VideoScrollRectCellData);
+
 		public RectTransform rectTrasform => this.GetComponent(ref _rectTransform, () => GetComponent<RectTransform>());
 		private RectTransform _rectTransform = null;
 
 		public LayoutElement layoutElement => this.GetComponent(ref _layoutElement, () => GetComponent<LayoutElement>());
 		private LayoutElement _layoutElement = null;
-
-		public Type cellDataType => typeof(VideoScrollRectCellData);
 
 		public void UpdateData(object data)
 		{
