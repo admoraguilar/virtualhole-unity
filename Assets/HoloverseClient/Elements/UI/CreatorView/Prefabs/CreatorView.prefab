@@ -1036,8 +1036,8 @@ MonoBehaviour:
   _socialButtonContainer: {fileID: 261884416136949357}
   _socialButtonTemplate: {fileID: 261884415951377124}
   _followButton: {fileID: 261884416225736747}
-  _peekContentContainer: {fileID: 2461090746988238566}
-  _peekContentTemplate: {fileID: 4565399295807321426}
+  _peekScrollContainer: {fileID: 2461090746988238566}
+  _peekScrollTemplate: {fileID: 4565399295807321426}
 --- !u!114 &5147708338462546729
 MonoBehaviour:
   m_ObjectHideFlags: 0

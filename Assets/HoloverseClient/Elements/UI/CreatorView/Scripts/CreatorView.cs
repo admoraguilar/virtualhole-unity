@@ -1,14 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight.Web;
 
 namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents;
 	using Api.Data.Contents.Creators;
+	
+	using Client.Data;
 
 	public class CreatorView : MonoBehaviour
 	{
@@ -33,17 +35,20 @@ namespace Holoverse.Client.UI
 
 		[Space]
 		[SerializeField]
-		private RectTransform _peekContentContainer = null;
+		private RectTransform _peekScrollContainer = null;
 
 		[SerializeField]
-		private VideoPeekScroll _peekContentTemplate = null;
+		private VideoPeekScroll _peekScrollTemplate = null;
 
-
-		public async Task LoadCreator(Creator creator, CancellationToken cancellationToken = default)
+		public async Task LoadCreatorAsync(
+			Creator creator, IEnumerable<VideoFeedQuery> feeds, 
+			CancellationToken cancellationToken = default)
 		{
 			this.creator = creator;
 
-			_avatarImage.sprite = await ImageGetWebRequest.GetAsync(creator.avatarUrl, null, cancellationToken);
+			_avatarImage.sprite = await CreatorCache.GetAvatarAsync(
+				creator.universalId, creator.avatarUrl, 
+				cancellationToken);
 			_nameText.text = creator.universalName;
 
 			while(_socialButtonContainer.childCount > 0) {
@@ -56,6 +61,19 @@ namespace Holoverse.Client.UI
 				socialButton.image.sprite = UIResources.GetPlatformUI(social.platform).logo;
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
+
+			foreach(VideoFeedQuery feed in feeds) {
+				VideoPeekScroll peekScroll = Instantiate(_peekScrollTemplate, _peekScrollContainer, false);
+				peekScroll.name = _peekScrollTemplate.name;
+				peekScroll.gameObject.SetActive(true);
+
+				await peekScroll.InitializeAsync(feed, cancellationToken);
+			}
+		}
+
+		public async Task UnloadAsync()
+		{
+			await Task.CompletedTask;
 		}
 	}
 }

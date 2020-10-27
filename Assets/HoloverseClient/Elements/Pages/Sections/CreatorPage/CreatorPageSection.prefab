@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 261884416377793858}
+  - component: {fileID: 5869312936206100200}
   m_Layer: 5
   m_Name: CreatorPageSection
   m_TagString: Untagged
@@ -36,6 +37,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5869312936206100200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261884416377793859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2573e97f920ebc4fb698c7529d4e1c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requirements: 0
+  _contentDisplay: {fileID: 261884417529371550}
+  _loadingIndicatorDisplay: {fileID: 0}
+  _genericErrorDisplay: {fileID: 0}
+  _internetErrorDisplay: {fileID: 0}
+  _appIncompatibleErrorDisplay: {fileID: 0}
 --- !u!1 &261884417529371550
 GameObject:
   m_ObjectHideFlags: 0
