@@ -42,6 +42,7 @@ namespace Holoverse.Client.UI
 					date = video.creationDate.ToString(),
 					creatorSprite = creatorSprite,
 					creatorName = video.creator,
+					creatorUniversalId = video.creatorIdUniversal,
 					onOptionsClick = () => { },
 					onCellClick = () => Application.OpenURL(video.url)
 				};

@@ -11,6 +11,8 @@ namespace Holoverse.Client.Data
 
 	public static class CreatorCache
 	{
+		public static Creator creator = null;
+
 		private static Dictionary<string, Creator> _creatorLookup = new Dictionary<string, Creator>();
 		private static Dictionary<string, Sprite> _avatarLookup = new Dictionary<string, Sprite>();
 

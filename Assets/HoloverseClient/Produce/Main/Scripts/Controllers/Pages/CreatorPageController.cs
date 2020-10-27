@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight.SOM;
@@ -9,6 +8,8 @@ using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
+	using Api.Data.Contents.Creators;
+
 	using Client.UI;
 	using Client.SOM;
 	using Client.Data;
@@ -26,13 +27,17 @@ namespace Holoverse.Client.Controllers
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
+			Creator creator = CreatorCache.creator;
+			if(creator == null) { return; }
+
+			IEnumerable<Creator> creators = new Creator[] { creator };
 			await _creatorView.LoadCreatorAsync(
-				null,
+				creator,
 				new VideoFeedQuery[] {
-					VideoFeedQuery.CreateDiscoverFeed(_client.client, null),
-					VideoFeedQuery.CreateCommunityFeed(_client.client, null),
-					VideoFeedQuery.CreateLiveFeed(_client.client, null),
-					VideoFeedQuery.CreateScheduledFeed(_client.client, null)
+					VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
+					VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
+					VideoFeedQuery.CreateLiveFeed(_client.client, creators),
+					VideoFeedQuery.CreateScheduledFeed(_client.client, creators)
 				},
 				cancellationToken);
 		}

@@ -51,8 +51,8 @@ namespace Holoverse.Client.UI
 				cancellationToken);
 			_nameText.text = creator.universalName;
 
-			while(_socialButtonContainer.childCount > 0) {
-				Destroy(_socialButtonContainer.GetChild(0).gameObject);
+			for(int i = 0; i < _socialButtonContainer.childCount; i++) {
+				Destroy(_socialButtonContainer.GetChild(i).gameObject);
 			}
 
 			foreach(Social social in creator.socials) {

@@ -12,6 +12,7 @@ namespace Holoverse.Client.UI
 
 		public Sprite creatorSprite = null;
 		public string creatorName = string.Empty;
+		public string creatorUniversalId = string.Empty;
 
 		public Action onCellClick = delegate { };
 		public Action onOptionsClick = delegate { };

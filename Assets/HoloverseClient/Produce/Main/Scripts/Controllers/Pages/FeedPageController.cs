@@ -12,6 +12,7 @@ namespace Holoverse.Client.Controllers
 	using Client.UI;
 	using Client.SOM;
 	using Client.Data;
+	using FancyScrollView.Example01;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
@@ -59,7 +60,10 @@ namespace Holoverse.Client.Controllers
 
 		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
-			cellData.onOptionsClick += _optionsNode.Push;
+			cellData.onOptionsClick += () => {
+				CreatorCache.creator = CreatorCache.Get(cellData.creatorUniversalId);
+				_optionsNode.Push();
+			};
 		}
 
 		private async void OnDropdownValueChanged(int value)
