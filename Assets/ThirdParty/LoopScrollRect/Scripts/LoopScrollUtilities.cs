@@ -2,7 +2,7 @@
 
 namespace UnityEngine.UI
 {
-	public static class LoopScrollRectUtilities
+	public static class LoopScrollUtilities
 	{
 		public static T GetComponentFromLookup<T>(Dictionary<int, T> lookup, Transform transform)
 		{

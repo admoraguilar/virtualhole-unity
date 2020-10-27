@@ -38,14 +38,13 @@ namespace Holoverse.Client.Controllers
 					VideoFeedQuery.CreateCommunityFeed(_client.client, creatorQuery.creatorLookup.Values),
 					VideoFeedQuery.CreateLiveFeed(_client.client, creatorQuery.creatorLookup.Values),
 					VideoFeedQuery.CreateScheduledFeed(_client.client, creatorQuery.creatorLookup.Values)
-				},
-				OnVideoScrollRectCellDataCreated, 
+				}, 
 				cancellationToken);
 		}
 
 		private async Task LoadAsync(CancellationToken cancellationToken = default)
 		{
-			await _videoFeed.LoadAsync(OnVideoScrollRectCellDataCreated, cancellationToken);
+			await _videoFeed.LoadAsync(cancellationToken);
 		}
 
 		private async Task UnloadAsync()
@@ -58,7 +57,7 @@ namespace Holoverse.Client.Controllers
 			await _page.InitializeAsync();
 		}
 
-		private void OnVideoScrollRectCellDataCreated(VideoScrollRectCellData cellData)
+		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
 			cellData.onOptionsClick += _optionsNode.Push;
 		}
@@ -99,6 +98,7 @@ namespace Holoverse.Client.Controllers
 			_videoFeedSection.LoadTaskFactory += LoadAsync;
 			_videoFeedSection.UnloadTaskFactory += UnloadAsync;
 
+			_videoFeed.OnCellDataCreated += OnCellDataCreated;
 			_videoFeed.OnDropdownValueChangedCallback += OnDropdownValueChanged;
 			_videoFeed.OnNearScrollEnd += OnNearScrollEnd;
 		}
@@ -111,6 +111,7 @@ namespace Holoverse.Client.Controllers
 			_videoFeedSection.LoadTaskFactory -= LoadAsync;
 			_videoFeedSection.UnloadTaskFactory -= UnloadAsync;
 
+			_videoFeed.OnCellDataCreated -= OnCellDataCreated;
 			_videoFeed.OnDropdownValueChangedCallback -= OnDropdownValueChanged;
 			_videoFeed.OnNearScrollEnd -= OnNearScrollEnd;
 		}

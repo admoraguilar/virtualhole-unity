@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Holoverse.Client.UI
 {
-	public class VideoScrollRectCellData
+	public class VideoScrollCellData
 	{
 		public Sprite thumbnailSprite = null;
 		public Sprite indicatorSprite = null;

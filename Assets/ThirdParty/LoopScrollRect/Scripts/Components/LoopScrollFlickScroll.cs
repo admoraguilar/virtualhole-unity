@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace Holoverse.Client.UI
 {
 	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollRectFlickScroll : MonoBehaviour, IEndDragHandler
+	public class LoopScrollFlickScroll : MonoBehaviour, IEndDragHandler
 	{
 		public float scrollMultiplierApex = 2.5f;
 		public int flickCountToReachApex = 5;

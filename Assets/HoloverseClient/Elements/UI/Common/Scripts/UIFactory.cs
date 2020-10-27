@@ -13,10 +13,10 @@ namespace Holoverse.Client.UI
 
 	public static class UIFactory
 	{
-		public static async Task<IEnumerable<VideoScrollRectCellData>> CreateVideoScrollRectCellData(
+		public static async Task<IEnumerable<VideoScrollCellData>> CreateVideoScrollCellData(
 			VideoFeedQuery feed, CancellationToken cancellationToken = default)
 		{
-			List<VideoScrollRectCellData> results = new List<VideoScrollRectCellData>();
+			List<VideoScrollCellData> results = new List<VideoScrollCellData>();
 
 			IEnumerable<Video> videoResult = await feed.LoadAsync(cancellationToken);
 			if(videoResult == null) { return results; }
@@ -36,7 +36,7 @@ namespace Holoverse.Client.UI
 				// finished.
 				if(thumbnail == null) { continue; }
 
-				VideoScrollRectCellData cellData = new VideoScrollRectCellData() {
+				VideoScrollCellData cellData = new VideoScrollCellData() {
 					thumbnailSprite = thumbnail,
 					title = video.title,
 					date = video.creationDate.ToString(),

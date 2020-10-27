@@ -30,8 +30,9 @@ namespace Holoverse.Client.UI
 			private TMP_Text _text = null;
 		}
 
-		public Action<int> OnDropdownValueChangedCallback = delegate { };
-		public Action OnNearScrollEnd = delegate { };
+		public event Action<VideoScrollCellData> OnCellDataCreated = delegate { };
+		public event Action<int> OnDropdownValueChangedCallback = delegate { };
+		public event Action OnNearScrollEnd = delegate { };
 
 		[SerializeField]
 		private int _cellRemainingThreshold = 7;
@@ -40,6 +41,10 @@ namespace Holoverse.Client.UI
 		[Header("References")]
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
+
+		public LoopScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
+		[SerializeField]
+		private LoopScrollCellDataContainer _scrollDataContainer = null;
 
 		public ContextButton contextButton => _contextButton;
 		[SerializeField]
@@ -50,11 +55,9 @@ namespace Holoverse.Client.UI
 		private TMP_Dropdown _dropDown = null;
 
 		private List<VideoFeedQuery> _feeds = new List<VideoFeedQuery>();
-		private List<VideoScrollRectCellData> _cellData = new List<VideoScrollRectCellData>();
+		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
 
-		public async Task InitializeAsync(
-			IEnumerable<VideoFeedQuery> feeds, Action<VideoScrollRectCellData> onCellDataCreated = null,
-			CancellationToken cancellationToken = default)
+		public async Task InitializeAsync(IEnumerable<VideoFeedQuery> feeds, CancellationToken cancellationToken = default)
 		{
 			_feeds.AddRange(feeds);
 
@@ -64,20 +67,20 @@ namespace Holoverse.Client.UI
 
 			ClearFeed();
 			cancellationToken.ThrowIfCancellationRequested();
-			await LoadAsync(onCellDataCreated, cancellationToken);
+			await LoadAsync(cancellationToken);
 		}
 
-		public async Task LoadAsync(Action<VideoScrollRectCellData> onCellDataCreated = null, CancellationToken cancellationToken = default)
+		public async Task LoadAsync(CancellationToken cancellationToken = default)
 		{
 			if(_feeds.Count <= 0) { return; }
 
 			VideoFeedQuery feed = _feeds[dropdown.value];
 			if(feed.isDone) { return; }
 
-			IEnumerable<VideoScrollRectCellData> cellData = await UIFactory.CreateVideoScrollRectCellData(
+			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellData(
 				feed, cancellationToken);
-			foreach(VideoScrollRectCellData cell in cellData) {
-				onCellDataCreated?.Invoke(cell);
+			foreach(VideoScrollCellData cell in cellData) { 
+				OnCellDataCreated?.Invoke(cell); 
 			}
 
 			bool isFromTop = _cellData.Count <= 0;
@@ -85,7 +88,7 @@ namespace Holoverse.Client.UI
 
 			CoroutineUtilities.ExecuteOnYield(
 				null, () => {
-					_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
+					scrollDataContainer.UpdateData(_cellData);
 
 					if(isFromTop) {
 						//scroll.ScrollToCell(0, 3000f);
@@ -102,7 +105,7 @@ namespace Holoverse.Client.UI
 		public void ClearFeed()
 		{
 			_cellData.Clear();
-			_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
+			scrollDataContainer.UpdateData(_cellData);
 
 			if(_feeds != null) {
 				VideoFeedQuery feed = _feeds[dropdown.value];

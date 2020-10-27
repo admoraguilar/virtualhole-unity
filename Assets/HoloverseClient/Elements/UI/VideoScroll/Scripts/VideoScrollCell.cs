@@ -6,7 +6,7 @@ using Midnight;
 
 namespace Holoverse.Client.UI
 {
-	public class VideoScrollRectCell : MonoBehaviour, ILoopScrollCell
+	public class VideoScrollCell : MonoBehaviour, ILoopScrollCell
 	{
 		[SerializeField]
 		private Image _thumbnailImage = null;
@@ -32,7 +32,7 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private Button _optionsButton = null;
 
-		public Type cellDataType => typeof(VideoScrollRectCellData);
+		public Type cellDataType => typeof(VideoScrollCellData);
 
 		public RectTransform rectTrasform => this.GetComponent(ref _rectTransform, () => GetComponent<RectTransform>());
 		private RectTransform _rectTransform = null;
@@ -42,7 +42,7 @@ namespace Holoverse.Client.UI
 
 		public void UpdateData(object data)
 		{
-			VideoScrollRectCellData itemData = (VideoScrollRectCellData)data;
+			VideoScrollCellData itemData = (VideoScrollCellData)data;
 			_thumbnailImage.sprite = itemData.thumbnailSprite;
 
 			if(itemData.indicatorSprite != null) {
@@ -70,12 +70,12 @@ namespace Holoverse.Client.UI
 			}
 		}
 
-		private void OnCellButtonClicked(VideoScrollRectCellData itemData)
+		private void OnCellButtonClicked(VideoScrollCellData itemData)
 		{
 			itemData.onCellClick?.Invoke();
 		}
 
-		private void OnOptionsButtonClicked(VideoScrollRectCellData itemData)
+		private void OnOptionsButtonClicked(VideoScrollCellData itemData)
 		{
 			itemData.onOptionsClick?.Invoke();
 		}

@@ -28,7 +28,7 @@ namespace UnityEngine.UI
 
 		public virtual void ReturnObject(Transform transform)
 		{
-			ILoopScrollCellReturnReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_cellReturnReceiverLookup, transform);
+			ILoopScrollCellReturnReceiver receiver = LoopScrollUtilities.GetComponentFromLookup(_cellReturnReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellReturn(); }
 
 			SG.ResourceManager.Instance.ReturnObjectToPool(transform.gameObject);

@@ -5,7 +5,7 @@ namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(RectTransform))]
 	[RequireComponent(typeof(LayoutElement))]
-	public class LoopScrollRectCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
+	public class LoopScrollCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
 	{
 		public RectTransform[] cellPrefabs = null;
 
@@ -13,18 +13,18 @@ namespace UnityEngine.UI
 		private object _data = null;
 		private int _index = 0;
 
-		protected LoopScrollRectCellDataContainer dataContainer
+		protected LoopScrollCellDataContainer dataContainer
 		{
 			get {
 				if(_dataContainer == null) {
-					LoopScrollRectCellDataContainer[] cs = GetComponentsInParent<LoopScrollRectCellDataContainer>(true);
+					LoopScrollCellDataContainer[] cs = GetComponentsInParent<LoopScrollCellDataContainer>(true);
 					_dataContainer = cs != null && cs.Length > 0 ? cs[0] : null;
 				}
 				return _dataContainer;
 			}
 		}
 		[SerializeField]
-		private LoopScrollRectCellDataContainer _dataContainer = null;
+		private LoopScrollCellDataContainer _dataContainer = null;
 
 		protected LayoutElement layoutElement
 		{

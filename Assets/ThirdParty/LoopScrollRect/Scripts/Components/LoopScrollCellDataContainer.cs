@@ -3,7 +3,7 @@
 namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollRectCellDataContainer : MonoBehaviour
+	public class LoopScrollCellDataContainer : MonoBehaviour
 	{
 		public IReadOnlyList<object> data => _data;
 		private List<object> _data = new List<object>();

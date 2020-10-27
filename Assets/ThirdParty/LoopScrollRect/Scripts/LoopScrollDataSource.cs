@@ -26,7 +26,7 @@ namespace UnityEngine.UI
         {
 			Assert.IsNotNull(transform);
 
-			ILoopScrollIndexReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_indexReceiverLookup, transform);
+			ILoopScrollIndexReceiver receiver = LoopScrollUtilities.GetComponentFromLookup(_indexReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellIndex(index); } 
         }
     }
@@ -52,7 +52,7 @@ namespace UnityEngine.UI
         {
 			Assert.IsNotNull(transform);
 
-			ILoopScrollContentReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_contentReceiverLookup, transform);
+			ILoopScrollContentReceiver receiver = LoopScrollUtilities.GetComponentFromLookup(_contentReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellContent(index); }
         }
     }
