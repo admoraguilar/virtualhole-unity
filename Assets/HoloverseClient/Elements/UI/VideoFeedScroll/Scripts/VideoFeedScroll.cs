@@ -85,19 +85,16 @@ namespace Holoverse.Client.UI
 			}
 
 			bool isFromTop = _cellData.Count <= 0;
-
 			_cellData.AddRange(cellData);
-			CoroutineUtilities.Start(DelayFrame());
 
-			IEnumerator DelayFrame()
-			{
-				yield return null;
-				_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
+			CoroutineUtilities.ExecuteOnYield(
+				null, () => {
+					_scroll.GetComponent<LoopScrollRectCellDataContainer>().UpdateData(_cellData);
 
-				if(isFromTop) {
-					//scroll.ScrollToCell(0, 3000f);
-				}
-			}
+					if(isFromTop) {
+						//scroll.ScrollToCell(0, 3000f);
+					}
+				}, false);
 		}
 
 		public async Task UnloadAsync()
