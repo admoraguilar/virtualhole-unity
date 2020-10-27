@@ -550,6 +550,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7203265578860187269, guid: 841a09e870f3d8745925059129785a6c,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7203265578860187290, guid: 841a09e870f3d8745925059129785a6c,
         type: 3}
       propertyPath: m_ChildControlWidth
@@ -559,6 +564,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ChildControlHeight
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203265578860187290, guid: 841a09e870f3d8745925059129785a6c,
+        type: 3}
+      propertyPath: m_Spacing
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7203265579530333881, guid: 841a09e870f3d8745925059129785a6c,
         type: 3}

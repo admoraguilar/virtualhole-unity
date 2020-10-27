@@ -49,6 +49,7 @@ namespace Holoverse.Client.Controllers
 
 		private async void OnCreatorPageVisit()
 		{
+			await _page.UnloadAsync();
 			await _page.InitializeAsync();
 		}
 

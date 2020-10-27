@@ -51,21 +51,24 @@ namespace Holoverse.Client.UI
 				cancellationToken);
 			_nameText.text = creator.universalName;
 
-			for(int i = 0; i < _socialButtonContainer.childCount; i++) {
-				Destroy(_socialButtonContainer.GetChild(i).gameObject);
-			}
-
 			foreach(Social social in creator.socials) {
 				Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonContainer, false);
+				socialButton.gameObject.SetActive(true);
+
 				socialButton.name = $"{social.platform}-{social.name}";
 				socialButton.image.sprite = UIResources.GetPlatformUI(social.platform).logo;
+				socialButton.image.enabled = true;
+
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
 
 			foreach(VideoFeedQuery feed in feeds) {
 				VideoPeekScroll peekScroll = Instantiate(_peekScrollTemplate, _peekScrollContainer, false);
-				peekScroll.name = _peekScrollTemplate.name;
 				peekScroll.gameObject.SetActive(true);
+
+				peekScroll.name = feed.name;
+				peekScroll.header.text = feed.name;
+				peekScroll.optionButton.GetComponentInChildren<TMP_Text>(true).text = $"More {feed.name}";
 
 				await peekScroll.InitializeAsync(feed, cancellationToken);
 			}
