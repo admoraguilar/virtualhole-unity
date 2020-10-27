@@ -6,7 +6,6 @@ using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
-	using Client.UI;
 	using Client.SOM;
 
 	public class SameFlowNodeSetResponse : MonoBehaviour
@@ -14,14 +13,14 @@ namespace Holoverse.Client.Controllers
 		private SceneObjectModel _som = null;
 		private FlowTree _flowTree = null;
 
-		private IReadOnlyList<VideoScrollRect> _videoScrollRects = null;
+		private IReadOnlyList<LoopScrollRect> _loopScrollRects = null;
 		private IReadOnlyList<ScrollRect> _scrollRects = null;
 
 		private void OnAttemptSetSameNodeAsCurrent(Node node)
 		{
-			foreach(VideoScrollRect videoScrollRect in _videoScrollRects) {
-				if(!node.transform.IsChildOf(videoScrollRect.transform)) { continue; }
-				videoScrollRect.ScrollTo(0f, 1f);
+			foreach(LoopScrollRect loopScrollRect in _loopScrollRects) {
+				if(!node.transform.IsChildOf(loopScrollRect.transform)) { continue; }
+				loopScrollRect.ScrollToCell(0, 2000f);
 			}
 
 			foreach(ScrollRect scrollRect in _scrollRects) {
@@ -37,7 +36,7 @@ namespace Holoverse.Client.Controllers
 			_som = SceneObjectModel.Get(this);
 			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
 
-			_videoScrollRects = _som.GetCachedComponents<VideoScrollRect>();
+			_loopScrollRects = _som.GetCachedComponents<LoopScrollRect>();
 			_scrollRects = _som.GetCachedComponents<ScrollRect>();
 		}
 

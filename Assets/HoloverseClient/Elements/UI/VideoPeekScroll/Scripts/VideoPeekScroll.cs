@@ -14,9 +14,9 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private TMP_Text _header = null;
 
-		public VideoScrollRect scroll => _scroll;
+		public LoopScrollRect scroll => _scroll;
 		[SerializeField]
-		private VideoScrollRect _scroll = null;
+		private LoopScrollRect _scroll = null;
 
 		public Button optionButton => _optionButton;
 		[SerializeField]

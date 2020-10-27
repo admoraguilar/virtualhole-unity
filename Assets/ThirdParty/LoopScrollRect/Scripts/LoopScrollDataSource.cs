@@ -1,5 +1,5 @@
-﻿using UnityEngine.Assertions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 namespace UnityEngine.UI
 {
@@ -28,7 +28,6 @@ namespace UnityEngine.UI
 
 			ILoopScrollIndexReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_indexReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellIndex(index); } 
-			else { Debug.LogError(_noReceiverError); }
         }
     }
 
@@ -55,7 +54,6 @@ namespace UnityEngine.UI
 
 			ILoopScrollContentReceiver receiver = LoopScrollRectUtilities.GetComponentFromLookup(_contentReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellContent(index); }
-			else { Debug.LogError(_noReceiverError); }
         }
     }
 }

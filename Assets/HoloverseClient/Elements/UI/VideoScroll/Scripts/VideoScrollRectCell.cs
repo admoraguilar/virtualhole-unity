@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using FancyScrollView;
+using Midnight;
 
 namespace Holoverse.Client.UI
 {
-	public class VideoScrollRectCell : FancyScrollRectCell<VideoScrollRectCellData, VideoScrollRectContext>
+	public class VideoScrollRectCell : MonoBehaviour, ILoopScrollCell
 	{
 		[SerializeField]
 		private Image _thumbnailImage = null;
@@ -31,8 +32,17 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private Button _optionsButton = null;
 
-		public override void UpdateContent(VideoScrollRectCellData itemData)
+		public Type cellDataType => typeof(VideoScrollRectCellData);
+
+		public RectTransform rectTrasform => this.GetComponent(ref _rectTransform, () => GetComponent<RectTransform>());
+		private RectTransform _rectTransform = null;
+
+		public LayoutElement layoutElement => this.GetComponent(ref _layoutElement, () => GetComponent<LayoutElement>());
+		private LayoutElement _layoutElement = null;
+
+		public void UpdateData(object data)
 		{
+			VideoScrollRectCellData itemData = (VideoScrollRectCellData)data;
 			_thumbnailImage.sprite = itemData.thumbnailSprite;
 
 			if(itemData.indicatorSprite != null) {
