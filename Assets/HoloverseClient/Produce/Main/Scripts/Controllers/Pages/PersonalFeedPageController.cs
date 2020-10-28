@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Midnight.SOM;
+using UnityEngine;
 using Midnight.Pages;
 using Midnight.FlowTree;
 
@@ -8,11 +8,20 @@ namespace Holoverse.Client.Controllers
 	using Api.Data;
 
 	using Client.UI;
-	using Client.SOM;
 	using Client.Data;
+	using Client.ComponentMaps;
 
 	public class PersonalFeedPageController : FeedPageController
 	{
+		protected override Node _mainNode => mainFlowMap.personalFeedNode;
+		protected override Page _page => _mainFlowPersonalFeedMap.page;
+		protected override VideoFeedScroll _videoFeed => _mainFlowPersonalFeedMap.videoFeed;
+		protected override Section _videoFeedSection => _mainFlowPersonalFeedMap.videoSection;
+		public Section emptySection => _mainFlowPersonalFeedMap.emptySection;
+		[Space]
+		[SerializeField]
+		private MainFlowPersonalFeedMap _mainFlowPersonalFeedMap = null;
+
 		private Section _emptyFeedSection = null;
 
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) => null;
@@ -22,19 +31,6 @@ namespace Holoverse.Client.Controllers
 			await Task.CompletedTask;
 			_emptyFeedSection.gameObject.SetActive(true);
 			await _emptyFeedSection.LoadAsync();
-		}
-
-		protected override void SetReferences(
-			ref Page page, ref Section videoFeedSection,
-			ref VideoFeedScroll videoFeed, ref Node mainNode)
-		{
-			SceneObjectModel som = SceneObjectModel.Get(this);
-			page = som.GetCachedComponent<MainFlowPersonalFeedMap>().page;
-			videoFeedSection = som.GetCachedComponent<MainFlowPersonalFeedMap>().videoSection;
-			videoFeed = som.GetCachedComponent<MainFlowPersonalFeedMap>().videoFeed;
-			mainNode = som.GetCachedComponent<MainFlowMap>().personalFeedNode;
-
-			_emptyFeedSection = som.GetCachedComponent<MainFlowPersonalFeedMap>().emptySection;
 		}
 	}
 }

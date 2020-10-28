@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
-using Midnight.SOM;
 using Midnight.Mobile;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
 	using Client.UI;
-	using Client.SOM;
+	using Client.ComponentMaps;
 
 	public class MainFlowNavigator : MonoBehaviour
 	{
@@ -25,21 +23,19 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private NavigationItem[] _navigationItems = null;
 
-		private SceneObjectModel _som = null;
-		private FlowTree _flowTree = null;
-		private NavigationBar _navigationBar = null;
+		private FlowTree _flowTree => _mainFlowMap.flowTree;
+		[Space]
+		[SerializeField]
+		private MainFlowMap _mainFlowMap = null;
+
+		private NavigationBar _navigationBar => _controlsMap.navigationBar;
+		[SerializeField]
+		private ControlsMap _controlsMap = null;
 
 		private void OnBackButtonClicked()
 		{
 			if(_flowTree.isLessThanOrOneNode) { MobileApplication.Suspend(); } 
 			else { _flowTree.Backward(); }
-		}
-
-		private void Awake()
-		{
-			_som = SceneObjectModel.Get(this);
-			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
-			_navigationBar = _som.GetCachedComponent<ControlsMap>().navigationBar;
 		}
 
 		private void Start()

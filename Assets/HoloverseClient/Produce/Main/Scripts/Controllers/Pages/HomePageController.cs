@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Midnight.SOM;
+using UnityEngine;
 using Midnight.Pages;
 using Midnight.FlowTree;
 
@@ -8,12 +8,20 @@ namespace Holoverse.Client.Controllers
 	using Api.Data;
 	using Api.Data.Contents.Creators;
 
-	using Client.SOM;
-	using Client.Data;
 	using Client.UI;
+	using Client.Data;
+	using Client.ComponentMaps;
 
 	public class HomePageController : FeedPageController
 	{
+		protected override Node _mainNode => mainFlowMap.homeNode;
+		protected override Page _page => _mainFlowHomeMap.page;
+		protected override VideoFeedScroll _videoFeed => _mainFlowHomeMap.videoFeed;
+		protected override Section _videoFeedSection => _mainFlowHomeMap.videoSection;
+		[Space]
+		[SerializeField]
+		private MainFlowHomeMap _mainFlowHomeMap = null;
+
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) =>
 			new CreatorQuery(
 				client,
@@ -24,16 +32,5 @@ namespace Holoverse.Client.Controllers
 					},
 					batchSize = 100
 				});
-
-		protected override void SetReferences(
-			ref Page page, ref Section videoFeedSection, 
-			ref VideoFeedScroll videoFeed, ref Node mainNode)
-		{
-			SceneObjectModel som = SceneObjectModel.Get(this);
-			page = som.GetCachedComponent<MainFlowHomeMap>().page;
-			videoFeedSection = som.GetCachedComponent<MainFlowHomeMap>().videoSection;
-			videoFeed = som.GetCachedComponent<MainFlowHomeMap>().videoFeed;
-			mainNode = som.GetCachedComponent<MainFlowMap>().homeNode;
-		}
 	}
 }

@@ -473,6 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b3d6a7db982a24d9e17a7fd030ac8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainFlowMap: {fileID: 480715572}
 --- !u!1 &590136848
 GameObject:
   m_ObjectHideFlags: 0
@@ -974,6 +975,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
+  _mainFlowMap: {fileID: 480715572}
+  _mainFlowCreatorPageMap: {fileID: 1424740557}
 --- !u!1 &897503139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,24 +1158,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 958391154}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &958391156 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2891373282288589768, guid: 51b87c14451385d40a63583f56d84e5c,
-    type: 3}
-  m_PrefabInstance: {fileID: 958391154}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &958391157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958391156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a782a7e105a96a4fa245356715d0b6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &971644651 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8577074079074898083, guid: d7f010382abf15c40bbe66561a6fbea4,
@@ -1614,6 +1599,8 @@ MonoBehaviour:
   - sprite: {fileID: 21300000, guid: bd190f341a63ae7449752d80a3a8ef73, type: 3}
     text: Support
     node: {fileID: 1224511792}
+  _mainFlowMap: {fileID: 480715572}
+  _controlsMap: {fileID: 1168806931}
 --- !u!1 &1424740554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,6 +1712,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
+  _mainFlowMap: {fileID: 480715572}
+  _mainFlowHomeMap: {fileID: 2025111117}
 --- !u!224 &1599135657 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 261884416377793858, guid: 52226a3b54c7471449f2f2ca57edec2b,
@@ -1978,6 +1967,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
+  _mainFlowMap: {fileID: 480715572}
+  _mainFlowPersonalFeedMap: {fileID: 77373906}
 --- !u!1001 &2003048901
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using Midnight.SOM;
 using Midnight.FlowTree;
 
-namespace Holoverse.Client.SOM
+namespace Holoverse.Client.ComponentMaps
 {
-	public class MainFlowMap : SceneObject
+	public class MainFlowMap : MonoBehaviour
 	{
 		public FlowTree flowTree => _flowTree;
 		[SerializeField]

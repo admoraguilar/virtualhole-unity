@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using Midnight.SOM;
 
-namespace Holoverse.Client.SOM
+namespace Holoverse.Client.ComponentMaps
 {
 	using Client.UI;
 
-	public class ControlsMap : SceneObject
+	public class ControlsMap : MonoBehaviour
 	{
 		public NavigationBar navigationBar => _navigationBar;
 		[SerializeField]

@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using Midnight.SOM;
 using Midnight.Pages;
 
-namespace Holoverse.Client.SOM
+namespace Holoverse.Client.ComponentMaps
 {
 	using Client.UI;
 	
-	public class MainFlowCreatorPageMap : SceneObject
+	public class MainFlowCreatorPageMap : MonoBehaviour
 	{
 		public Page page => _page;
 		[SerializeField]

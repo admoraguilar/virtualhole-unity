@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Midnight.SOM;
 using Midnight.Pages;
 using Midnight.FlowTree;
 
@@ -10,21 +9,25 @@ namespace Holoverse.Client.Controllers
 	using Api.Data;
 
 	using Client.UI;
-	using Client.SOM;
 	using Client.Data;
+	using Client.ComponentMaps;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
-		private SceneObjectModel _som = null;
-		private FlowTree _flowTree = null;
-		private Node _mainNode = null;
-		private Node _optionsNode = null;
-		private Page _page = null;
-		private Section _videoFeedSection = null;
-		private VideoFeedScroll _videoFeed = null;
+		private FlowTree _flowTree => _mainFlowMap.flowTree;
+		private Node _optionsNode => _mainFlowMap.creatorPageNode;
+		protected MainFlowMap mainFlowMap => _mainFlowMap;
+		[Space]
+		[SerializeField]
+		private MainFlowMap _mainFlowMap = null;
+
+		protected abstract Node _mainNode { get; }
+		protected abstract Page _page { get; }
+		protected abstract Section _videoFeedSection { get; }
+		protected abstract VideoFeedScroll _videoFeed { get; }
 
 		protected abstract CreatorQuery CreateCreatorQuery(HoloverseDataClient client);
 
@@ -84,21 +87,6 @@ namespace Holoverse.Client.Controllers
 		{
 			if(node != _mainNode) { return; }
 			_videoFeed.ScrollToTop();
-		}
-
-		protected virtual void SetReferences(
-			ref Page page, ref Section videoFeedSection,
-			ref VideoFeedScroll videoFeed, ref Node mainNode) { }
-
-		private void Awake()
-		{
-			_som = SceneObjectModel.Get(this);
-			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
-			_optionsNode = _som.GetCachedComponent<MainFlowMap>().creatorPageNode;
-
-			SetReferences(
-				ref _page, ref _videoFeedSection, 
-				ref _videoFeed, ref _mainNode);
 		}
 
 		private void OnEnable()

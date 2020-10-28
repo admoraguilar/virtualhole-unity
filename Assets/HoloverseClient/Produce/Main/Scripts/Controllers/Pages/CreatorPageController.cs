@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight.SOM;
 using Midnight.Pages;
 using Midnight.FlowTree;
 
@@ -11,20 +10,25 @@ namespace Holoverse.Client.Controllers
 	using Api.Data.Contents.Creators;
 
 	using Client.UI;
-	using Client.SOM;
 	using Client.Data;
+	using Client.ComponentMaps;
 
 	public class CreatorPageController : MonoBehaviour
 	{
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
+		
+		private FlowTree _flowTree => _mainFlowMap.flowTree;
+		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
+		[Space]
+		[SerializeField]
+		private MainFlowMap _mainFlowMap = null;
 
-		private SceneObjectModel _som = null;
-		private FlowTree _flowTree = null;
-		private Node _creatorPageNode = null;
-		private Page _page = null;
-		private Section _creatorPageSection = null;
-		private CreatorView _creatorView = null;
+		private Page _page => _mainFlowCreatorPageMap.page;
+		private Section _creatorPageSection => _mainFlowCreatorPageMap.creatorPageSection;
+		private CreatorView _creatorView => _mainFlowCreatorPageMap.creatorView;
+		[SerializeField]
+		private MainFlowCreatorPageMap _mainFlowCreatorPageMap = null;
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{
@@ -58,16 +62,6 @@ namespace Holoverse.Client.Controllers
 		{
 			if(node != _creatorPageNode) { return; }
 			_creatorView.ScrollToTop();
-		}
-
-		private void Awake()
-		{
-			_som = SceneObjectModel.Get(this);
-			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
-			_creatorPageNode = _som.GetCachedComponent<MainFlowMap>().creatorPageNode;
-			_page = _som.GetCachedComponent<MainFlowCreatorPageMap>().page;
-			_creatorPageSection = _som.GetCachedComponent<MainFlowCreatorPageMap>().creatorPageSection;
-			_creatorView = _som.GetCachedComponent<MainFlowCreatorPageMap>().creatorView;
 		}
 
 		private void OnEnable()

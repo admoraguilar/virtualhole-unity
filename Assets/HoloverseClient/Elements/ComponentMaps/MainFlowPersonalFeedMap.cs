@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using Midnight.SOM;
 using Midnight.Pages;
 
-namespace Holoverse.Client.SOM
+namespace Holoverse.Client.ComponentMaps
 {
 	using Client.UI;
-	
-	public class MainFlowHomeMap : SceneObject
+
+	public class MainFlowPersonalFeedMap : MonoBehaviour
 	{
 		public Page page => _page;
 		[SerializeField]
@@ -19,5 +18,9 @@ namespace Holoverse.Client.SOM
 		public VideoFeedScroll videoFeed => _videoFeed;
 		[SerializeField]
 		private VideoFeedScroll _videoFeed = null;
+
+		public Section emptySection => _emptySection;
+		[SerializeField]
+		private Section _emptySection = null;
 	}
 }
