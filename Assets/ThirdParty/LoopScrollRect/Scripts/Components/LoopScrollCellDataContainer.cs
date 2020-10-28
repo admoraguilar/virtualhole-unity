@@ -24,13 +24,22 @@ namespace UnityEngine.UI
 			_data.Clear();
 			_data.AddRange(values);
 
+			bool wasZeroOrLess = loopScrollRect.totalCount <= 0;
+
 			if(loopScrollRect.totalCount != _data.Count) {
-				bool wasZeroOrLess = loopScrollRect.totalCount <= 0;
 				loopScrollRect.totalCount = _data.Count;
 
+				// NOTES: refilling cells causing some weird behaviours on
+				// first fill? (or apparently it seems like it's Unity's fault,
+				// I've removed the scene view and only had the game view
+				// and the scroll is working fine.
+				// loading scene view and game view again after that confirms
+				// a fix, remember to reload the editor layout again next time
 				if(wasZeroOrLess) { loopScrollRect.RefillCells(); }
-				else { loopScrollRect.RefreshCells(); }
-			} else {
+			}
+
+			if(!wasZeroOrLess) {
+				// NOTES: Still works fine even if the cells are not refreshed?
 				loopScrollRect.RefreshCells();
 			}
 		}
