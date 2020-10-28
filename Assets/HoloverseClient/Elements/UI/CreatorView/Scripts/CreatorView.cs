@@ -1,9 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Midnight;
 
 namespace Holoverse.Client.UI
 {
@@ -105,6 +107,25 @@ namespace Holoverse.Client.UI
 				Destroy(peekScroll.gameObject);
 			}
 			_peekScrollInstances.Clear();
+		}
+
+		public void ScrollToTop(float speed = 10f)
+		{
+			CoroutineUtilities.Start(Routine());
+
+			IEnumerator Routine()
+			{
+				int totalCount = _plainScroll.content.transform.childCount;
+				if(totalCount > 0) {
+					if(totalCount < 10) { _plainScroll.verticalNormalizedPosition = .2f; } 
+					else { _plainScroll.verticalNormalizedPosition = 10f / totalCount; }
+				}
+
+				while(_plainScroll.verticalNormalizedPosition > 0f) {
+					_plainScroll.verticalNormalizedPosition -= speed * Time.fixedDeltaTime;
+					yield return null;
+				}
+			}
 		}
 	}
 }

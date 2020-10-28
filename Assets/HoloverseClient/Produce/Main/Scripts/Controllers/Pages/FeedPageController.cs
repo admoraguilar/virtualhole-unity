@@ -12,7 +12,6 @@ namespace Holoverse.Client.Controllers
 	using Client.UI;
 	using Client.SOM;
 	using Client.Data;
-	using FancyScrollView.Example01;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
@@ -20,6 +19,7 @@ namespace Holoverse.Client.Controllers
 		private HoloverseDataClientObject _client = null;
 
 		private SceneObjectModel _som = null;
+		private FlowTree _flowTree = null;
 		private Node _mainNode = null;
 		private Node _optionsNode = null;
 		private Page _page = null;
@@ -80,6 +80,12 @@ namespace Holoverse.Client.Controllers
 			await _page.LoadAsync();
 		}
 
+		private void OnAttemptSetSameNodeAsCurrent(Node node)
+		{
+			if(node != _mainNode) { return; }
+			_videoFeed.ScrollToTop();
+		}
+
 		protected virtual void SetReferences(
 			ref Page page, ref Section videoFeedSection,
 			ref VideoFeedScroll videoFeed, ref Node mainNode) { }
@@ -87,6 +93,7 @@ namespace Holoverse.Client.Controllers
 		private void Awake()
 		{
 			_som = SceneObjectModel.Get(this);
+			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
 			_optionsNode = _som.GetCachedComponent<MainFlowMap>().creatorPageNode;
 
 			SetReferences(
@@ -96,6 +103,8 @@ namespace Holoverse.Client.Controllers
 
 		private void OnEnable()
 		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
+
 			_mainNode.OnVisit += OnNodeVisit;
 
 			_videoFeedSection.InitializeTaskFactory += InitializeAsync;
@@ -109,6 +118,8 @@ namespace Holoverse.Client.Controllers
 
 		private void OnDisable()
 		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
+
 			_mainNode.OnVisit -= OnNodeVisit;
 
 			_videoFeedSection.InitializeTaskFactory -= InitializeAsync;

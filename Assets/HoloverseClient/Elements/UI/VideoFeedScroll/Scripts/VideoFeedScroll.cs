@@ -110,6 +110,17 @@ namespace Holoverse.Client.UI
 			}
 		}
 
+		public void ScrollToTop()
+		{
+			if(scroll.totalCount > 0) {
+				if(scroll.totalCount < 10) { scroll.verticalNormalizedPosition = .2f; } 
+				else { scroll.verticalNormalizedPosition = 10f / scroll.totalCount; }
+			}
+			
+			scroll.RefreshCells();
+			scroll.ScrollToCell(0, 20000f);
+		}
+
 		private void OnDropdownValueChanged(int value)
 		{
 			OnDropdownValueChangedCallback(value);

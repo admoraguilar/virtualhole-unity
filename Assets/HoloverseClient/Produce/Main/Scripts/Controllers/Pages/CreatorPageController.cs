@@ -20,6 +20,7 @@ namespace Holoverse.Client.Controllers
 		private HoloverseDataClientObject _client = null;
 
 		private SceneObjectModel _som = null;
+		private FlowTree _flowTree = null;
 		private Node _creatorPageNode = null;
 		private Page _page = null;
 		private Section _creatorPageSection = null;
@@ -53,9 +54,16 @@ namespace Holoverse.Client.Controllers
 			await _page.InitializeAsync();
 		}
 
+		private void OnAttemptSetSameNodeAsCurrent(Node node)
+		{
+			if(node != _creatorPageNode) { return; }
+			_creatorView.ScrollToTop();
+		}
+
 		private void Awake()
 		{
 			_som = SceneObjectModel.Get(this);
+			_flowTree = _som.GetCachedComponent<MainFlowMap>().flowTree;
 			_creatorPageNode = _som.GetCachedComponent<MainFlowMap>().creatorPageNode;
 			_page = _som.GetCachedComponent<MainFlowCreatorPageMap>().page;
 			_creatorPageSection = _som.GetCachedComponent<MainFlowCreatorPageMap>().creatorPageSection;
@@ -64,6 +72,7 @@ namespace Holoverse.Client.Controllers
 
 		private void OnEnable()
 		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
 			_creatorPageNode.OnVisit += OnCreatorPageVisit;
 
 			_creatorPageSection.InitializeTaskFactory += InitializeAsync;
@@ -72,6 +81,9 @@ namespace Holoverse.Client.Controllers
 
 		private void OnDisable()
 		{
+			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
+			_creatorPageNode.OnVisit -= OnCreatorPageVisit;
+
 			_creatorPageSection.InitializeTaskFactory -= InitializeAsync;
 			_creatorPageSection.UnloadTaskFactory -= UnloadAsync;
 		}
