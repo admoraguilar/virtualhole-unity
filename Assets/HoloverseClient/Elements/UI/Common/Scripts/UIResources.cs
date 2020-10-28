@@ -40,6 +40,6 @@ namespace Holoverse.Client.UI
 		private Sprite _scheduledIndicator = null;
 
 		[SerializeField]
-		private PlatformUI[] _platformUIs;
+		private PlatformUI[] _platformUIs = null;
 	}
 }

@@ -34,9 +34,6 @@ namespace Holoverse.Client.UI
 		public event Action<int> OnDropdownValueChangedCallback = delegate { };
 		public event Action OnNearScrollEnd = delegate { };
 
-		[SerializeField]
-		private int _cellRemainingThreshold = 7;
-
 		public LoopScrollRect scroll => _scroll;
 		[Header("References")]
 		[SerializeField]
