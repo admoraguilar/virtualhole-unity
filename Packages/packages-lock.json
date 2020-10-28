@@ -24,7 +24,7 @@
         "com.unity.scriptablebuildpipeline": "1.11.2",
         "jillejr.newtonsoft.json-for-unity": "12.0.301"
       },
-      "hash": "1285a9e3f604901b874bfaf8b12770a7426ecd2f"
+      "hash": "bdb2362bcdbde41d2ef308ee9d72d5f19472ca17"
     },
     "com.unity.2d.animation": {
       "version": "4.2.6",
