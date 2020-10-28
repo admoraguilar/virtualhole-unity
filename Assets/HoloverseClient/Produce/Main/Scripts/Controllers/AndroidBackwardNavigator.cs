@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using Midnight;
 using Midnight.SOM;
+using Midnight.Mobile;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
@@ -13,18 +15,8 @@ namespace Holoverse.Client.Controllers
 
 		private void OnEscapeButton()
 		{
-			if(_flowTree.isOnlyOneNode) {
-#if !UNITY_EDITOR && UNITY_ANDROID
-				AndroidJavaObject activity =
-					new AndroidJavaClass("com.unity3d.player.UnityPlayer")
-					.GetStatic<AndroidJavaObject>("currentActivity");
-				activity.Call<bool>("moveTaskToBack", true);
-#else
-				_flowTree.Backward();
-#endif
-			} else {
-				_flowTree.Backward();
-			}
+			if(_flowTree.isLessThanOrOneNode) { MobileApplication.Suspend(); } 
+			else { _flowTree.Backward(); }
 		}
 
 		private void Awake()
