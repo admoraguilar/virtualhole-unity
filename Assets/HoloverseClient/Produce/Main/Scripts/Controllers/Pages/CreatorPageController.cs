@@ -34,10 +34,10 @@ namespace Holoverse.Client.Controllers
 			await _creatorView.LoadCreatorAsync(
 				creator,
 				new VideoFeedQuery[] {
-					VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
-					VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
-					VideoFeedQuery.CreateLiveFeed(_client.client, creators),
-					VideoFeedQuery.CreateScheduledFeed(_client.client, creators)
+					VideoFeedQuery.CreateDiscoverFeed(_client.client, creators, 4),
+					VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
+					VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),
+					VideoFeedQuery.CreateScheduledFeed(_client.client, creators, 4)
 				},
 				cancellationToken);
 		}
