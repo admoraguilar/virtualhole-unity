@@ -24,7 +24,7 @@ namespace Holoverse.Client.UI
 			List<Video> videos = videoResult.ToList();
 			VideoCache.Add(videos);
 
-			await Concurrent.ForEachAsync(videos, PreloadResources, cancellationToken);
+			await Concurrent.ForEachAsync(videos, PreloadResources, 50, cancellationToken);
 
 			foreach(Video video in videos) {
 				Sprite thumbnail = await VideoCache.GetThumbnailAsync(video.platform, video.id);
