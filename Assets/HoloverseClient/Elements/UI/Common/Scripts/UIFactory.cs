@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using Humanizer;
 using Midnight.Concurrency;
 
 namespace Holoverse.Client.UI
@@ -39,7 +40,7 @@ namespace Holoverse.Client.UI
 				VideoScrollCellData cellData = new VideoScrollCellData() {
 					thumbnailSprite = thumbnail,
 					title = video.title,
-					date = video.creationDate.ToString(),
+					date = video.creationDate.Humanize(),
 					creatorSprite = creatorSprite,
 					creatorName = video.creator,
 					creatorUniversalId = video.creatorIdUniversal,
