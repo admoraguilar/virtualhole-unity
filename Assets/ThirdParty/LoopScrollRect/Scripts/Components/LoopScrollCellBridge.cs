@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Midnight;
+using System;
 using System.Collections.Generic;
 
 namespace UnityEngine.UI
@@ -7,9 +8,16 @@ namespace UnityEngine.UI
 	[RequireComponent(typeof(LayoutElement))]
 	public class LoopScrollCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
 	{
+		private class LoopScrollCell
+		{
+			public ILoopScrollCell cell = null;
+			public RectTransform rectTransform = null;
+			public LayoutElement layoutElement = null;
+		}
+
 		public RectTransform[] cellPrefabs = null;
 
-		private Dictionary<Type, ILoopScrollCell> _cellLookup = new Dictionary<Type, ILoopScrollCell>();
+		private Dictionary<Type, LoopScrollCell> _cellLookup = new Dictionary<Type, LoopScrollCell>();
 		private object _data = null;
 		private int _index = 0;
 
@@ -60,8 +68,8 @@ namespace UnityEngine.UI
 
 		private void Refresh()
 		{
-			foreach(ILoopScrollCell cellItem in _cellLookup.Values) {
-				cellItem.rectTrasform.gameObject.SetActive(false);
+			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
+				cellItem.rectTransform.gameObject.SetActive(false);
 			}
 
 			if(_data == null) { 
@@ -69,15 +77,31 @@ namespace UnityEngine.UI
 			}
 
 			Type dataType = _data.GetType();
-			if(!_cellLookup.TryGetValue(dataType, out ILoopScrollCell cell)) {
+			if(!_cellLookup.TryGetValue(dataType, out LoopScrollCell cell)) {
+				cell = new LoopScrollCell();
+
 				foreach(RectTransform cellPrefab in cellPrefabs) {
 					if(cellPrefab.TryGetComponent(typeof(ILoopScrollCell), out Component c)) {
-						cell = (ILoopScrollCell)c;
-						if(cell.cellDataType == dataType) {
+						cell.cell = (ILoopScrollCell)c;
+
+						if(cell.cell.cellDataType == dataType) {
 							Component newCell = Instantiate(c, rectTransform, false);
 							newCell.name = c.name;
 
-							cell = (ILoopScrollCell)newCell;
+							if(!newCell.TryGetComponent(out RectTransform rt)) { 
+								rt = newCell.AddOrGetComponent<RectTransform>(); 
+							}
+							
+							if(!newCell.TryGetComponent(out LayoutElement le)) { 
+								le = newCell.AddOrGetComponent<LayoutElement>();
+								le.preferredWidth = rt.sizeDelta.x;
+								le.preferredHeight = rt.sizeDelta.y;
+							}
+
+							cell.cell = (ILoopScrollCell)newCell;
+							cell.rectTransform = rt;
+							cell.layoutElement = le;
+
 							_cellLookup[dataType] = cell;
 							break;
 						} else {
@@ -88,8 +112,8 @@ namespace UnityEngine.UI
 			}
 
 			if(cell != null) {
-				cell.UpdateData(_data);
-				cell.rectTrasform.gameObject.SetActive(true);
+				cell.cell.UpdateData(_data);
+				cell.rectTransform.gameObject.SetActive(true);
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
 				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
