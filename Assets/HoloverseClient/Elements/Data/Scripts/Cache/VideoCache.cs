@@ -16,6 +16,12 @@ namespace Holoverse.Client.Data
 		private static Dictionary<string, Sprite> _thumbnailLookup = new Dictionary<string, Sprite>();
 
 		public static async Task<Sprite> GetThumbnailAsync(
+			Video video, CancellationToken cancellationToken = default)
+		{
+			return await GetThumbnailAsync(video.platform, video.id, cancellationToken);
+		} 
+
+		public static async Task<Sprite> GetThumbnailAsync(
 			Platform platform, string id, CancellationToken cancellationToken = default)
 		{
 			string key = CreateLookupKey(platform, id);

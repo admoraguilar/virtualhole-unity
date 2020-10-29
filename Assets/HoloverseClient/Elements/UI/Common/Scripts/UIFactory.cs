@@ -9,17 +9,46 @@ using Midnight.Concurrency;
 namespace Holoverse.Client.UI
 {
 	using Api.Data.Contents.Videos;
+	using Api.Data.Contents.Creators;
 
 	using Client.Data;
 
 	public static class UIFactory
 	{
+		public static async Task<IEnumerable<CreatorScrollCellData>> CreateCreatorScrollCellData(
+			CreatorQuery query, CancellationToken cancellationToken = default)
+		{
+			List<CreatorScrollCellData> results = new List<CreatorScrollCellData>();
+
+			IEnumerable<Creator> creatorResult = await query.LoadAsync(cancellationToken);
+			if(creatorResult == null) { return results; }
+
+			List<Creator> creators = creatorResult.ToList();
+			await Concurrent.ForEachAsync(creators, PreloadResources, 50, cancellationToken);
+
+			foreach(Creator creator in query.creatorLookup.Values) {
+				CreatorScrollCellData cellData = new CreatorScrollCellData {
+					creatorAvatar = await CreatorCache.GetAvatarAsync(creator),
+					creatorName = creator.universalName,
+					onCellClick = () => { }
+				};
+				results.Add(cellData);
+			}
+
+			return results;
+
+			async Task PreloadResources(Creator creator)
+			{
+				await CreatorCache.GetAvatarAsync(creator);
+			}
+		}
+
 		public static async Task<IEnumerable<VideoScrollCellData>> CreateVideoScrollCellData(
-			VideoFeedQuery feed, CancellationToken cancellationToken = default)
+			VideoFeedQuery query, CancellationToken cancellationToken = default)
 		{
 			List<VideoScrollCellData> results = new List<VideoScrollCellData>();
 
-			IEnumerable<Video> videoResult = await feed.LoadAsync(cancellationToken);
+			IEnumerable<Video> videoResult = await query.LoadAsync(cancellationToken);
 			if(videoResult == null) { return results; }
 
 			List<Video> videos = videoResult.ToList();
@@ -60,7 +89,7 @@ namespace Holoverse.Client.UI
 
 			async Task PreloadResources(Video video)
 			{
-				await VideoCache.GetThumbnailAsync(video.platform, video.id);
+				await VideoCache.GetThumbnailAsync(video);
 				await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
 			}
 		}

@@ -27,9 +27,7 @@ namespace Holoverse.Client.Controllers
 				client,
 				new FindCreatorsSettings {
 					isCheckForAffiliations = true,
-					affiliations = new List<string>() {
-						"hololiveProduction"
-					},
+					affiliations = new List<string>() { "hololiveProduction" },
 					batchSize = 100
 				});
 	}

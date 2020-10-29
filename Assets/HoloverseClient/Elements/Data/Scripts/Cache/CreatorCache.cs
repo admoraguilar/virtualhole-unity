@@ -17,6 +17,14 @@ namespace Holoverse.Client.Data
 		private static Dictionary<string, Sprite> _avatarLookup = new Dictionary<string, Sprite>();
 
 		public static async Task<Sprite> GetAvatarAsync(
+			Creator creator, CancellationToken cancellationToken = default)
+		{
+			return await GetAvatarAsync(
+				creator.universalId, creator.avatarUrl, 
+				cancellationToken);
+		}
+
+		public static async Task<Sprite> GetAvatarAsync(
 			string universalId, string url, 
 			CancellationToken cancellationToken = default)
 		{

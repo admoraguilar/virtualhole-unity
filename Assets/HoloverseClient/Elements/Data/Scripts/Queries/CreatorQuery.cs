@@ -24,9 +24,9 @@ namespace Holoverse.Client.Data
 			_findCreatorsSettings = findCreatorsSettings;
 		}
 
-		public async Task LoadAsync(CancellationToken cancellationToken = default)
+		public async Task<IEnumerable<Creator>> LoadAsync(CancellationToken cancellationToken = default)
 		{
-			if(_isLoaded) { return; }
+			if(_isLoaded) { return _creatorLookup.Values; }
 
 			using(new StopwatchScope(nameof(CreatorQuery), "Start getting creators...", "End getting creators.")) {
 				CreatorClient creatorClient = _client.contents.creators;
@@ -37,6 +37,7 @@ namespace Holoverse.Client.Data
 				}
 			}
 
+			return _creatorLookup.Values;
 			_isLoaded = true;
 		}
 
