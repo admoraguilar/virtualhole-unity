@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,10 @@ namespace Holoverse.Client.UI
 
 	public class SearchView : MonoBehaviour
 	{
+		public event Action<CreatorScrollCellData> OnCellDataCreated = delegate { };
+
+		public float searchInputDelaySeconds = 2f;
+
 		public TMP_InputField searchField => _searchField;
 		[SerializeField]
 		private TMP_InputField _searchField = null;
@@ -33,6 +38,7 @@ namespace Holoverse.Client.UI
 		private CreatorQuery _creatorQuery = null;
 
 		private List<CreatorScrollCellData> _scrollCellData = new List<CreatorScrollCellData>();
+		private string _prevSearch = string.Empty;
 		private CancellationTokenSource _cts = null;
 
 		public void Initialize(HoloverseDataClient client)
@@ -44,27 +50,48 @@ namespace Holoverse.Client.UI
 		{
 			if(string.IsNullOrEmpty(searchField.text)) { return; }
 
+			MLog.Log($"Start searching: {searchField.text}");
+
 			_creatorQuery = new CreatorQuery(
 				_client,
 				new FindCreatorsRegexSettings {
 					searchQueries = new List<string>() { _searchField.text },
+					isCheckSocialName = false,
 					isCheckForAffiliations = true,
 					affiliations = new List<string>() { "hololiveProduction" }
 				});
 
+			_scrollCellData.Clear();
+			_scrollCellData.AddRange(await UIFactory.CreateCreatorScrollCellDataAsync(_creatorQuery, cancellationToken));
+
+			foreach(CreatorScrollCellData cellData in _scrollCellData) {
+				OnCellDataCreated(cellData);
+			}
+
+			CoroutineUtilities.ExecuteOnYield(
+				null, () => {
+					scrollDataContainer.UpdateData(_scrollCellData);
+				}, true);
+
 			cancellationToken.ThrowIfCancellationRequested();
 		}
 
-		private void OnSearchFieldValueChanged(string value)
+		private async void OnSearchFieldValueChanged(string value)
 		{
-			if(string.IsNullOrEmpty(searchField.text)) { return; }
+			if(string.IsNullOrEmpty(searchField.text) ||
+			   searchField.text == _prevSearch) { 
+				return; 
+			}
 
-			CoroutineUtilities.Start(SearchRoutine());
+			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
 
-			IEnumerator SearchRoutine()
-			{
-				yield return new WaitForSeconds(2f);
-				CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+			try {
+				await Task.Delay(TimeSpan.FromSeconds(searchInputDelaySeconds), _cts.Token);
+				await LoadAsync(_cts.Token);
+			} catch(Exception e) {
+				if(!(e is OperationCanceledException)) {
+					throw;
+				}
 			}
 		}
 

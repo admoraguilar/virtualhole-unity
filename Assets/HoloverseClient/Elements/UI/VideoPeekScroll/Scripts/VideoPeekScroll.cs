@@ -42,7 +42,7 @@ namespace Holoverse.Client.UI
 		{
 			_feed = feed;
 
-			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellData(
+			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
 				_feed, cancellationToken);
 			foreach(VideoScrollCellData cell in cellData) {
 				OnCellDataCreated?.Invoke(cell);

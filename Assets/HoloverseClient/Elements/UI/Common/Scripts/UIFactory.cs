@@ -15,7 +15,7 @@ namespace Holoverse.Client.UI
 
 	public static class UIFactory
 	{
-		public static async Task<IEnumerable<CreatorScrollCellData>> CreateCreatorScrollCellData(
+		public static async Task<IEnumerable<CreatorScrollCellData>> CreateCreatorScrollCellDataAsync(
 			CreatorQuery query, CancellationToken cancellationToken = default)
 		{
 			List<CreatorScrollCellData> results = new List<CreatorScrollCellData>();
@@ -30,6 +30,7 @@ namespace Holoverse.Client.UI
 				CreatorScrollCellData cellData = new CreatorScrollCellData {
 					creatorAvatar = await CreatorCache.GetAvatarAsync(creator),
 					creatorName = creator.universalName,
+					creatorId = creator.universalId,
 					onCellClick = () => { }
 				};
 				results.Add(cellData);
@@ -43,7 +44,7 @@ namespace Holoverse.Client.UI
 			}
 		}
 
-		public static async Task<IEnumerable<VideoScrollCellData>> CreateVideoScrollCellData(
+		public static async Task<IEnumerable<VideoScrollCellData>> CreateVideoScrollCellDataAsync(
 			VideoFeedQuery query, CancellationToken cancellationToken = default)
 		{
 			List<VideoScrollCellData> results = new List<VideoScrollCellData>();

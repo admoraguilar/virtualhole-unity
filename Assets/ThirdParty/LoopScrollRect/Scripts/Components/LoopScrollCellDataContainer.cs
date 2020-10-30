@@ -36,6 +36,11 @@ namespace UnityEngine.UI
 				// loading scene view and game view again after that confirms
 				// a fix, remember to reload the editor layout again next time
 				if(wasZeroOrLess) { loopScrollRect.RefillCells(); }
+				else {
+					// Hack the scroll rect to have a very tiny bit of movement to
+					// force it to update its cells
+					loopScrollRect.verticalNormalizedPosition += 0.0001f;
+				}
 			}
 
 			if(!wasZeroOrLess) {

@@ -74,7 +74,7 @@ namespace Holoverse.Client.UI
 			VideoFeedQuery feed = _feeds[dropdown.value];
 			if(feed.isDone) { return; }
 
-			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellData(
+			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
 				feed, cancellationToken);
 			foreach(VideoScrollCellData cell in cellData) { 
 				OnCellDataCreated?.Invoke(cell); 

@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 8605391786281536659}
   - component: {fileID: 8605391786281536670}
   - component: {fileID: 8605391786281536656}
+  - component: {fileID: 8593626112063993239}
   m_Layer: 5
   m_Name: CreatorButton
   m_TagString: Untagged
@@ -478,3 +479,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8593626112063993239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8605391786281536658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 622bec9f8e7d40d44acd298d9955b9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _creatorAvatarImage: {fileID: 8605391786081241222}
+  _creatorNameText: {fileID: 8605391785302843004}
+  _cellButton: {fileID: 8605391786281536656}
