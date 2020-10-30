@@ -48,20 +48,22 @@ namespace Holoverse.Client.Controllers
 			});
 		}
 
-		protected async void OnNodeVisit()
+		protected async void OnCreatorFeedVisit()
 		{
+			await _videoFeed.UnloadAsync();
+
 			_videoFeed.SetData(VideoFeedDataFactoryAsync);
 			await _videoFeed.InitializeAsync();
 		}
 
 		private void OnEnable()
 		{
-			_creatorFeedNode.OnVisit += OnNodeVisit;
+			_creatorFeedNode.OnVisit += OnCreatorFeedVisit;
 		}
 
 		private void OnDisable()
 		{
-			_creatorFeedNode.OnVisit -= OnNodeVisit;
+			_creatorFeedNode.OnVisit -= OnCreatorFeedVisit;
 		}
 	}
 }

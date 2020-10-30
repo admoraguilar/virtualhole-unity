@@ -105,10 +105,9 @@ namespace Holoverse.Client.UI
 				ClearFeed();
 				cancellationToken.ThrowIfCancellationRequested();
 				await LoadAsync(cancellationToken);
-			} catch(Exception e) {
-				if(!(e is OperationCanceledException)) {
-					OnInitializeError(e, null);
-				}
+			} catch(Exception e)  {
+				OnInitializeError(e, null);
+				throw;
 			}
 
 			OnInitializeFinish(null);
@@ -135,8 +134,9 @@ namespace Holoverse.Client.UI
 
 				_cellData.AddRange(cellData);
 				scrollDataContainer.UpdateData(_cellData);
-			} catch(Exception e) when (!(e is OperationCanceledException)) {
+			} catch(Exception e) {
 				OnLoadError(e, null);
+				throw;
 			} finally {
 				isLoading = false;
 			}
@@ -164,7 +164,7 @@ namespace Holoverse.Client.UI
 			_cellData.Clear();
 			scrollDataContainer.UpdateData(_cellData);
 
-			if(_feeds != null) {
+			if(_feeds != null && _feeds.Count > dropdown.value) {
 				VideoFeedQuery feed = _feeds[dropdown.value];
 				feed.Clear();
 			}

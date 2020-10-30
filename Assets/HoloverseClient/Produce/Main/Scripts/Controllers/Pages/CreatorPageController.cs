@@ -1,8 +1,5 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Midnight.Pages;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
@@ -34,17 +31,15 @@ namespace Holoverse.Client.Controllers
 			await _creatorView.UnloadAsync();
 
 			Creator creator = CreatorCache.creator;
-			if(creator == null) { return; }
-
 			IEnumerable<Creator> creators = new Creator[] { creator };
-			await _creatorView.LoadCreatorAsync(
-				creator,
-				new VideoFeedQuery[] {
-					VideoFeedQuery.CreateDiscoverFeed(_client.client, creators, 4),
-					VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
-					VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),
-					VideoFeedQuery.CreateScheduledFeed(_client.client, creators, 4)
-				});
+			_creatorView.SetData(creator, new VideoFeedQuery[] {
+				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators, 4),
+				VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
+				VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),
+				VideoFeedQuery.CreateScheduledFeed(_client.client, creators, 4)
+			});
+
+			await _creatorView.InitializeAsync();
 		}
 
 		private void OnAttemptSetSameNodeAsCurrent(Node node)
