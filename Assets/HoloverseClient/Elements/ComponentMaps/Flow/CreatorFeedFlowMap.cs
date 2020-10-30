@@ -5,7 +5,7 @@ namespace Holoverse.Client.ComponentMaps
 {
 	using Client.UI;
 
-	public class MainFlowCreatorFeedMap : MonoBehaviour
+	public class CreatorFeedFlowMap : MonoBehaviour
 	{
 		public Page page => _page;
 		[SerializeField]

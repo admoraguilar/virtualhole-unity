@@ -20,7 +20,7 @@ namespace Holoverse.Client.Controllers
 
 		private SearchView _searchView => _mainFlowSearchMap.searchView;
 		[SerializeField]
-		private MainFlowSearchMap _mainFlowSearchMap = null;
+		private SearchFlowMap _mainFlowSearchMap = null;
 
 		protected void OnNodeVisit()
 		{

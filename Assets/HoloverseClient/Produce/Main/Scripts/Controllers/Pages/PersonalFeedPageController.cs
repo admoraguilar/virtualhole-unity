@@ -22,7 +22,7 @@ namespace Holoverse.Client.Controllers
 		private Section _emptySection => _mainFlowPersonalFeedMap.emptySection;
 		[Space]
 		[SerializeField]
-		private MainFlowPersonalFeedMap _mainFlowPersonalFeedMap = null;
+		private PersonalFeedFlowMap _mainFlowPersonalFeedMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) 
 		{

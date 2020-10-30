@@ -20,7 +20,7 @@ namespace Holoverse.Client.Controllers
 		protected override Section _videoFeedSection => _mainFlowHomeMap.videoSection;
 		[Space]
 		[SerializeField]
-		private MainFlowHomeMap _mainFlowHomeMap = null;
+		private HomeFlowMap _mainFlowHomeMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) =>
 			new CreatorQuery(

@@ -29,7 +29,7 @@ namespace Holoverse.Client.Controllers
 		private Section _creatorPageSection => _mainFlowCreatorPageMap.creatorPageSection;
 		private CreatorView _creatorView => _mainFlowCreatorPageMap.creatorView;
 		[SerializeField]
-		private MainFlowCreatorPageMap _mainFlowCreatorPageMap = null;
+		private CreatorPageFlowMap _mainFlowCreatorPageMap = null;
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{

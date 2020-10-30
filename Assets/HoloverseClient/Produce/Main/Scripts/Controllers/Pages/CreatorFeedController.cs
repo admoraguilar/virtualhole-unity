@@ -30,7 +30,7 @@ namespace Holoverse.Client.Controllers
 		private VideoFeedScroll _videoFeed => _creatorFeedMap.videoFeed;
 		[Space]
 		[SerializeField]
-		private MainFlowCreatorFeedMap _creatorFeedMap = null;
+		private CreatorFeedFlowMap _creatorFeedMap = null;
 
 		private async Task InitializeAsync(CancellationToken cancellationToken = default)
 		{

@@ -4,7 +4,7 @@ namespace Holoverse.Client.ComponentMaps
 {
 	using Client.UI;
 
-	public class MainFlowSearchMap : MonoBehaviour
+	public class SearchFlowMap : MonoBehaviour
 	{
 		public SearchView searchView => _searchView;
 		[SerializeField]
