@@ -74,7 +74,6 @@ namespace Holoverse.Client.UI
 					creatorSprite = creatorSprite,
 					creatorName = video.creator,
 					creatorUniversalId = video.creatorIdUniversal,
-					onOptionsClick = () => { },
 					onCellClick = () => Application.OpenURL(video.url)
 				};
 

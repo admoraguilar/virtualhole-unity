@@ -14,7 +14,7 @@ namespace Holoverse.Client.UI
 		public string creatorName = string.Empty;
 		public string creatorUniversalId = string.Empty;
 
-		public Action onCellClick = delegate { };
-		public Action onOptionsClick = delegate { };
+		public Action onCellClick = null;
+		public Action onOptionsClick = null;
 	}
 }
