@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using Midnight.Pages;
 using Midnight.FlowTree;
@@ -6,6 +7,7 @@ using Midnight.FlowTree;
 namespace Holoverse.Client.Controllers
 {
 	using Api.Data;
+	using Api.Data.Contents.Creators;
 
 	using Client.UI;
 	using Client.Data;
@@ -17,20 +19,26 @@ namespace Holoverse.Client.Controllers
 		protected override Page _page => _mainFlowPersonalFeedMap.page;
 		protected override VideoFeedScroll _videoFeed => _mainFlowPersonalFeedMap.videoFeed;
 		protected override Section _videoFeedSection => _mainFlowPersonalFeedMap.videoSection;
-		public Section emptySection => _mainFlowPersonalFeedMap.emptySection;
+		private Section _emptySection => _mainFlowPersonalFeedMap.emptySection;
 		[Space]
 		[SerializeField]
 		private MainFlowPersonalFeedMap _mainFlowPersonalFeedMap = null;
 
-		private Section _emptyFeedSection = null;
-
-		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) => null;
+		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) 
+		{
+			return new CreatorQuery(client, new FindCreatorsRegexSettings {
+				searchQueries = new List<string>() { "Watame", "Matsuri", "Haato", "Subaru" }
+			});
+		}
 
 		protected override async void OnNodeVisit()
 		{
-			await Task.CompletedTask;
-			_emptyFeedSection.gameObject.SetActive(true);
-			await _emptyFeedSection.LoadAsync();
+			_emptySection.gameObject.SetActive(false);
+			base.OnNodeVisit();
+
+			//await Task.CompletedTask;
+			//_emptySection.gameObject.SetActive(true);
+			//await _emptySection.LoadAsync();
 		}
 	}
 }
