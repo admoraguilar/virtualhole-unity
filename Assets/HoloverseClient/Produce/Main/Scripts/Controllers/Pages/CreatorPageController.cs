@@ -20,6 +20,7 @@ namespace Holoverse.Client.Controllers
 		
 		private FlowTree _flowTree => _mainFlowMap.flowTree;
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
+		private Node _creatorFeedNode => _mainFlowMap.creatorFeedNode;
 		[Space]
 		[SerializeField]
 		private MainFlowMap _mainFlowMap = null;
@@ -64,6 +65,14 @@ namespace Holoverse.Client.Controllers
 			_creatorView.ScrollToTop();
 		}
 
+		private void OnVideoPeekScrollProcess(VideoPeekScroll peekScroll)
+		{
+			peekScroll.optionButton.onClick.RemoveAllListeners();
+			peekScroll.optionButton.onClick.AddListener(() => {
+				_creatorFeedNode.Set();
+			});
+		}
+
 		private void OnEnable()
 		{
 			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
@@ -71,6 +80,8 @@ namespace Holoverse.Client.Controllers
 
 			_creatorPageSection.InitializeTaskFactory += InitializeAsync;
 			_creatorPageSection.UnloadTaskFactory += UnloadAsync;
+
+			_creatorView.OnVideoPeekScrollProcess += OnVideoPeekScrollProcess;
 		}
 
 		private void OnDisable()
@@ -80,6 +91,8 @@ namespace Holoverse.Client.Controllers
 
 			_creatorPageSection.InitializeTaskFactory -= InitializeAsync;
 			_creatorPageSection.UnloadTaskFactory -= UnloadAsync;
+
+			_creatorView.OnVideoPeekScrollProcess -= OnVideoPeekScrollProcess;
 		}
 	}
 }

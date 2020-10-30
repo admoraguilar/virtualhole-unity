@@ -13,9 +13,12 @@ namespace Holoverse.Client.UI
 	using Api.Data.Contents.Creators;
 	
 	using Client.Data;
+	using System;
 
 	public class CreatorView : MonoBehaviour
 	{
+		public event Action<VideoPeekScroll> OnVideoPeekScrollProcess = delegate { };
+
 		public Creator creator { get; private set; } = null;
 
 		[Header("References")]
@@ -80,7 +83,11 @@ namespace Holoverse.Client.UI
 
 				peekScroll.name = feed.name;
 				peekScroll.header.text = feed.name;
+
+				peekScroll.optionButton.onClick.RemoveAllListeners();
 				peekScroll.optionButton.GetComponentInChildren<TMP_Text>(true).text = $"More {feed.name}";
+
+				OnVideoPeekScrollProcess(peekScroll);
 
 				await peekScroll.InitializeAsync(feed, cancellationToken);
 			}

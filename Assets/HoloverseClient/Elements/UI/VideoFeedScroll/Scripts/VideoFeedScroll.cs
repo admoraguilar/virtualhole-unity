@@ -83,20 +83,19 @@ namespace Holoverse.Client.UI
 			bool isFromTop = _cellData.Count <= 0;
 			_cellData.AddRange(cellData);
 
-			CoroutineUtilities.ExecuteOnYield(
-				null, () => {
-					scrollDataContainer.UpdateData(_cellData);
+			scrollDataContainer.UpdateData(_cellData);
 
-					if(isFromTop) {
-						//scroll.ScrollToCell(0, 3000f);
-					}
-				}, false);
+			if(isFromTop) {
+				//scroll.ScrollToCell(0, 3000f);
+			}
 		}
 
 		public async Task UnloadAsync()
 		{
 			await Task.CompletedTask;
+			
 			ClearFeed();
+			_feeds.Clear();
 		}
 
 		public void ClearFeed()

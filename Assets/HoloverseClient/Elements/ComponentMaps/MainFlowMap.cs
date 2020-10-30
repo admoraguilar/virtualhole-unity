@@ -29,6 +29,10 @@ namespace Holoverse.Client.ComponentMaps
 		[SerializeField]
 		private Node _creatorPageNode = null;
 
+		public Node creatorFeedNode => _creatorFeedNode;
+		[SerializeField]
+		private Node _creatorFeedNode = null;
+
 		public Node videoOptionsNode => _videoOptionsNode;
 		[SerializeField]
 		private Node _videoOptionsNode = null;
