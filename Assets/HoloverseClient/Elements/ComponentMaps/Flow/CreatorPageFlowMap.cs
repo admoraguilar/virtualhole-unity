@@ -7,14 +7,6 @@ namespace Holoverse.Client.ComponentMaps
 	
 	public class CreatorPageFlowMap : MonoBehaviour
 	{
-		public Page page => _page;
-		[SerializeField]
-		private Page _page = null;
-
-		public Section creatorPageSection => _creatorPageSection;
-		[SerializeField]
-		private Section _creatorPageSection = null;
-
 		public CreatorView creatorView => _creatorView;
 		[SerializeField]
 		private CreatorView _creatorView = null;

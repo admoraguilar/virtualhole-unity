@@ -7,14 +7,6 @@ namespace Holoverse.Client.ComponentMaps
 
 	public class PersonalFeedFlowMap : MonoBehaviour
 	{
-		public Page page => _page;
-		[SerializeField]
-		private Page _page = null;
-
-		public Section videoSection => _videoSection;
-		[SerializeField]
-		private Section _videoSection = null;
-
 		public VideoFeedScroll videoFeed => _videoFeed;
 		[SerializeField]
 		private VideoFeedScroll _videoFeed = null;

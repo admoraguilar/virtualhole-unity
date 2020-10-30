@@ -76,6 +76,7 @@ namespace UnityEngine.UI
 					// Hack the scroll rect to have a very tiny bit of movement to
 					// force it to update its cells
 					loopScrollRect.verticalNormalizedPosition += Mathf.Epsilon;
+					loopScrollRect.horizontalNormalizedPosition += Mathf.Epsilon;
 				}
 
 				if(!wasZeroOrLess) {

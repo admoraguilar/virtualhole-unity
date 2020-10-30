@@ -2,12 +2,10 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight.Pages;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
-	using Api.Data;
 	using Api.Data.Contents.Creators;
 
 	using Client.UI;
@@ -25,8 +23,6 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private MainFlowMap _mainFlowMap = null;
 
-		private Page _page => _creatorFeedMap.page;
-		private Section _videoFeedSection => _creatorFeedMap.videoSection;
 		private VideoFeedScroll _videoFeed => _creatorFeedMap.videoFeed;
 		[Space]
 		[SerializeField]

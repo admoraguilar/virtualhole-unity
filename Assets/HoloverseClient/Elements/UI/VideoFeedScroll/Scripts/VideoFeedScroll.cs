@@ -133,14 +133,8 @@ namespace Holoverse.Client.UI
 					OnCellDataCreated?.Invoke(cell);
 				}
 
-				bool isFromTop = _cellData.Count <= 0;
 				_cellData.AddRange(cellData);
-
 				scrollDataContainer.UpdateData(_cellData);
-
-				if(isFromTop) {
-					//scroll.ScrollToCell(0, 3000f);
-				}
 			} catch(Exception e) when (!(e is OperationCanceledException)) {
 				OnLoadError(e, null);
 			} finally {
