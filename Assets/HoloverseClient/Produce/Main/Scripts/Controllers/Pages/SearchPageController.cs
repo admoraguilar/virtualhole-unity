@@ -1,13 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using UnityEngine;
-using Midnight.Pages;
+﻿using UnityEngine;
 using Midnight.FlowTree;
 
 namespace Holoverse.Client.Controllers
 {
-	using Api.Data;
-
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
@@ -17,7 +12,6 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private HoloverseDataClientObject _client = null;
 
-		private FlowTree _flowTree => _mainFlowMap.flowTree;
 		private Node _searchNode => _mainFlowMap.searchNode;
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		[Space]

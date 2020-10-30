@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,7 +37,6 @@ namespace Holoverse.Client.UI
 		private CreatorQuery _creatorQuery = null;
 
 		private List<CreatorScrollCellData> _scrollCellData = new List<CreatorScrollCellData>();
-		private string _prevSearch = string.Empty;
 		private CancellationTokenSource _cts = null;
 
 		public void Initialize(HoloverseDataClient client)
@@ -78,9 +76,8 @@ namespace Holoverse.Client.UI
 
 		private async void OnSearchFieldValueChanged(string value)
 		{
-			if(string.IsNullOrEmpty(searchField.text) ||
-			   searchField.text == _prevSearch) { 
-				return; 
+			if(string.IsNullOrEmpty(searchField.text)) { 
+				return;
 			}
 
 			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);

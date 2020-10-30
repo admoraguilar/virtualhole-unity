@@ -37,8 +37,8 @@ namespace Holoverse.Client.Data
 				}
 			}
 
-			return _creatorLookup.Values;
 			_isLoaded = true;
+			return _creatorLookup.Values;
 		}
 
 		private void AddCreatorsToLookup(IEnumerable<Creator> creators)
