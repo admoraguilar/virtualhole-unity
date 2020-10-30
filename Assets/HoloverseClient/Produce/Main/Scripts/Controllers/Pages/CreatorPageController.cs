@@ -25,14 +25,14 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private MainFlowMap _mainFlowMap = null;
 
-		private Page _page => _mainFlowCreatorPageMap.page;
-		private Section _creatorPageSection => _mainFlowCreatorPageMap.creatorPageSection;
 		private CreatorView _creatorView => _mainFlowCreatorPageMap.creatorView;
 		[SerializeField]
 		private CreatorPageFlowMap _mainFlowCreatorPageMap = null;
 
-		private async Task InitializeAsync(CancellationToken cancellationToken = default)
+		private async void OnCreatorPageVisit()
 		{
+			await _creatorView.UnloadAsync();
+
 			Creator creator = CreatorCache.creator;
 			if(creator == null) { return; }
 
@@ -44,19 +44,7 @@ namespace Holoverse.Client.Controllers
 					VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
 					VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),
 					VideoFeedQuery.CreateScheduledFeed(_client.client, creators, 4)
-				},
-				cancellationToken);
-		}
-
-		private async Task UnloadAsync()
-		{
-			await _creatorView.UnloadAsync();
-		}
-
-		private async void OnCreatorPageVisit()
-		{
-			await _page.UnloadAsync();
-			await _page.InitializeAsync();
+				});
 		}
 
 		private void OnAttemptSetSameNodeAsCurrent(Node node)
@@ -77,10 +65,6 @@ namespace Holoverse.Client.Controllers
 		{
 			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
 			_creatorPageNode.OnVisit += OnCreatorPageVisit;
-
-			_creatorPageSection.InitializeTaskFactory += InitializeAsync;
-			_creatorPageSection.UnloadTaskFactory += UnloadAsync;
-
 			_creatorView.OnVideoPeekScrollProcess += OnVideoPeekScrollProcess;
 		}
 
@@ -88,10 +72,6 @@ namespace Holoverse.Client.Controllers
 		{
 			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
 			_creatorPageNode.OnVisit -= OnCreatorPageVisit;
-
-			_creatorPageSection.InitializeTaskFactory -= InitializeAsync;
-			_creatorPageSection.UnloadTaskFactory -= UnloadAsync;
-
 			_creatorView.OnVideoPeekScrollProcess -= OnVideoPeekScrollProcess;
 		}
 	}

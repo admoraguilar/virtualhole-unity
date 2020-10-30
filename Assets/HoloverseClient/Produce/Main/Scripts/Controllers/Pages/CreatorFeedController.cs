@@ -32,7 +32,7 @@ namespace Holoverse.Client.Controllers
 		[SerializeField]
 		private CreatorFeedFlowMap _creatorFeedMap = null;
 
-		private async Task InitializeAsync(CancellationToken cancellationToken = default)
+		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
 			IEnumerable<Creator> creators = new Creator[] { CreatorCache.creator };
 
@@ -44,68 +44,28 @@ namespace Holoverse.Client.Controllers
 				_creatorPageNode.Set();
 			});
 
-			await _videoFeed.InitializeAsync(
-				new VideoFeedQuery[] {
-					VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
-					VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
-					VideoFeedQuery.CreateLiveFeed(_client.client, creators),
-					VideoFeedQuery.CreateScheduledFeed(_client.client, creators)
-				},
-				cancellationToken);
+			_videoFeed.SetData(new VideoFeedQuery[] {
+				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
+				VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
+				VideoFeedQuery.CreateLiveFeed(_client.client, creators),
+				VideoFeedQuery.CreateScheduledFeed(_client.client, creators)
+			});
 		}
 
-		private async Task LoadAsync(CancellationToken cancellationToken = default)
+		protected async void OnNodeVisit()
 		{
-			await _videoFeed.LoadAsync(cancellationToken);
-		}
-
-		private async Task UnloadAsync()
-		{
-			await _videoFeed.UnloadAsync();
-		}
-
-		private async void OnNodeVisit()
-		{
-			await _page.UnloadAsync();
-			await _page.InitializeAsync();
-		}
-
-		private async void OnDropdownValueChanged(int value)
-		{
-			_videoFeed.ClearFeed();
-
-			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.LoadingIndicator), true);
-			await _videoFeedSection.LoadAsync();
-			_videoFeedSection.SetDisplayActive(_videoFeedSection.GetDisplay(Section.DisplayType.Content), true);
-		}
-
-		private async void OnNearScrollEnd()
-		{
-			await _page.LoadAsync();
+			_videoFeed.SetData(VideoFeedDataFactoryAsync);
+			await _videoFeed.InitializeAsync();
 		}
 
 		private void OnEnable()
 		{
 			_creatorFeedNode.OnVisit += OnNodeVisit;
-
-			_videoFeedSection.InitializeTaskFactory += InitializeAsync;
-			_videoFeedSection.LoadTaskFactory += LoadAsync;
-			_videoFeedSection.UnloadTaskFactory += UnloadAsync;
-
-			_videoFeed.OnDropdownValueChangedCallback += OnDropdownValueChanged;
-			_videoFeed.OnNearScrollEnd += OnNearScrollEnd;
 		}
 
 		private void OnDisable()
 		{
 			_creatorFeedNode.OnVisit -= OnNodeVisit;
-
-			_videoFeedSection.InitializeTaskFactory -= InitializeAsync;
-			_videoFeedSection.LoadTaskFactory -= LoadAsync;
-			_videoFeedSection.UnloadTaskFactory -= UnloadAsync;
-
-			_videoFeed.OnDropdownValueChangedCallback -= OnDropdownValueChanged;
-			_videoFeed.OnNearScrollEnd -= OnNearScrollEnd;
 		}
 	}
 }

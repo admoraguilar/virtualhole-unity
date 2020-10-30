@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Midnight;
 
 namespace Holoverse.Client.UI
 {
@@ -33,33 +34,30 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private Button _optionsButton = null;
 
-		public Type cellDataType => typeof(VideoScrollCellData);
-
-		public void UpdateData(object data)
+		public void SetData(VideoScrollCellData data)
 		{
-			VideoScrollCellData itemData = (VideoScrollCellData)data;
-			_thumbnailImage.sprite = itemData.thumbnailSprite;
+			_thumbnailImage.sprite = data.thumbnailSprite;
 
-			if(itemData.indicatorSprite != null) {
+			if(data.indicatorSprite != null) {
 				_indicatorImage.gameObject.SetActive(true);
-				_indicatorImage.sprite = itemData.indicatorSprite;
+				_indicatorImage.sprite = data.indicatorSprite;
 			} else {
 				_indicatorImage.gameObject.SetActive(false);
 			}
 
-			_creatorImage.sprite = itemData.creatorSprite;
-			_creatorNameText.text = itemData.creatorName;
+			_creatorImage.sprite = data.creatorSprite;
+			_creatorNameText.text = data.creatorName;
 
-			_titleText.text = itemData.title;
-			_dateText.text = itemData.date;
+			_titleText.text = data.title;
+			_dateText.text = data.date;
 
 			_cellButton.onClick.RemoveAllListeners();
-			_cellButton.onClick.AddListener(() => OnCellButtonClicked(itemData));
+			_cellButton.onClick.AddListener(() => OnCellButtonClicked(data));
 
-			if(itemData.onOptionsClick != null) {
+			if(data.onOptionsClick != null) {
 				_optionsButton.gameObject.SetActive(true);
 				_optionsButton.onClick.RemoveAllListeners();
-				_optionsButton.onClick.AddListener(() => OnOptionsButtonClicked(itemData));
+				_optionsButton.onClick.AddListener(() => OnOptionsButtonClicked(data));
 			} else {
 				_optionsButton.gameObject.SetActive(false);
 			}
@@ -74,5 +72,8 @@ namespace Holoverse.Client.UI
 		{
 			itemData.onOptionsClick?.Invoke();
 		}
+
+		Type ILoopScrollCell.dataType => typeof(VideoScrollCellData);
+		void ILoopScrollCell.SetData(object data) => ObjectUtilities.SetDataIfCompatible<VideoScrollCellData>(data, SetData);
 	}
 }

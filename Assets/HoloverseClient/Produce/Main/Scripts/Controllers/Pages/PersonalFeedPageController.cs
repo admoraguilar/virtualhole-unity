@@ -16,9 +16,7 @@ namespace Holoverse.Client.Controllers
 	public class PersonalFeedPageController : FeedPageController
 	{
 		protected override Node _mainNode => mainFlowMap.personalFeedNode;
-		protected override Page _page => _mainFlowPersonalFeedMap.page;
 		protected override VideoFeedScroll _videoFeed => _mainFlowPersonalFeedMap.videoFeed;
-		protected override Section _videoFeedSection => _mainFlowPersonalFeedMap.videoSection;
 		private Section _emptySection => _mainFlowPersonalFeedMap.emptySection;
 		[Space]
 		[SerializeField]

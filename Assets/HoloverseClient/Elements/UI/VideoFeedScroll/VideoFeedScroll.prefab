@@ -651,14 +651,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54485f37d8002674197316f9f656d365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellRemainingThreshold: 7
   _scroll: {fileID: 8207812876310664077}
   _scrollDataContainer: {fileID: 2840605629895207353}
   _contextButton:
     _button: {fileID: 7422591175818966893}
     _image: {fileID: 5284713717050634434}
     _text: {fileID: 1719593386321951208}
-  _dropDown: {fileID: 5523841117904864391}
+  _dropdown: {fileID: 5523841117904864391}
 --- !u!1 &5523841116544838931
 GameObject:
   m_ObjectHideFlags: 0

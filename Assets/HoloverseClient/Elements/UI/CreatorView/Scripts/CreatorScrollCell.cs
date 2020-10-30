@@ -18,9 +18,9 @@ namespace Holoverse.Client.UI
 		[SerializeField]
 		private Button _cellButton = null;
 
-		public Type cellDataType => typeof(CreatorScrollCellData);
+		public Type dataType => typeof(CreatorScrollCellData);
 
-		public void UpdateData(object data)
+		public void SetData(object data)
 		{
 			CreatorScrollCellData itemData = (CreatorScrollCellData)data;
 			_creatorAvatarImage.sprite = itemData.creatorAvatar;

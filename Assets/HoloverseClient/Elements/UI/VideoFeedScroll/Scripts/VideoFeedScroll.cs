@@ -12,7 +12,7 @@ namespace Holoverse.Client.UI
 {
 	using Client.Data;
 
-	public class VideoFeedScroll : MonoBehaviour
+	public class VideoFeedScroll : MonoBehaviour, ISimpleCycleAsync
 	{
 		[Serializable]
 		public class ContextButton
@@ -30,72 +30,139 @@ namespace Holoverse.Client.UI
 			private TMP_Text _text = null;
 		}
 
+		public event Action<object> OnInitializeStart = delegate { };
+		public event Action<Exception, object> OnInitializeError = delegate { };
+		public event Action<object> OnInitializeFinish = delegate { };
+
+		public event Action<object> OnLoadStart = delegate { };
+		public event Action<Exception, object> OnLoadError = delegate { };
+		public event Action<object> OnLoadFinish = delegate { };
+
+		public event Action<object> OnUnloadStart = delegate { };
+		public event Action<Exception, object> OnUnloadError = delegate { };
+		public event Action<object> OnUnloadFinish = delegate { };
+
 		public event Action<VideoScrollCellData> OnCellDataCreated = delegate { };
 		public event Action<int> OnDropdownValueChangedCallback = delegate { };
 		public event Action OnNearScrollEnd = delegate { };
 
 		public LoopScrollRect scroll => _scroll;
-		[Header("References")]
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		public LoopScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
-		[SerializeField]
+		private LoopScrollCellDataContainer scrollDataContainer
+		{
+			get {
+				return this.GetComponent(
+					ref _scrollDataContainer,
+					() => scroll == null ? null : scroll.GetComponent<LoopScrollCellDataContainer>());
+			}
+		}
 		private LoopScrollCellDataContainer _scrollDataContainer = null;
 
 		public ContextButton contextButton => _contextButton;
 		[SerializeField]
 		private ContextButton _contextButton = null;
 
-		public TMP_Dropdown dropdown => _dropDown;
+		public TMP_Dropdown dropdown => _dropdown;
 		[SerializeField]
-		private TMP_Dropdown _dropDown = null;
+		private TMP_Dropdown _dropdown = null;
 
+		public bool isInitializing { get; private set; } = false;
+		public bool isInitialized { get; private set; } = false;
+		public bool isLoading { get; private set; } = false;
+
+		private Func<CancellationToken, Task> _dataFactory = null;
 		private List<VideoFeedQuery> _feeds = new List<VideoFeedQuery>();
 		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
+		private CycleLoadParameters _loadParameters = null;
 
-		public async Task InitializeAsync(IEnumerable<VideoFeedQuery> feeds, CancellationToken cancellationToken = default)
+		public void SetData(Func<CancellationToken, Task> dataFactory)
+		{
+			_dataFactory = dataFactory;
+		}
+
+		public void SetData(IEnumerable<VideoFeedQuery> feeds)
 		{
 			_feeds.AddRange(feeds);
+		}
 
-			dropdown.ClearOptions();
-			dropdown.AddOptions(_feeds.Select(f => f.name).ToList());
-			dropdown.value = 0;
+		public async Task InitializeAsync(CancellationToken cancellationToken = default)
+		{
+			if(!this.CanInitialize()) { return; }
+			isInitializing = true;
+			OnInitializeStart(null);
 
-			ClearFeed();
-			cancellationToken.ThrowIfCancellationRequested();
-			await LoadAsync(cancellationToken);
+			try {
+				if(_dataFactory != null) {
+					await _dataFactory(cancellationToken);
+				}
+
+				dropdown.ClearOptions();
+				dropdown.AddOptions(_feeds.Select(f => f.name).ToList());
+				dropdown.value = 0;
+
+				ClearFeed();
+				cancellationToken.ThrowIfCancellationRequested();
+				await LoadAsync(cancellationToken);
+			} catch(Exception e) {
+				if(!(e is OperationCanceledException)) {
+					OnInitializeError(e, null);
+				}
+			}
+
+			OnInitializeFinish(null);
+			isInitialized = true;
 		}
 
 		public async Task LoadAsync(CancellationToken cancellationToken = default)
 		{
-			if(_feeds.Count <= 0) { return; }
+			if(isLoading) { return; }
+			isLoading = true;
+			OnLoadStart(_loadParameters);
 
-			VideoFeedQuery feed = _feeds[dropdown.value];
-			if(feed.isDone) { return; }
+			try {
+				if(_feeds.Count <= 0) { return; }
 
-			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
-				feed, cancellationToken);
-			foreach(VideoScrollCellData cell in cellData) { 
-				OnCellDataCreated?.Invoke(cell); 
+				VideoFeedQuery feed = _feeds[dropdown.value];
+				if(feed.isDone) { return; }
+
+				IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
+					feed, cancellationToken);
+				foreach(VideoScrollCellData cell in cellData) {
+					OnCellDataCreated?.Invoke(cell);
+				}
+
+				bool isFromTop = _cellData.Count <= 0;
+				_cellData.AddRange(cellData);
+
+				scrollDataContainer.UpdateData(_cellData);
+
+				if(isFromTop) {
+					//scroll.ScrollToCell(0, 3000f);
+				}
+			} catch(Exception e) when (!(e is OperationCanceledException)) {
+				OnLoadError(e, null);
+			} finally {
+				isLoading = false;
 			}
 
-			bool isFromTop = _cellData.Count <= 0;
-			_cellData.AddRange(cellData);
-
-			scrollDataContainer.UpdateData(_cellData);
-
-			if(isFromTop) {
-				//scroll.ScrollToCell(0, 3000f);
-			}
+			OnLoadFinish(null);
 		}
 
 		public async Task UnloadAsync()
 		{
 			await Task.CompletedTask;
-			
+			if(isLoading) { return; }
+			OnUnloadStart(null);
+
 			ClearFeed();
 			_feeds.Clear();
+
+			isLoading = false;
+			isInitializing = false;
+			isInitialized = false;
+			OnUnloadFinish(null);
 		}
 
 		public void ClearFeed()
@@ -111,22 +178,29 @@ namespace Holoverse.Client.UI
 
 		public void ScrollToTop()
 		{
-			if(scroll.totalCount > 30) { 
-				scroll.verticalNormalizedPosition = 10f / scroll.totalCount; 
+			if(scroll.totalCount > 30) {
+				scroll.verticalNormalizedPosition = 10f / _scroll.totalCount; 
 			}
 
 			scroll.RefreshCells();
 			scroll.ScrollToCell(0, 30000f);
 		}
 
-		private void OnDropdownValueChanged(int value)
+		private async void OnDropdownValueChanged(int value)
 		{
+			ClearFeed();
+
+			_loadParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
+			await LoadAsync();
+			_loadParameters = null;
+
 			OnDropdownValueChangedCallback(value);
 		}
 
-		private void OnScrollValueChanged(Vector2 position)
+		private async void OnScrollValueChanged(Vector2 position)
 		{
 			if(position.y >= .8f) {
+				await LoadAsync();
 				OnNearScrollEnd();
 			}
 		}

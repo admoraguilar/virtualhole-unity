@@ -4,8 +4,8 @@ namespace UnityEngine.UI
 {
 	public interface ILoopScrollCell
 	{
-		Type cellDataType { get; }
+		Type dataType { get; }
 
-		void UpdateData(object data);
+		void SetData(object content);
 	}
 }

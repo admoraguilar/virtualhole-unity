@@ -84,7 +84,7 @@ namespace UnityEngine.UI
 					if(cellPrefab.TryGetComponent(typeof(ILoopScrollCell), out Component c)) {
 						cell.cell = (ILoopScrollCell)c;
 
-						if(cell.cell.cellDataType == dataType) {
+						if(cell.cell.dataType == dataType) {
 							Component newCell = Instantiate(c, rectTransform, false);
 							newCell.name = c.name;
 
@@ -112,7 +112,7 @@ namespace UnityEngine.UI
 			}
 
 			if(cell != null) {
-				cell.cell.UpdateData(_data);
+				cell.cell.SetData(_data);
 				cell.rectTransform.gameObject.SetActive(true);
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;

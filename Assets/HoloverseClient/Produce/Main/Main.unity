@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requirements: 0
   _contentDisplay: {fileID: 681288782}
-  _loadingIndicatorDisplay: {fileID: 0}
+  _loadingDisplay: {fileID: 0}
   _genericErrorDisplay: {fileID: 0}
   _internetErrorDisplay: {fileID: 0}
   _appIncompatibleErrorDisplay: {fileID: 0}
@@ -1785,7 +1785,7 @@ PrefabInstance:
     - target: {fileID: 6265047690639382159, guid: d7f010382abf15c40bbe66561a6fbea4,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 44.569946
+      value: 44.57007
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7f010382abf15c40bbe66561a6fbea4, type: 3}
