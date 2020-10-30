@@ -31,7 +31,7 @@ namespace Holoverse.Client.Controllers
 		{
 			cellData.onCellClick += () => {
 				CreatorCache.creator = CreatorCache.Get(cellData.creatorId);
-				_creatorPageNode.Push();
+				_creatorPageNode.Set();
 			};
 		}
 

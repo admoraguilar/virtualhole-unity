@@ -18,7 +18,7 @@ namespace Holoverse.Client.Controllers
 		private HoloverseDataClientObject _client = null;
 
 		private FlowTree _flowTree => _mainFlowMap.flowTree;
-		private Node _optionsNode => _mainFlowMap.creatorPageNode;
+		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		protected MainFlowMap mainFlowMap => _mainFlowMap;
 		[Space]
 		[SerializeField]
@@ -65,7 +65,7 @@ namespace Holoverse.Client.Controllers
 		{
 			cellData.onOptionsClick += () => {
 				CreatorCache.creator = CreatorCache.Get(cellData.creatorUniversalId);
-				_optionsNode.Push();
+				_creatorPageNode.Set();
 			};
 		}
 
