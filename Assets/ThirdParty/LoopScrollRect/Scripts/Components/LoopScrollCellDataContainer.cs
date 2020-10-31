@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace UnityEngine.UI
@@ -16,8 +15,7 @@ namespace UnityEngine.UI
 		public IReadOnlyList<object> data => _data;
 		private List<object> _data = new List<object>();
 
-		private List<UpdateAction> _updateActions = new List<UpdateAction>();
-		private bool _isProcessingActions = false;
+		private UpdateAction _updateAction = new UpdateAction();
 
 		protected LoopScrollRect loopScrollRect
 		{
@@ -32,19 +30,23 @@ namespace UnityEngine.UI
 
 		public void UpdateData(IEnumerable<object> values)
 		{
-			UpdateAction action = GetUpdateAction();
-			action.data.Clear();
-			if(values != null) {
-				action.data.AddRange(values);
-			}
+			// NOTES: Oct 31, 2020
+			// * Seems like the main source of weird calculation on LoopScrollRect
+			// actually stems from the Content having a 0 width or 0 height, for either
+			// horizontal or vertical version.
+			// Adding a LayoutElement that gives the Content at least 1 width or height
+			// eliminated the problem.
 
-			action.action = UpdateAction;
+			_updateAction.data.Clear();
+			if(values != null) { _updateAction.data.AddRange(values); }
+			_updateAction.action = UpdateAction;
+
 			ProcessUpdateActions();
 
 			void UpdateAction()
 			{
 				_data.Clear();
-				_data.AddRange(action.data);
+				_data.AddRange(_updateAction.data);
 
 				bool wasZeroOrLess = loopScrollRect.totalCount <= 0;
 
@@ -85,50 +87,16 @@ namespace UnityEngine.UI
 			// this might be due to the scene view acting up
 			// or something but if this gets on the build
 			// then it'll be worth investigating further
-			if(_isProcessingActions || !gameObject.activeInHierarchy) { return; }
-			_isProcessingActions = true;
+			//
+			// * There's another weird thing where if you
+			// don't do this when the scroll rect is active
+			// it'll scroll down a bit for some instances
+			if(_updateAction.action == null || !gameObject.activeInHierarchy) { return; }
 
-			StartCoroutine(ProcessUpdateActions());
+			_updateAction.action();
+			_updateAction.action = null;
 
-			IEnumerator ProcessUpdateActions()
-			{
-				foreach(UpdateAction action in _updateActions) {
-					yield return null;
-					if(action.action != null) {
-						action.action();
-						action.action = null;
-					}
-				}
-
-				_isProcessingActions = false;
-			}
-		}
-
-		private UpdateAction GetUpdateAction()
-		{
-			UpdateAction result = null;
-
-			if(_updateActions.Count <= 0) {
-				result = new UpdateAction();
-				_updateActions.Add(result);
-			} else {
-				bool hasFoundRecyclable = false;
-
-				foreach(UpdateAction action in _updateActions) {
-					if(action.action == null) {
-						result = action;
-						hasFoundRecyclable = true;
-						break;
-					}
-				}
-
-				if(!hasFoundRecyclable) {
-					result = new UpdateAction();
-					_updateActions.Add(result);
-				}
-			}
-
-			return result;
+			_updateAction.data.Clear();
 		}
 
 		private void OnEnable()

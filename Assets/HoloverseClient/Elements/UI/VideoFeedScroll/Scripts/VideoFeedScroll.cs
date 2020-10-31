@@ -84,6 +84,7 @@ namespace Holoverse.Client.UI
 
 		public void SetData(IEnumerable<VideoFeedQuery> feeds)
 		{
+			_feeds.Clear();
 			_feeds.AddRange(feeds);
 		}
 
@@ -118,6 +119,7 @@ namespace Holoverse.Client.UI
 		{
 			if(isLoading) { return; }
 			isLoading = true;
+
 			OnLoadStart(_loadParameters);
 
 			try {
