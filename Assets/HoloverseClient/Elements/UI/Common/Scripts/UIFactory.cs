@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Humanizer;
+using Midnight.Web;
 using Midnight.Concurrency;
 
 namespace Holoverse.Client.UI
@@ -12,7 +13,7 @@ namespace Holoverse.Client.UI
 	using Api.Data.Contents.Creators;
 
 	using Client.Data;
-
+	
 	public static class UIFactory
 	{
 		public static async Task<IEnumerable<CreatorScrollCellData>> CreateCreatorScrollCellDataAsync(
@@ -91,6 +92,37 @@ namespace Holoverse.Client.UI
 			{
 				await VideoCache.GetThumbnailAsync(video);
 				await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
+			}
+		}
+
+		public static async Task<IEnumerable<InfoButtonData>> CreateInfoButtonDataAsync(
+			IEnumerable<SupportInfo> supportInfos, CancellationToken cancellationToken = default)
+		{
+			List<InfoButtonData> results = new List<InfoButtonData>();
+
+			Dictionary<string, Sprite> _spriteLookup = new Dictionary<string, Sprite>();
+			await Concurrent.ForEachAsync(supportInfos.ToList(), PreloadResources, cancellationToken);
+
+			foreach(SupportInfo supportInfo in supportInfos) {
+				InfoButtonData infoButtonData = new InfoButtonData() {
+					header = supportInfo.header,
+					content = supportInfo.content,
+					onClick = () => Application.OpenURL(supportInfo.url)
+				};
+
+				_spriteLookup.TryGetValue(supportInfo.imageUrl, out Sprite sprite);
+				infoButtonData.sprite = sprite;
+
+				results.Add(infoButtonData);
+			}
+
+			return results;
+
+			async Task PreloadResources(SupportInfo supportInfo)
+			{
+				if(!string.IsNullOrEmpty(supportInfo.imageUrl)) {
+					_spriteLookup[supportInfo.imageUrl] = await ImageGetWebRequest.GetAsync(supportInfo.imageUrl);
+				}
 			}
 		}
 	}

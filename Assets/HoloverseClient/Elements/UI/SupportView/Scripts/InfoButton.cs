@@ -16,7 +16,7 @@ namespace Holoverse.Client.UI
 				if(image == null) { return; }
 				
 				image.sprite = value;
-				image.gameObject.SetActive(image.sprite == null);
+				image.gameObject.SetActive(image.sprite != null);
 			}
 		}
 
