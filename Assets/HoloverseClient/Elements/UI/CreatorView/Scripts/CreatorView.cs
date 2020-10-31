@@ -77,6 +77,7 @@ namespace Holoverse.Client.UI
 		public void SetData(Creator creator, IEnumerable<VideoFeedQuery> feeds)
 		{
 			this.creator = creator;
+			_feeds.Clear();
 			_feeds.AddRange(feeds);
 		} 
 
