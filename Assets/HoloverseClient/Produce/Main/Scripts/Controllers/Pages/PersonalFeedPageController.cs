@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 using Midnight.Pages;
 using Midnight.FlowTree;
 
@@ -15,11 +16,11 @@ namespace Holoverse.Client.Controllers
 	public class PersonalFeedPageController : FeedPageController
 	{
 		protected override Node _mainNode => mainFlowMap.personalFeedNode;
-		protected override VideoFeedScroll _videoFeed => _mainFlowPersonalFeedMap.videoFeed;
-		private Section _emptySection => _mainFlowPersonalFeedMap.emptySection;
+		protected override VideoFeedScroll _videoFeed => _personalFeedFlowMap.videoFeed;
+		private Section _emptySection => _personalFeedFlowMap.emptySection;
 		[Space]
 		[SerializeField]
-		private PersonalFeedFlowMap _mainFlowPersonalFeedMap = null;
+		private PersonalFeedFlowMap _personalFeedFlowMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) 
 		{
@@ -30,6 +31,7 @@ namespace Holoverse.Client.Controllers
 
 		protected override async void OnNodeVisit()
 		{
+			await Task.CompletedTask;
 			_emptySection.gameObject.SetActive(false);
 			base.OnNodeVisit();
 

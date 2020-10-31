@@ -119,7 +119,6 @@ namespace Holoverse.Client.UI
 		{
 			if(isLoading) { return; }
 			isLoading = true;
-
 			OnLoadStart(_loadParameters);
 
 			try {

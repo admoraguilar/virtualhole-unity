@@ -14,10 +14,10 @@ namespace Holoverse.Client.Controllers
 	public class HomePageController : FeedPageController
 	{
 		protected override Node _mainNode => mainFlowMap.homeNode;
-		protected override VideoFeedScroll _videoFeed => _mainFlowHomeMap.videoFeed;
+		protected override VideoFeedScroll _videoFeed => _homeFlowMap.videoFeed;
 		[Space]
 		[SerializeField]
-		private HomeFlowMap _mainFlowHomeMap = null;
+		private HomeFlowMap _homeFlowMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery(HoloverseDataClient client) =>
 			new CreatorQuery(
