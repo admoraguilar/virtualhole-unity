@@ -7,10 +7,17 @@ namespace UnityEngine.UI
 	[RequireComponent(typeof(LoopScrollRect))]
 	public class LoopScrollCellDataContainer : MonoBehaviour
 	{
+		private class UpdateAction
+		{
+			public List<object> data = new List<object>();
+			public Action action = null;
+		}
+
 		public IReadOnlyList<object> data => _data;
 		private List<object> _data = new List<object>();
 
-		private Action _onDelayAction = null;
+		private List<UpdateAction> _updateActions = new List<UpdateAction>();
+		private bool _isProcessingActions = false;
 
 		protected LoopScrollRect loopScrollRect
 		{
@@ -25,40 +32,19 @@ namespace UnityEngine.UI
 
 		public void UpdateData(IEnumerable<object> values)
 		{
-			// NOTES: 
-			// * The reason this was done is it seems like
-			// LoopScrollRect calculations don't work well when
-			// being done while an object is disabled
-			// 
-			// * Also there's a weird thing where resetting
-			// Unity's layout and only showing the game view
-			// fixes most of the weird things on the scroll rect
-			// this might be due to the scene view acting up
-			// or something but if this gets on the build
-			// then it'll be worth investigating further
-			if(!gameObject.activeInHierarchy) {
-				// Another thing to remedy the issue is to only
-				// update it when it's finally active and when it
-				// is then only update it after a frame so that
-				// UI calculations are pretty much done already
-				_onDelayAction = () => {
-					StopCoroutine(UpdateRoutine());
-					StartCoroutine(UpdateRoutine()); 
-				}; 
-			} else { 
-				UpdateAction(); 
+			UpdateAction action = GetUpdateAction();
+			action.data.Clear();
+			if(values != null) {
+				action.data.AddRange(values);
 			}
 
-			IEnumerator UpdateRoutine()
-			{
-				yield return null;
-				UpdateAction();
-			}
+			action.action = UpdateAction;
+			ProcessUpdateActions();
 
 			void UpdateAction()
 			{
 				_data.Clear();
-				_data.AddRange(values);
+				_data.AddRange(action.data);
 
 				bool wasZeroOrLess = loopScrollRect.totalCount <= 0;
 
@@ -86,10 +72,73 @@ namespace UnityEngine.UI
 			}
 		}
 
+		private void ProcessUpdateActions()
+		{
+			// NOTES:
+			// * The reason this was done is it seems like
+			// LoopScrollRect calculations don't work well when
+			// being done while an object is disabled
+			// 
+			// * Also there's a weird thing where resetting
+			// Unity's layout and only showing the game view
+			// fixes most of the weird things on the scroll rect
+			// this might be due to the scene view acting up
+			// or something but if this gets on the build
+			// then it'll be worth investigating further
+			if(_isProcessingActions || !gameObject.activeInHierarchy) { return; }
+			_isProcessingActions = true;
+
+			StartCoroutine(ProcessUpdateActions());
+
+			IEnumerator ProcessUpdateActions()
+			{
+				foreach(UpdateAction action in _updateActions) {
+					yield return null;
+					if(action.action != null) {
+						action.action();
+						action.action = null;
+					}
+				}
+
+				_isProcessingActions = false;
+			}
+		}
+
+		private UpdateAction GetUpdateAction()
+		{
+			UpdateAction result = null;
+
+			if(_updateActions.Count <= 0) {
+				result = new UpdateAction();
+				_updateActions.Add(result);
+			} else {
+				bool hasFoundRecyclable = false;
+
+				foreach(UpdateAction action in _updateActions) {
+					if(action.action == null) {
+						result = action;
+						hasFoundRecyclable = true;
+						break;
+					}
+				}
+
+				if(!hasFoundRecyclable) {
+					result = new UpdateAction();
+					_updateActions.Add(result);
+				}
+			}
+
+			return result;
+		}
+
 		private void OnEnable()
 		{
-			_onDelayAction?.Invoke();
-			_onDelayAction = null;
+			// NOTES:
+			// * Another thing to remedy the issue is to only
+			// update it when it's finally active and when it
+			// is then only update it after a frame so that
+			// UI calculations are pretty much done already
+			ProcessUpdateActions();
 		}
 	}
 }
