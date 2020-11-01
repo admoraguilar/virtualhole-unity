@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
+﻿using UnityEngine.EventSystems;
 
-namespace VirtualHole.Client.UI
+namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(LoopScrollRect))]
 	public class LoopScrollFlickScroll : MonoBehaviour, IEndDragHandler

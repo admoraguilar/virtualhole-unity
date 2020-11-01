@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+﻿using UnityEngine.EventSystems;
 using Midnight;
 
-namespace VirtualHole.Client.UI
+namespace UnityEngine.UI
 {
 	/// Source: https://forum.unity.com/threads/nested-scrollrect.268551/page-2#post-4214161
 	[RequireComponent(typeof(LoopScrollRect))]
