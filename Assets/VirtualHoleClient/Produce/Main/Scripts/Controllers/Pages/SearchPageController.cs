@@ -29,7 +29,7 @@ namespace VirtualHole.Client.Controllers
 
 		private void OnCellDataCreated(CreatorScrollCellData cellData)
 		{
-			cellData.onCellClick += () => {
+			cellData.onClick += () => {
 				CreatorCache.creator = CreatorCache.Get(cellData.creatorId);
 				_creatorPageNode.Set();
 			};

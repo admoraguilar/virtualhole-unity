@@ -9,6 +9,6 @@ namespace VirtualHole.Client.UI
 		public string creatorName = string.Empty;
 		public string creatorId = string.Empty;
 
-		public Action onCellClick = delegate { };
+		public Action onClick = null;
 	}
 }

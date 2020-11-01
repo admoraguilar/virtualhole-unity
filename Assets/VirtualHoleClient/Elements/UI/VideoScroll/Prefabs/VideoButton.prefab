@@ -824,7 +824,7 @@ MonoBehaviour:
   _creatorNameText: {fileID: 4134916009811488502}
   _titleText: {fileID: 4134916011753441507}
   _dateText: {fileID: 6301536505072250005}
-  _cellButton: {fileID: 4134916011671619781}
+  _button: {fileID: 4134916011671619781}
   _optionsButton: {fileID: 8594215027118850546}
 --- !u!1 &4134916011753441505
 GameObject:

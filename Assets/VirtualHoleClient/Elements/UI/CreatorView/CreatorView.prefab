@@ -635,7 +635,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d54bcadbde8eb6647a9c979d9eb922e4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f3a9731e6f18037418bdd97dc34c3108, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -710,7 +710,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tokayami Towa
+  m_text: Hoshimachi Suisei
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0d0665ad93896604f88aa209cd70bc3a, type: 2}
   m_sharedMaterial: {fileID: -4478415084831729098, guid: 0d0665ad93896604f88aa209cd70bc3a,
@@ -1031,7 +1031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11d20d2a283dfe34caf24ea4edc83e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _plainScroll: {fileID: 0}
+  _plainScroll: {fileID: 2658705819554113521}
   _avatarImage: {fileID: 261884416385529715}
   _nameText: {fileID: 261884417066362950}
   _socialButtonContainer: {fileID: 261884416136949357}
@@ -1096,6 +1096,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4541676702152893410, guid: b8899c73379a3194b93019e667a2f6a9,
+        type: 3}
+      propertyPath: dataProcessors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4541676702152893410, guid: b8899c73379a3194b93019e667a2f6a9,
+        type: 3}
+      propertyPath: dataProcessors.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: b932af21d2a68ab4cbf3bd17341dc03b,
+        type: 2}
     - target: {fileID: 5270453569594788561, guid: b8899c73379a3194b93019e667a2f6a9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1398,6 +1409,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8563032206323893134}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2658705819554113521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5923252445800244351, guid: ae4c487debec9434ea3dcead442b31dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 8563032206323893134}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2658705819554113523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2658705819554113523 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5923252445800244349, guid: ae4c487debec9434ea3dcead442b31dd,

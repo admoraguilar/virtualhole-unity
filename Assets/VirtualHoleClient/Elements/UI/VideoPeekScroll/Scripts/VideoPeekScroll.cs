@@ -49,7 +49,7 @@ namespace VirtualHole.Client.UI
 			}
 
 			_cellData.AddRange(cellData);
-			CoroutineUtilities.ExecuteOnYield(null, () => scrollDataContainer.UpdateData(_cellData));
+			scrollDataContainer.UpdateData(_cellData);
 		}
 
 		public async Task UnloadAsync()

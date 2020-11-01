@@ -32,7 +32,7 @@ namespace VirtualHole.Client.UI
 					creatorAvatar = await CreatorCache.GetAvatarAsync(creator),
 					creatorName = creator.universalName,
 					creatorId = creator.universalId,
-					onCellClick = () => { }
+					onClick = () => { }
 				};
 				results.Add(cellData);
 			}

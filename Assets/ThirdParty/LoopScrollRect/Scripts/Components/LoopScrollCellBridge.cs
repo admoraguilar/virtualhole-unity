@@ -10,12 +10,13 @@ namespace UnityEngine.UI
 	{
 		private class LoopScrollCell
 		{
-			public ILoopScrollCell cell = null;
+			public GameObject instance = null;
+			public LoopScrollCellDataProcessor processor = null;
 			public RectTransform rectTransform = null;
 			public LayoutElement layoutElement = null;
 		}
 
-		public RectTransform[] cellPrefabs = null;
+		public LoopScrollCellDataProcessor[] dataProcessors = null;
 
 		private Dictionary<Type, LoopScrollCell> _cellLookup = new Dictionary<Type, LoopScrollCell>();
 		private object _data = null;
@@ -37,9 +38,7 @@ namespace UnityEngine.UI
 		protected LayoutElement layoutElement
 		{
 			get {
-				if(_layoutElement == null) {
-					_layoutElement = GetComponent<LayoutElement>();
-				}
+				if(_layoutElement == null) { _layoutElement = GetComponent<LayoutElement>(); }
 				return _layoutElement;
 			}
 		}
@@ -48,9 +47,7 @@ namespace UnityEngine.UI
 		protected RectTransform rectTransform
 		{
 			get {
-				if(_rectTransform == null) {
-					_rectTransform = GetComponent<RectTransform>();
-				}
+				if(_rectTransform == null) { _rectTransform = GetComponent<RectTransform>(); }
 				return _rectTransform;
 			}
 		}
@@ -69,51 +66,47 @@ namespace UnityEngine.UI
 		private void Refresh()
 		{
 			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
-				cellItem.rectTransform.gameObject.SetActive(false);
+				cellItem.instance.SetActive(false);
 			}
 
-			if(_data == null) { 
-				return; 
-			}
+			if(_data == null) { return; }
 
 			Type dataType = _data.GetType();
 			if(!_cellLookup.TryGetValue(dataType, out LoopScrollCell cell)) {
 				cell = new LoopScrollCell();
 
-				foreach(RectTransform cellPrefab in cellPrefabs) {
-					if(cellPrefab.TryGetComponent(typeof(ILoopScrollCell), out Component c)) {
-						cell.cell = (ILoopScrollCell)c;
+				foreach(LoopScrollCellDataProcessor dataProcessor in dataProcessors) {
+					if(dataProcessor.dataType != dataType) { continue; }
 
-						if(cell.cell.dataType == dataType) {
-							Component newCell = Instantiate(c, rectTransform, false);
-							newCell.name = c.name;
+					cell.processor = dataProcessor;
 
-							if(!newCell.TryGetComponent(out RectTransform rt)) { 
-								rt = newCell.AddOrGetComponent<RectTransform>(); 
-							}
-							
-							if(!newCell.TryGetComponent(out LayoutElement le)) { 
-								le = newCell.AddOrGetComponent<LayoutElement>();
-								le.preferredWidth = rt.sizeDelta.x;
-								le.preferredHeight = rt.sizeDelta.y;
-							}
+					cell.instance = Instantiate(cell.processor.prefab, rectTransform, false);
+					cell.instance.name = cell.processor.prefab.name;
 
-							cell.cell = (ILoopScrollCell)newCell;
-							cell.rectTransform = rt;
-							cell.layoutElement = le;
-
-							_cellLookup[dataType] = cell;
-							break;
-						} else {
-							cell = null;
-						}
+					if(!cell.instance.TryGetComponent(out cell.rectTransform)) {
+						cell.rectTransform = cell.instance.AddOrGetComponent<RectTransform>();
 					}
+
+					if(!cell.instance.TryGetComponent(out cell.layoutElement)) {
+						cell.layoutElement = cell.instance.AddOrGetComponent<LayoutElement>();
+						cell.layoutElement.minWidth = 1f;
+						cell.layoutElement.minHeight = 1f;
+						cell.layoutElement.preferredWidth = cell.rectTransform.sizeDelta.x;
+						cell.layoutElement.preferredHeight = cell.rectTransform.sizeDelta.y;
+					}
+
+					_cellLookup[dataType] = cell;
+				}
+
+				if(cell.processor == null) {
+					Debug.LogWarning($"[{nameof(LoopScrollCellBridge)}] No compatible data processor for [{dataType.GetType().Name}]", this);
 				}
 			}
 
-			if(cell != null) {
-				cell.cell.SetData(_data);
-				cell.rectTransform.gameObject.SetActive(true);
+			if(cell != null && cell.processor != null && 
+			   cell.instance != null) {
+				cell.processor.ProcessData(cell.instance, _data);
+				cell.instance.SetActive(true);
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
 				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
@@ -122,10 +115,7 @@ namespace UnityEngine.UI
 
 		private void Start()
 		{
-			if(_index >= 0 && dataContainer.data.Count > _index) {
-				_data = dataContainer.data[_index];
-				Refresh();
-			}
+			ScrollCellIndex(_index);
 		}
 	}
 }

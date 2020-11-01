@@ -621,10 +621,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3555367195300682113, guid: c0e977bddec7b5a4bbbf070868bf58ac,
         type: 3}
+      propertyPath: dataProcessors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3555367195300682113, guid: c0e977bddec7b5a4bbbf070868bf58ac,
+        type: 3}
       propertyPath: cellPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 8605391786281536659, guid: 66ceea497b3951f4198a6882cdf1e8bc,
         type: 3}
+    - target: {fileID: 3555367195300682113, guid: c0e977bddec7b5a4bbbf070868bf58ac,
+        type: 3}
+      propertyPath: dataProcessors.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: fdf8ff238147a1b498b208aff5a402d0,
+        type: 2}
     - target: {fileID: 7128403961701160070, guid: c0e977bddec7b5a4bbbf070868bf58ac,
         type: 3}
       propertyPath: m_ChildControlWidth
