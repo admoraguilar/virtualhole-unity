@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requirements: 0
   _contentDisplay: {fileID: 6265047690352269327}
-  _loadingIndicatorDisplay: {fileID: 0}
+  _loadingDisplay: {fileID: 0}
   _genericErrorDisplay: {fileID: 0}
   _internetErrorDisplay: {fileID: 0}
   _appIncompatibleErrorDisplay: {fileID: 0}
@@ -201,6 +201,16 @@ PrefabInstance:
         type: 3}
       propertyPath: paddingTail
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8207812875186262964, guid: 331e3941c49079e47b4cabf5e085153b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 8207812875943342711, guid: 331e3941c49079e47b4cabf5e085153b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8207812876308126628, guid: 331e3941c49079e47b4cabf5e085153b,
         type: 3}
