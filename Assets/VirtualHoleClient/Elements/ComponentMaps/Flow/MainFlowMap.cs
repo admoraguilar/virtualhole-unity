@@ -9,6 +9,10 @@ namespace VirtualHole.Client.ComponentMaps
 		[SerializeField]
 		private FlowTree _flowTree = null;
 
+		public Node bootstrapNode => _bootstrapNode;
+		[SerializeField]
+		private Node _bootstrapNode = null;
+
 		public Node homeNode => _homeNode;
 		[SerializeField]
 		private Node _homeNode = null;

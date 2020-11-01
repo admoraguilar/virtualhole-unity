@@ -61,11 +61,11 @@ namespace VirtualHole.Client.UI
 
 		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			_avatarImage.sprite = await CreatorCache.GetAvatarAsync(creator, cancellationToken);
-			_nameText.text = creator.universalName;
+			avatarImage.sprite = await CreatorCache.GetAvatarAsync(creator, cancellationToken);
+			nameText.text = creator.universalName;
 
 			foreach(Social social in creator.socials) {
-				Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonContainer, false);
+				Button socialButton = Instantiate(socialButtonTemplate, socialButtonContainer, false);
 				socialButton.gameObject.SetActive(true);
 
 				_socialButtonInstances.Add(socialButton);
@@ -77,8 +77,30 @@ namespace VirtualHole.Client.UI
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
 
+			List<Creator> followedCreators = UserCache.loadedProfile.followedCreators;
+			if(followedCreators.Exists(c => c.universalId == creator.universalId)) {
+				ColorHSV color = followButton.image.color;
+				color.v = 1f;
+				followButton.image.color = color;
+				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Following";
+
+				followButton.onClick.AddListener(() => {
+					int index = followedCreators.FindIndex(c => c.universalId == creator.universalId);
+					followedCreators.RemoveAt(index);
+				});
+			} else {
+				ColorHSV color = followButton.image.color;
+				color.v = .3f;
+				followButton.image.color = color;
+				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Follow";
+
+				followButton.onClick.AddListener(() => {
+					followedCreators.Add(creator);
+				});
+			}
+
 			foreach(VideoFeedQuery feed in feeds) {
-				VideoPeekScroll peekScroll = Instantiate(_peekScrollTemplate, _peekScrollContainer, false);
+				VideoPeekScroll peekScroll = Instantiate(peekScrollTemplate, peekScrollContainer, false);
 				peekScroll.gameObject.SetActive(true);
 
 				_peekScrollInstances.Add(peekScroll);
@@ -100,13 +122,13 @@ namespace VirtualHole.Client.UI
 		{
 			await Task.CompletedTask;
 
-			if(_plainScroll.horizontal) { _plainScroll.horizontalNormalizedPosition = 1f; }
-			if(_plainScroll.vertical) { _plainScroll.verticalNormalizedPosition = 1f; }
+			if(plainScroll.horizontal) { plainScroll.horizontalNormalizedPosition = 1f; }
+			if(plainScroll.vertical) { plainScroll.verticalNormalizedPosition = 1f; }
 
-			_avatarImage.sprite = null;
-			_nameText.text = string.Empty;
+			avatarImage.sprite = null;
+			nameText.text = string.Empty;
 
-			_followButton.onClick.RemoveAllListeners();
+			followButton.onClick.RemoveAllListeners();
 
 			foreach(Button socialButton in _socialButtonInstances) {
 				Destroy(socialButton.gameObject);
@@ -125,14 +147,14 @@ namespace VirtualHole.Client.UI
 
 			IEnumerator Routine()
 			{
-				int totalCount = _plainScroll.content.transform.childCount;
+				int totalCount = plainScroll.content.transform.childCount;
 				if(totalCount > 0) {
-					if(totalCount < 10) { _plainScroll.verticalNormalizedPosition = .2f; } 
-					else { _plainScroll.verticalNormalizedPosition = 10f / totalCount; }
+					if(totalCount < 10) { plainScroll.verticalNormalizedPosition = .2f; } 
+					else { plainScroll.verticalNormalizedPosition = 10f / totalCount; }
 				}
 
-				while(_plainScroll.verticalNormalizedPosition > 0f) {
-					_plainScroll.verticalNormalizedPosition -= speed * Time.fixedDeltaTime;
+				while(plainScroll.verticalNormalizedPosition > 0f) {
+					plainScroll.verticalNormalizedPosition -= speed * Time.fixedDeltaTime;
 					yield return null;
 				}
 			}

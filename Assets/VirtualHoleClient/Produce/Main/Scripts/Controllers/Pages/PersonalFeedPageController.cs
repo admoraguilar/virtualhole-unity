@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Midnight.Pages;
 using Midnight.FlowTree;
@@ -31,13 +30,13 @@ namespace VirtualHole.Client.Controllers
 
 		protected override async void OnNodeVisit()
 		{
-			await Task.CompletedTask;
-			_emptySection.gameObject.SetActive(false);
-			base.OnNodeVisit();
-
-			//await Task.CompletedTask;
-			//_emptySection.gameObject.SetActive(true);
-			//await _emptySection.LoadAsync();
+			if(UserCache.loadedProfile.followedCreators.Count > 0) {
+				_emptySection.gameObject.SetActive(false);
+				base.OnNodeVisit();
+			} else {
+				_emptySection.gameObject.SetActive(true);
+				await _emptySection.LoadAsync();
+			}
 		}
 	}
 }
