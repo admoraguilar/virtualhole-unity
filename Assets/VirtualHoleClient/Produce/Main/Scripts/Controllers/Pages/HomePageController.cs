@@ -19,13 +19,15 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private HomeFlowMap _homeFlowMap = null;
 
-		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client) =>
-			new CreatorQuery(
+		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client)
+		{
+			return new CreatorQuery(
 				client,
 				new FindCreatorsSettings {
 					isCheckForAffiliations = true,
 					affiliations = new List<string>() { "hololiveProduction" },
 					batchSize = 100
 				});
+		}
 	}
 }

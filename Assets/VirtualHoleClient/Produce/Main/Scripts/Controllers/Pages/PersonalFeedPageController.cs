@@ -22,7 +22,7 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private PersonalFeedFlowMap _personalFeedFlowMap = null;
 
-		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client) 
+		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client)
 		{
 			return new CreatorQuery(client, new FindCreatorsRegexSettings {
 				searchQueries = new List<string>() { "Watame", "Matsuri", "Haato", "Subaru" }

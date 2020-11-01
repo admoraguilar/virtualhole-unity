@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Midnight;
@@ -32,26 +33,32 @@ namespace VirtualHole.Client.Data
 			_isLoading = true;
 
 			IEnumerable<T> results = null;
-			using(new StopwatchScope(nameof(VideoFeedQuery<T>), $"Start load [{name}]...", $"End load [{name}].")) {
-				if(_findVideoResults == null) {
-					_findVideoResults = await client
-						.contents.videos
-						.FindVideosAsync(_findVideosSettings, cancellationToken);
+			try {
+				using(new StopwatchScope(nameof(VideoFeedQuery<T>), $"Start load [{name}]...", $"End load [{name}].")) {
+					if(_findVideoResults == null) {
+						_findVideoResults = await client
+							.contents.videos
+							.FindVideosAsync(_findVideosSettings, cancellationToken);
 
-					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+						if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+					}
+
+					if(_findVideoResults != null) {
+						results = _findVideoResults.current;
+						_videos.AddRange(results);
+						VideoCache.Add(results);
+
+						if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+					}
 				}
-
-				if(_findVideoResults != null) {
-					results = _findVideoResults.current;
-					_videos.AddRange(results);
-
-					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+			} catch(Exception e) {
+				if(!(e is OperationCanceledException)) {
+					throw;
 				}
+			} finally {
+				_isLoading = false;
 			}
-
-			VideoCache.Add(results);
 			
-			_isLoading = false;
 			return results;
 		}
 

@@ -29,10 +29,10 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			IEnumerable<Creator> creators = new Creator[] { CreatorCache.creator };
+			IEnumerable<Creator> creators = new Creator[] { CreatorCache.selectedCreator };
 
-			_videoFeed.contextButton.image.sprite = await CreatorCache.GetAvatarAsync(CreatorCache.creator, cancellationToken);
-			_videoFeed.contextButton.text.text = CreatorCache.creator.universalName;
+			_videoFeed.contextButton.image.sprite = await CreatorCache.GetAvatarAsync(CreatorCache.selectedCreator, cancellationToken);
+			_videoFeed.contextButton.text.text = CreatorCache.selectedCreator.universalName;
 
 			_videoFeed.contextButton.button.onClick.RemoveAllListeners();
 			_videoFeed.contextButton.button.onClick.AddListener(() => {

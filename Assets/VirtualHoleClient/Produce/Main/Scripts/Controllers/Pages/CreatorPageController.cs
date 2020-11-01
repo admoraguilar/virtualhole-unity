@@ -30,7 +30,7 @@ namespace VirtualHole.Client.Controllers
 		{
 			await _creatorView.UnloadAsync();
 
-			Creator creator = CreatorCache.creator;
+			Creator creator = CreatorCache.selectedCreator;
 			IEnumerable<Creator> creators = new Creator[] { creator };
 
 			_creatorView.creator = creator;

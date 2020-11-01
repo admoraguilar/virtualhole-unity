@@ -60,7 +60,7 @@ namespace VirtualHole.Client.UI
 
 			foreach(Video video in videos) {
 				Sprite thumbnail = await VideoCache.GetThumbnailAsync(video.platform, video.id);
-				Sprite creatorSprite = await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
+				Sprite creatorSprite = await CreatorCache.GetAvatarAsync(CreatorCache.Get(video.creatorIdUniversal));
 
 				// Skip videos without thumbnails, possible reasons for these are
 				// they maybe privated or deleted.
@@ -91,7 +91,7 @@ namespace VirtualHole.Client.UI
 			async Task PreloadResources(Video video)
 			{
 				await VideoCache.GetThumbnailAsync(video);
-				await CreatorCache.GetAvatarAsync(video.creatorIdUniversal);
+				await CreatorCache.GetAvatarAsync(CreatorCache.Get(video.creatorIdUniversal));
 			}
 		}
 

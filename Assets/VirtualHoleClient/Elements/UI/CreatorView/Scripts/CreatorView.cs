@@ -61,9 +61,7 @@ namespace VirtualHole.Client.UI
 
 		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			_avatarImage.sprite = await CreatorCache.GetAvatarAsync(
-				creator.universalId, creator.avatarUrl,
-				cancellationToken);
+			_avatarImage.sprite = await CreatorCache.GetAvatarAsync(creator, cancellationToken);
 			_nameText.text = creator.universalName;
 
 			foreach(Social social in creator.socials) {

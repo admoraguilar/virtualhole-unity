@@ -11,7 +11,7 @@ namespace VirtualHole.Client.Data
 
 	public static class CreatorCache
 	{
-		public static Creator creator = null;
+		public static Creator selectedCreator = null;
 
 		private static Dictionary<string, Creator> _creatorLookup = new Dictionary<string, Creator>();
 		private static Dictionary<string, Sprite> _avatarLookup = new Dictionary<string, Sprite>();
@@ -33,21 +33,6 @@ namespace VirtualHole.Client.Data
 					avatar = await ImageGetWebRequest.GetAsync(
 						url, null,
 						cancellationToken);
-			}
-
-			return avatar;
-		}
-
-		public static async Task<Sprite> GetAvatarAsync(
-			string universalId, CancellationToken cancellationToken = default)
-		{
-			if(!_avatarLookup.TryGetValue(universalId, out Sprite avatar)) {
-				if(_creatorLookup.TryGetValue(universalId, out Creator creator)) {
-					_avatarLookup[universalId] = 
-						avatar = await ImageGetWebRequest.GetAsync(
-							creator.avatarUrl, null, 
-							cancellationToken);
-				}
 			}
 
 			return avatar;

@@ -51,7 +51,7 @@ namespace VirtualHole.Client.Controllers
 		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
 			cellData.onOptionsClick += () => {
-				CreatorCache.creator = CreatorCache.Get(cellData.creatorUniversalId);
+				CreatorCache.selectedCreator = CreatorCache.Get(cellData.creatorUniversalId);
 				_creatorPageNode.Set();
 			};
 		}
