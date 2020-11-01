@@ -4,8 +4,8 @@ using Midnight;
 
 namespace VirtualHole.Client.Data
 {
-	[CreateAssetMenu(menuName = "VirtualHole/Data/Support Info Builder")]
-	public class SupportInfoBuilder : ScriptableObject
+	[CreateAssetMenu(menuName = "VirtualHole/Data/Support List Builder")]
+	public class SupportListBuilder : ScriptableObject
 	{
 		public List<SupportInfo> supportInfos = new List<SupportInfo>();
 
