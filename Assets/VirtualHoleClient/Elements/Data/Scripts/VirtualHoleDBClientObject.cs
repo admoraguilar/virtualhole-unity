@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace VirtualHole.Client
+namespace VirtualHole.Client.Data
 {
 	using Api.DB;
 
-	[CreateAssetMenu(menuName = "VirtualHole/Data/Data Client Object")]
+	[CreateAssetMenu(menuName = "VirtualHole/DB Client Object")]
 	public class VirtualHoleDBClientObject : ScriptableObject
 	{
 		[SerializeField]

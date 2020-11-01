@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e53fdef7704c6429f9e91c55f97b95, type: 3}
+  m_Name: SupportInfoBuilder
+  m_EditorClassIdentifier: 
+  supportInfos:
+  - url: patreon.com
+    imageUrl: 
+    header: Patreon
+    content: Patreon
+  - url: discord.com/app
+    imageUrl: 
+    header: Discord
+    content: Discord
+  - url: reddit.com/r/Hololive
+    imageUrl: 
+    header: r/Hololive
+    content: r/Hololive
+  - url: cover-corp.com
+    imageUrl: 
+    header: CoverCorp
+    content: CoverCorp
