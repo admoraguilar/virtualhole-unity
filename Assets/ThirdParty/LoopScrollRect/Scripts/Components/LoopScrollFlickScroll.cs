@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace Holoverse.Client.UI
+namespace VirtualHole.Client.UI
 {
 	[RequireComponent(typeof(LoopScrollRect))]
 	public class LoopScrollFlickScroll : MonoBehaviour, IEndDragHandler

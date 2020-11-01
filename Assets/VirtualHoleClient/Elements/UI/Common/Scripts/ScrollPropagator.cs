@@ -6,15 +6,15 @@ using Midnight;
 namespace VirtualHole.Client.UI
 {
 	/// Source: https://forum.unity.com/threads/nested-scrollrect.268551/page-2#post-4214161
-	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollPropagator :
+	[RequireComponent(typeof(ScrollRect))]
+	public class ScrollPropagator :
 		MonoBehaviour, IInitializePotentialDragHandler,
 		IDragHandler, IBeginDragHandler, IEndDragHandler
 	{
 		private bool _shouldRouteToParent = false;
 
-		public LoopScrollRect scrollRect => this.GetComponent(ref _scrollRect, () => GetComponent<LoopScrollRect>());
-		private LoopScrollRect _scrollRect = null;
+		public ScrollRect scrollRect => this.GetComponent(ref _scrollRect, () => GetComponent<ScrollRect>());
+		private ScrollRect _scrollRect = null;
 
 		public new Transform transform => this.GetComponent(ref _transform, () => base.transform);
 		private Transform _transform = null;
