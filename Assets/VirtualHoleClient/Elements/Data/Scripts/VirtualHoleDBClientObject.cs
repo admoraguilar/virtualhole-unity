@@ -4,7 +4,7 @@ namespace VirtualHole.Client.Data
 {
 	using Api.DB;
 
-	[CreateAssetMenu(menuName = "VirtualHole/DB Client Object")]
+	[CreateAssetMenu(menuName = "VirtualHole/Data/DB Client Object")]
 	public class VirtualHoleDBClientObject : ScriptableObject
 	{
 		[SerializeField]

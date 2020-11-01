@@ -4,7 +4,7 @@ namespace VirtualHole.Client.Data
 {
 	using Api.Storage;
 
-	[CreateAssetMenu(menuName = "VirtualHole/Storage Client Object")]
+	[CreateAssetMenu(menuName = "VirtualHole/Data/Storage Client Object")]
 	public class VirtualHoleStorageClientObject : ScriptableObject
 	{
 		[SerializeField]

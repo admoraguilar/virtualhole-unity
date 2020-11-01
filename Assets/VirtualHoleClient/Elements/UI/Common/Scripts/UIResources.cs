@@ -6,7 +6,7 @@ namespace VirtualHole.Client.UI
 {
 	using Api.DB.Contents;
 	
-	[CreateAssetMenu(menuName = "VirtualHole/UI Resources")]
+	[CreateAssetMenu(menuName = "VirtualHole/UI/UI Resources")]
 	public class UIResources : SingletonObject<UIResources>
 	{
 		[Serializable]
@@ -32,7 +32,6 @@ namespace VirtualHole.Client.UI
 			return null;
 		}
 
-		[Header("Indicators")]
 		[SerializeField]
 		private Sprite _liveIndicator = null;
 
