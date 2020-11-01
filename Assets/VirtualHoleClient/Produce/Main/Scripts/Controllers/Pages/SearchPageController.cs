@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
 {
+	using Api.DB.Contents.Creators;
+
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
@@ -22,9 +25,22 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private SearchFlowMap _mainFlowSearchMap = null;
 
-		protected void OnNodeVisit()
+		private CreatorQuery CreatorQueryFactory(string searchString)
 		{
-			_searchView.Initialize(_client.client);
+			return new CreatorQuery(
+				_client.client,
+				new FindCreatorsRegexSettings {
+					searchQueries = new List<string>() { searchString },
+					isCheckSocialName = false,
+					isCheckForAffiliations = true,
+					affiliations = new List<string>() { "hololiveProduction" }
+				});
+		}
+
+		private async void OnNodeVisit()
+		{
+			_searchView.creatorQueryFactory = CreatorQueryFactory;
+			await _searchView.InitializeAsync();	
 		}
 
 		private void OnCellDataCreated(CreatorScrollCellData cellData)

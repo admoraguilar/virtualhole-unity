@@ -1194,23 +1194,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _client: {fileID: 11400000, guid: a2f83a4c1cd73da4093fd14ee919a8ad, type: 2}
-  _supportInfos:
-  - url: 
-    imageUrl: /client/page/support/holoverse-patreon.png
-    header: Patreon
-    content: 1
-  - url: 
-    imageUrl: /client/page/support/holoverse-discord.png
-    header: Discord
-    content: 2
-  - url: https://www.reddit.com/r/Hololive/
-    imageUrl: /client/page/support/hololive-reddit.png
-    header: r/Hololive
-    content: Welcome to the rabbit hole.
-  - url: 
-    imageUrl: /client/page/support/simpukun-twitter.png
-    header: 'Twitter: Simpukun'
-    content: 4
   _mainFlowMap: {fileID: 958391158}
   _supportFlowMap: {fileID: 1224511793}
 --- !u!1 &831637902

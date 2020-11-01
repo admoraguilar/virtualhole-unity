@@ -32,7 +32,10 @@ namespace VirtualHole.Client.Controllers
 
 			Creator creator = CreatorCache.creator;
 			IEnumerable<Creator> creators = new Creator[] { creator };
-			_creatorView.SetData(creator, new VideoFeedQuery[] {
+
+			_creatorView.creator = creator;
+			_creatorView.feeds.Clear();
+			_creatorView.feeds.AddRange(new VideoFeedQuery[] {
 				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators, 4),
 				VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
 				VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),

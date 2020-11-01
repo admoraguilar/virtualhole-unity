@@ -101,7 +101,9 @@ namespace VirtualHole.Client.UI
 			List<InfoButtonData> results = new List<InfoButtonData>();
 
 			Dictionary<string, Sprite> _spriteLookup = new Dictionary<string, Sprite>();
-			await Concurrent.ForEachAsync(query._supportInfos.ToList(), PreloadResources, cancellationToken);
+			SupportInfo[] supportInfos = await query.LoadAsync(cancellationToken);
+
+			await Concurrent.ForEachAsync(supportInfos, PreloadResources, cancellationToken);
 
 			foreach(SupportInfo supportInfo in query._supportInfos) {
 				InfoButtonData infoButtonData = new InfoButtonData() {

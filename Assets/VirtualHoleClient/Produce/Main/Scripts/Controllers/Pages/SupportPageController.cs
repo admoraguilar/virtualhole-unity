@@ -14,9 +14,6 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private VirtualHoleStorageClientObject _client = null;
 		
-		[SerializeField]
-		private SupportInfo[] _supportInfos = null;
-
 		private Node _supportNode => _mainFlowMap.supportNode;
 		[SerializeField]
 		private MainFlowMap _mainFlowMap = null;
@@ -28,15 +25,13 @@ namespace VirtualHole.Client.Controllers
 		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
 			SupportListQuery supportListQuery = new SupportListQuery(_client.client);
-			_supportInfos = await supportListQuery.LoadAsync(cancellationToken);
-
 			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListQuery, cancellationToken);
-			_supportView.SetData(data);
+			_supportView.infoButtonData = data;
 		}
 
 		private async void OnSupportVisit()
 		{
-			_supportView.SetData(SupportViewDataFactoryAsync);
+			_supportView.SetDataAsyncFactory(SupportViewDataFactoryAsync);
 			await _supportView.InitializeAsync();
 		}
 

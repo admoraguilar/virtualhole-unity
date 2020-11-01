@@ -11,9 +11,11 @@ namespace VirtualHole.Client.UI
 {
 	using Client.Data;
 	
-	public class VideoPeekScroll : MonoBehaviour
+	public class VideoPeekScroll : UILifecycle
 	{
 		public event Action<VideoScrollCellData> OnCellDataCreated = delegate { };
+
+		public VideoFeedQuery feed { get; set; } = null;
 
 		public Image background => _background;
 		[SerializeField]
@@ -27,32 +29,28 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		public LoopScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
-		[SerializeField]
+		private LoopScrollCellDataContainer scrollDataContainer
+		{
+			get {
+				return this.GetComponent(
+					ref _scrollDataContainer,
+					() => scroll == null ? null : scroll.GetComponent<LoopScrollCellDataContainer>());
+			}
+		}
 		private LoopScrollCellDataContainer _scrollDataContainer = null;
 
 		public Button optionButton => _optionButton;
 		[SerializeField]
 		private Button _optionButton = null;
 
-		private VideoFeedQuery _feed = null;
-		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
-
-		public async Task InitializeAsync(VideoFeedQuery feed, CancellationToken cancellationToken = default)
+		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			_feed = feed;
-
-			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
-				_feed, cancellationToken);
-			foreach(VideoScrollCellData cell in cellData) {
-				OnCellDataCreated?.Invoke(cell);
-			}
-
-			_cellData.AddRange(cellData);
-			scrollDataContainer.UpdateData(_cellData);
+			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(feed, cancellationToken);
+			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
+			scrollDataContainer.UpdateData(cellData);
 		}
 
-		public async Task UnloadAsync()
+		protected override async Task UnloadAsync_Impl()
 		{
 			await Task.CompletedTask;
 			ClearFeed();
@@ -60,12 +58,8 @@ namespace VirtualHole.Client.UI
 
 		public void ClearFeed()
 		{
-			_cellData.Clear();
-			scrollDataContainer.UpdateData(_cellData);
-
-			if(_feed != null) {
-				_feed.Clear();
-			}
+			scrollDataContainer.UpdateData(null);
+			if(feed != null) { feed.Clear(); }
 		}
 	}
 }

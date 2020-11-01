@@ -3,95 +3,42 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Midnight;
 
 namespace VirtualHole.Client.UI
 {
-	public class SupportView : MonoBehaviour, ISimpleCycleAsync
+	public class SupportView : UILifecycle
 	{
-		public event Action<object> OnInitializeStart = delegate { };
-		public event Action<Exception, object> OnInitializeError = delegate { };
-		public event Action<object> OnInitializeFinish = delegate { };
+		public IEnumerable<InfoButtonData> infoButtonData { get; set; } = null;
 
-		public event Action<object> OnLoadStart = delegate { };
-		public event Action<Exception, object> OnLoadError = delegate { };
-		public event Action<object> OnLoadFinish = delegate { };
-
-		public event Action<object> OnUnloadStart = delegate { };
-		public event Action<Exception, object> OnUnloadError = delegate { };
-		public event Action<object> OnUnloadFinish = delegate { };
-
+		public InfoButton infoButtonPrefab => _infoButtonPrefab;
 		[SerializeField]
 		private InfoButton _infoButtonPrefab = null;
 
+		public RectTransform contentContainer => _contentContainer;
 		[SerializeField]
 		private RectTransform _contentContainer = null;
 
-		public bool isInitializing { get; private set; } = false;
-		public bool isInitialized { get; private set; } = false;
-		public bool isLoading { get; private set; } = false;
-
-		private Func<CancellationToken, Task> _dataFactory = null;
-		private IEnumerable<InfoButtonData> _data = null;
 		private List<InfoButton> _instances = new List<InfoButton>();
 
-		public void SetData(Func<CancellationToken, Task> dataFactory)
+		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			_dataFactory = dataFactory;
-		}
-
-		public void SetData(IEnumerable<InfoButtonData> data)
-		{
-			_data = data;
-		}
-
-		public async Task InitializeAsync(CancellationToken cancellationToken = default)
-		{
-			if(!this.CanInitialize()) { return; }
-			isInitializing = true;
-			OnInitializeStart(null);
-
-			try {
-				if(_dataFactory != null) {
-					await _dataFactory(cancellationToken);
-				}
-
-				foreach(InfoButtonData data in _data) {
-					InfoButton button = Instantiate(_infoButtonPrefab, _contentContainer, false);
-					button.name = data.header;
-					button.SetData(data);
-				}
-
-			} catch(Exception e) {
-				OnInitializeError(e, null);
-				throw;
+			await Task.CompletedTask;
+			foreach(InfoButtonData data in infoButtonData) {
+				InfoButton button = Instantiate(_infoButtonPrefab, _contentContainer, false);
+				button.name = data.header;
+				button.image.sprite = data.sprite;
+				button.headerText.text = data.header;
+				button.contentText.text = data.content;
 			}
-
-			OnInitializeFinish(null);
-			isInitialized = true;
 		}
 
-		public async Task LoadAsync(CancellationToken cancellationToken = default)
-		{
-			if(!this.CanLoad()) { return; }
-			await Task.CompletedTask;
-		}
-
-		public async Task UnloadAsync()
+		protected override async Task UnloadAsync_Impl()
 		{
 			await Task.CompletedTask;
-			if(!this.CanUnload()) { return; }
-			OnUnloadStart(null);
-
 			foreach(InfoButton instance in _instances) {
 				Destroy(instance.gameObject);
 			}
 			_instances.Clear();
-
-			isLoading = false;
-			isInitializing = false;
-			isInitialized = false;
-			OnUnloadFinish(null);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace VirtualHole.Client.UI
 {
 	using Client.Data;
 
-	public class VideoFeedScroll : MonoBehaviour, ISimpleCycleAsync
+	public class VideoFeedScroll : UILifecycle
 	{
 		[Serializable]
 		public class ContextButton
@@ -30,21 +30,11 @@ namespace VirtualHole.Client.UI
 			private TMP_Text _text = null;
 		}
 
-		public event Action<object> OnInitializeStart = delegate { };
-		public event Action<Exception, object> OnInitializeError = delegate { };
-		public event Action<object> OnInitializeFinish = delegate { };
-
-		public event Action<object> OnLoadStart = delegate { };
-		public event Action<Exception, object> OnLoadError = delegate { };
-		public event Action<object> OnLoadFinish = delegate { };
-
-		public event Action<object> OnUnloadStart = delegate { };
-		public event Action<Exception, object> OnUnloadError = delegate { };
-		public event Action<object> OnUnloadFinish = delegate { };
-
 		public event Action<VideoScrollCellData> OnCellDataCreated = delegate { };
 		public event Action<int> OnDropdownValueChangedCallback = delegate { };
 		public event Action OnNearScrollEnd = delegate { };
+
+		public List<VideoFeedQuery> feeds { get; private set; } = new List<VideoFeedQuery>();
 
 		public LoopScrollRect scroll => _scroll;
 		[SerializeField]
@@ -68,105 +58,47 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private TMP_Dropdown _dropdown = null;
 
-		public bool isInitializing { get; private set; } = false;
-		public bool isInitialized { get; private set; } = false;
-		public bool isLoading { get; private set; } = false;
-
-		private Func<CancellationToken, Task> _dataFactory = null;
-		private List<VideoFeedQuery> _feeds = new List<VideoFeedQuery>();
-		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
-		private CycleLoadParameters _loadParameters = null;
-
-		public void SetData(Func<CancellationToken, Task> dataFactory)
-		{
-			_dataFactory = dataFactory;
-		}
-
-		public void SetData(IEnumerable<VideoFeedQuery> feeds)
-		{
-			_feeds.Clear();
-			_feeds.AddRange(feeds);
-		}
-
-		public async Task InitializeAsync(CancellationToken cancellationToken = default)
-		{
-			if(!this.CanInitialize()) { return; }
-			isInitializing = true;
-			OnInitializeStart(null);
-
-			try {
-				if(_dataFactory != null) {
-					await _dataFactory(cancellationToken);
-				}
-
-				dropdown.ClearOptions();
-				dropdown.AddOptions(_feeds.Select(f => f.name).ToList());
-				dropdown.value = 0;
-
-				ClearFeed();
-				cancellationToken.ThrowIfCancellationRequested();
-				await LoadAsync(cancellationToken);
-			} catch(Exception e)  {
-				OnInitializeError(e, null);
-				throw;
-			}
-
-			OnInitializeFinish(null);
-			isInitialized = true;
-		}
-
-		public async Task LoadAsync(CancellationToken cancellationToken = default)
-		{
-			if(isLoading) { return; }
-			isLoading = true;
-			OnLoadStart(_loadParameters);
-
-			try {
-				if(_feeds.Count <= 0) { return; }
-
-				VideoFeedQuery feed = _feeds[dropdown.value];
-				if(feed.isDone) { return; }
-
-				IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(
-					feed, cancellationToken);
-				foreach(VideoScrollCellData cell in cellData) {
-					OnCellDataCreated?.Invoke(cell);
-				}
-
-				_cellData.AddRange(cellData);
-				scrollDataContainer.UpdateData(_cellData);
-			} catch(Exception e) {
-				OnLoadError(e, null);
-				throw;
-			} finally {
-				isLoading = false;
-			}
-
-			OnLoadFinish(null);
-		}
-
-		public async Task UnloadAsync()
+		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
 			await Task.CompletedTask;
-			if(isLoading) { return; }
-			OnUnloadStart(null);
+
+			dropdown.ClearOptions();
+			dropdown.AddOptions(feeds.Select(f => f.name).ToList());
+			dropdown.value = 0;
 
 			ClearFeed();
-			_feeds.Clear();
+			cancellationToken.ThrowIfCancellationRequested();	
+		}
 
-			isLoading = false;
-			isInitializing = false;
-			isInitialized = false;
-			OnUnloadFinish(null);
+		protected override async Task PostInitializeAsync_Impl(CancellationToken cancellationToken = default)
+		{
+			await LoadAsync(cancellationToken);
+		}
+
+		protected override async Task LoadAsync_Impl(CancellationToken cancellationToken = default)
+		{
+			if(feeds.Count <= 0) { return; }
+
+			VideoFeedQuery feed = feeds[dropdown.value];
+			if(feed.isDone) { return; }
+
+			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(feed, cancellationToken);
+			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
+			scrollDataContainer.UpdateData(cellData);
+		}
+
+		protected override async Task UnloadAsync_Impl()
+		{
+			await Task.CompletedTask;
+			ClearFeed();
+			feeds.Clear();
 		}
 
 		public void ClearFeed()
 		{
-			_cellData.Clear();
-			scrollDataContainer.UpdateData(_cellData);
-
-			if(_feeds != null && _feeds.Count > dropdown.value) {
-				VideoFeedQuery feed = _feeds[dropdown.value];
+			scrollDataContainer.UpdateData(null);
+			if(feeds != null && feeds.Count > dropdown.value) {
+				VideoFeedQuery feed = feeds[dropdown.value];
 				feed.Clear();
 			}
 		}
@@ -185,9 +117,9 @@ namespace VirtualHole.Client.UI
 		{
 			ClearFeed();
 
-			_loadParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
+			_loadingParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
 			await LoadAsync();
-			_loadParameters = null;
+			_loadingParameters = null;
 
 			OnDropdownValueChangedCallback(value);
 		}

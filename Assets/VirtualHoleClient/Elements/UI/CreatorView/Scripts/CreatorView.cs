@@ -14,134 +14,93 @@ namespace VirtualHole.Client.UI
 	using Api.DB.Contents.Creators;
 	
 	using Client.Data;
-	
 
-	public class CreatorView : MonoBehaviour, ISimpleCycleAsync
+	public class CreatorView : UILifecycle
 	{
-		public event Action<object> OnInitializeStart = delegate { };
-		public event Action<Exception, object> OnInitializeError = delegate { };
-		public event Action<object> OnInitializeFinish = delegate { };
-
-		public event Action<object> OnLoadStart = delegate { };
-		public event Action<Exception, object> OnLoadError = delegate { };
-		public event Action<object> OnLoadFinish = delegate { };
-
-		public event Action<object> OnUnloadStart = delegate { };
-		public event Action<Exception, object> OnUnloadError = delegate { };
-		public event Action<object> OnUnloadFinish = delegate { };
-
 		public event Action<VideoPeekScroll> OnVideoPeekScrollProcess = delegate { };
 
-		public Creator creator { get; private set; } = null;
+		public Creator creator { get; set; } = null;
+		public List<VideoFeedQuery> feeds { get; private set; } = new List<VideoFeedQuery>();
 
+		public ScrollRect plainScroll => _plainScroll;
 		[SerializeField]
 		private ScrollRect _plainScroll = null;
 
+		public Image avatarImage => _avatarImage;
 		[SerializeField]
 		private Image _avatarImage = null;
 
+		public TMP_Text nameText => _nameText;
 		[SerializeField]
 		private TMP_Text _nameText = null;
 
+		public RectTransform socialButtonContainer => _socialButtonContainer;
 		[Space]
 		[SerializeField]
 		private RectTransform _socialButtonContainer = null;
 
+		public Button socialButtonTemplate => _socialButtonTemplate;
 		[SerializeField]
 		private Button _socialButtonTemplate = null;
 
+		public Button followButton => _followButton;
 		[SerializeField]
 		private Button _followButton = null;
 
+		public RectTransform peekScrollContainer => _peekScrollContainer;
 		[Space]
 		[SerializeField]
 		private RectTransform _peekScrollContainer = null;
 
+		public VideoPeekScroll peekScrollTemplate => _peekScrollTemplate;
 		[SerializeField]
 		private VideoPeekScroll _peekScrollTemplate = null;
 
-		public bool isInitializing { get; private set; } = false;
-		public bool isInitialized { get; private set; } = false;
-		public bool isLoading { get; private set; } = false;
-
-		private Func<CancellationToken, Task> _dataFactory = null;
 		private List<Button> _socialButtonInstances = new List<Button>();
-		private List<VideoFeedQuery> _feeds = new List<VideoFeedQuery>();
 		private List<VideoPeekScroll> _peekScrollInstances = new List<VideoPeekScroll>();
 
-		public void SetData(Func<CancellationToken, Task> dataFactory)
+		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			_dataFactory = dataFactory;
-		}
-
-		public void SetData(Creator creator, IEnumerable<VideoFeedQuery> feeds)
-		{
-			this.creator = creator;
-			_feeds.Clear();
-			_feeds.AddRange(feeds);
-		} 
-
-		public async Task InitializeAsync(CancellationToken cancellationToken = default)
-		{
-			if(!this.CanInitialize()) { return; }
-			isInitializing = true;
-			OnInitializeStart(null);
-
-			try {
-				_avatarImage.sprite = await CreatorCache.GetAvatarAsync(
+			_avatarImage.sprite = await CreatorCache.GetAvatarAsync(
 				creator.universalId, creator.avatarUrl,
 				cancellationToken);
-				_nameText.text = creator.universalName;
+			_nameText.text = creator.universalName;
 
-				foreach(Social social in creator.socials) {
-					Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonContainer, false);
-					socialButton.gameObject.SetActive(true);
+			foreach(Social social in creator.socials) {
+				Button socialButton = Instantiate(_socialButtonTemplate, _socialButtonContainer, false);
+				socialButton.gameObject.SetActive(true);
 
-					_socialButtonInstances.Add(socialButton);
+				_socialButtonInstances.Add(socialButton);
 
-					socialButton.name = $"{social.platform}-{social.name}";
-					socialButton.image.sprite = UIResources.GetPlatformUI(social.platform).logo;
-					socialButton.image.enabled = true;
+				socialButton.name = $"{social.platform}-{social.name}";
+				socialButton.image.sprite = UIResources.GetPlatformUI(social.platform).logo;
+				socialButton.image.enabled = true;
 
-					socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
-				}
-
-				foreach(VideoFeedQuery feed in _feeds) {
-					VideoPeekScroll peekScroll = Instantiate(_peekScrollTemplate, _peekScrollContainer, false);
-					peekScroll.gameObject.SetActive(true);
-
-					_peekScrollInstances.Add(peekScroll);
-
-					peekScroll.name = feed.name;
-					peekScroll.header.text = feed.name;
-
-					peekScroll.optionButton.onClick.RemoveAllListeners();
-					peekScroll.optionButton.GetComponentInChildren<TMP_Text>(true).text = $"More {feed.name}";
-
-					OnVideoPeekScrollProcess(peekScroll);
-
-					await peekScroll.InitializeAsync(feed, cancellationToken);
-				}
-			} catch(Exception e) {
-				OnInitializeError(e, null);
-				throw;
+				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
 
-			OnInitializeFinish(null);
-			isInitialized = true;
+			foreach(VideoFeedQuery feed in feeds) {
+				VideoPeekScroll peekScroll = Instantiate(_peekScrollTemplate, _peekScrollContainer, false);
+				peekScroll.gameObject.SetActive(true);
+
+				_peekScrollInstances.Add(peekScroll);
+
+				peekScroll.name = feed.name;
+				peekScroll.header.text = feed.name;
+
+				peekScroll.optionButton.onClick.RemoveAllListeners();
+				peekScroll.optionButton.GetComponentInChildren<TMP_Text>(true).text = $"More {feed.name}";
+
+				OnVideoPeekScrollProcess(peekScroll);
+
+				peekScroll.feed = feed;
+				await peekScroll.InitializeAsync(cancellationToken);
+			}
 		}
 
-		public async Task LoadAsync(CancellationToken cancellationToken = default)
-		{
-			if(!this.CanLoad()) { return; }
-			await Task.CompletedTask;
-		}
-
-		public async Task UnloadAsync()
+		protected override async Task UnloadAsync_Impl()
 		{
 			await Task.CompletedTask;
-			if(!this.CanUnload()) { return; }
-			OnUnloadStart(null);
 
 			if(_plainScroll.horizontal) { _plainScroll.horizontalNormalizedPosition = 1f; }
 			if(_plainScroll.vertical) { _plainScroll.verticalNormalizedPosition = 1f; }
@@ -160,11 +119,6 @@ namespace VirtualHole.Client.UI
 				Destroy(peekScroll.gameObject);
 			}
 			_peekScrollInstances.Clear();
-
-			isLoading = false;
-			isInitializing = false;
-			isInitialized = false;
-			OnUnloadFinish(null);
 		}
 
 		public void ScrollToTop(float speed = 10f)

@@ -536,10 +536,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7099337565212791375, guid: 841a09e870f3d8745925059129785a6c,
         type: 3}
+      propertyPath: dataProcessors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7099337565212791375, guid: 841a09e870f3d8745925059129785a6c,
+        type: 3}
       propertyPath: cellPrefabs.Array.data[0]
       value: 
       objectReference: {fileID: 4134916011671619780, guid: 68486111473a0d54291a95b6c8f8b2fc,
         type: 3}
+    - target: {fileID: 7099337565212791375, guid: 841a09e870f3d8745925059129785a6c,
+        type: 3}
+      propertyPath: dataProcessors.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: b932af21d2a68ab4cbf3bd17341dc03b,
+        type: 2}
     - target: {fileID: 7203265578508161380, guid: 841a09e870f3d8745925059129785a6c,
         type: 3}
       propertyPath: m_AnchorMax.x

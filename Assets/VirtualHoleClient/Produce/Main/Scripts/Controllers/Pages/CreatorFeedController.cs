@@ -39,7 +39,8 @@ namespace VirtualHole.Client.Controllers
 				_creatorPageNode.Set();
 			});
 
-			_videoFeed.SetData(new VideoFeedQuery[] {
+			_videoFeed.feeds.Clear();
+			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
 				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
 				VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
 				VideoFeedQuery.CreateLiveFeed(_client.client, creators),
@@ -51,7 +52,7 @@ namespace VirtualHole.Client.Controllers
 		{
 			await _videoFeed.UnloadAsync();
 
-			_videoFeed.SetData(VideoFeedDataFactoryAsync);
+			_videoFeed.SetDataAsyncFactory(VideoFeedDataFactoryAsync);
 			await _videoFeed.InitializeAsync();
 		}
 

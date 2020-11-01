@@ -32,7 +32,9 @@ namespace VirtualHole.Client.Controllers
 		{
 			CreatorQuery creatorQuery = CreateCreatorQuery(_client.client);
 			await creatorQuery.LoadAsync(cancellationToken);
-			_videoFeed.SetData(new VideoFeedQuery[] {
+
+			_videoFeed.feeds.Clear();
+			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
 				VideoFeedQuery.CreateDiscoverFeed(_client.client, creatorQuery.creatorLookup.Values),
 				VideoFeedQuery.CreateCommunityFeed(_client.client, creatorQuery.creatorLookup.Values),
 				VideoFeedQuery.CreateLiveFeed(_client.client, creatorQuery.creatorLookup.Values),
@@ -42,7 +44,7 @@ namespace VirtualHole.Client.Controllers
 
 		protected virtual async void OnNodeVisit()
 		{
-			_videoFeed.SetData(VideoFeedDataFactoryAsync);
+			_videoFeed.SetDataAsyncFactory(VideoFeedDataFactoryAsync);
 			await _videoFeed.InitializeAsync();
 		}
 
