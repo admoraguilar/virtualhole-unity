@@ -1895,7 +1895,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -3413,7 +3413,7 @@ PrefabInstance:
     - target: {fileID: 5923252444221986757, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.9
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 5923252445800244349, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}

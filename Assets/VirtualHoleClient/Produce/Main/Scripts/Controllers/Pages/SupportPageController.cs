@@ -12,8 +12,8 @@ namespace VirtualHole.Client.Controllers
 	public class SupportPageController : MonoBehaviour
 	{
 		[SerializeField]
-		private string _cdnUrl = string.Empty;
-
+		private VirtualHoleStorageClientObject _client = null;
+		
 		[SerializeField]
 		private SupportInfo[] _supportInfos = null;
 
@@ -27,11 +27,10 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			foreach(SupportInfo supportInfo in _supportInfos) {
-				supportInfo.imageUrl = $"{_cdnUrl}{supportInfo.imageUrl}";
-			}
+			SupportListQuery supportListQuery = new SupportListQuery(_client.client);
+			_supportInfos = await supportListQuery.LoadAsync(cancellationToken);
 
-			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(_supportInfos, cancellationToken);
+			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListQuery, cancellationToken);
 			_supportView.SetData(data);
 		}
 

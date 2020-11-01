@@ -9,31 +9,39 @@ namespace VirtualHole.Client.Data
 	
 	public class SupportListQuery
 	{
-		internal const string rootPath = "/client/page/support/";
+		internal const string rootPath = "/dynamic/";
 		internal const string supportListPath = "support-list.json";
 
-		private SupportInfo[] _supportInfo = null;
+		public SupportInfo[] _supportInfos { get; private set; } = null;
 
 		private VirtualHoleStorageClient _client = null;
 		private bool _isLoaded = false;
 
-		public SupportListQuery(VirtualHoleStorageClientObject client)
+		public SupportListQuery(VirtualHoleStorageClient client)
 		{
-			_client = client.client;
+			_client = client;
+		}
+
+		public string BuildImageUrl(SupportInfo supportInfo)
+		{
+			return _client.BuildObjectUri(supportInfo.imageUrl).AbsoluteUri;
 		}
 
 		public async Task<SupportInfo[]> LoadAsync(CancellationToken cancellationToken = default)
 		{
-			if(_isLoaded) { return _supportInfo; }
+			if(_isLoaded) { return _supportInfos; }
 
 			using(new StopwatchScope(nameof(SupportInfo), "Start getting support-list", "End getting support-list")) {
 				string url = _client.BuildObjectUri($"{rootPath}{supportListPath}").AbsoluteUri;
 				string response = await TextGetWebRequest.GetAsync(url, null, cancellationToken);
-				JsonUtilities.Deserialize(ref _supportInfo, response);
+
+				SupportInfo[] result = null;
+				JsonUtilities.Deserialize(ref result, response);
+				_supportInfos = result;
 			}
 
 			_isLoaded = true;
-			return _supportInfo;
+			return _supportInfos;
 		}
 	}
 }

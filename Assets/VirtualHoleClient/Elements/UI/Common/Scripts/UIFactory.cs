@@ -96,14 +96,14 @@ namespace VirtualHole.Client.UI
 		}
 
 		public static async Task<IEnumerable<InfoButtonData>> CreateInfoButtonDataAsync(
-			IEnumerable<SupportInfo> supportInfos, CancellationToken cancellationToken = default)
+			SupportListQuery query, CancellationToken cancellationToken = default)
 		{
 			List<InfoButtonData> results = new List<InfoButtonData>();
 
 			Dictionary<string, Sprite> _spriteLookup = new Dictionary<string, Sprite>();
-			await Concurrent.ForEachAsync(supportInfos.ToList(), PreloadResources, cancellationToken);
+			await Concurrent.ForEachAsync(query._supportInfos.ToList(), PreloadResources, cancellationToken);
 
-			foreach(SupportInfo supportInfo in supportInfos) {
+			foreach(SupportInfo supportInfo in query._supportInfos) {
 				InfoButtonData infoButtonData = new InfoButtonData() {
 					header = supportInfo.header,
 					content = supportInfo.content,
@@ -121,7 +121,7 @@ namespace VirtualHole.Client.UI
 			async Task PreloadResources(SupportInfo supportInfo)
 			{
 				if(!string.IsNullOrEmpty(supportInfo.imageUrl)) {
-					_spriteLookup[supportInfo.imageUrl] = await ImageGetWebRequest.GetAsync(supportInfo.imageUrl);
+					_spriteLookup[supportInfo.imageUrl] = await ImageGetWebRequest.GetAsync(query.BuildImageUrl(supportInfo));
 				}
 			}
 		}
