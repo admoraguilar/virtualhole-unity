@@ -77,7 +77,8 @@ namespace VirtualHole.Client.UI
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
 
-			List<Creator> followedCreators = UserCache.loadedProfile.followedCreators;
+			//List<Creator> followedCreators = UserCache.loadedProfile.followedCreators;
+			List<Creator> followedCreators = new List<Creator>();
 			if(followedCreators.Exists(c => c.universalId == creator.universalId)) {
 				ColorHSV color = followButton.image.color;
 				color.v = 1f;

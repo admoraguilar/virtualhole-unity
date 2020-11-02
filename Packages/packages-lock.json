@@ -15,14 +15,14 @@
         "com.unity.scriptablebuildpipeline": "1.11.2",
         "jillejr.newtonsoft.json-for-unity": "12.0.301"
       },
-      "hash": "ea864e377ba220864d223a6904a71c746ba26618"
+      "hash": "21f8261b88d9f3219bd67abf9a8a99a8fefb3a43"
     },
     "com.midnight-cigarettes.virtualhole-api-unity": {
       "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.holoverse-data-api-unity.git#develop",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f3a098feaf32b96e72dd43fc0a4e762c9473b8ff"
+      "hash": "88fb6984278be02e8db0dd670babd934ce69da37"
     },
     "com.unity.2d.animation": {
       "version": "4.2.6",

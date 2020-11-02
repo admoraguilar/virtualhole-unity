@@ -30,13 +30,13 @@ namespace VirtualHole.Client.Controllers
 
 		protected override async void OnNodeVisit()
 		{
-			if(UserCache.loadedProfile.followedCreators.Count > 0) {
-				_emptySection.gameObject.SetActive(false);
-				base.OnNodeVisit();
-			} else {
-				_emptySection.gameObject.SetActive(true);
-				await _emptySection.LoadAsync();
-			}
+			//if(UserCache.loadedProfile.followedCreators.Count > 0) {
+			//	_emptySection.gameObject.SetActive(false);
+			//	base.OnNodeVisit();
+			//} else {
+			//	_emptySection.gameObject.SetActive(true);
+			//	await _emptySection.LoadAsync();
+			//}
 		}
 	}
 }

@@ -35,8 +35,7 @@ namespace VirtualHole.Client.Data
 				string url = _client.BuildObjectUri($"{rootPath}{supportListPath}").AbsoluteUri;
 				string response = await TextGetWebRequest.GetAsync(url, null, cancellationToken);
 
-				SupportInfo[] result = null;
-				JsonUtilities.Deserialize(ref result, response);
+				SupportInfo[] result = JsonUtilities.Deserialize<SupportInfo[]>(response);
 				_supportInfos = result;
 			}
 
