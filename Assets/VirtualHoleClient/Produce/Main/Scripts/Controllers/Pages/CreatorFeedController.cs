@@ -41,10 +41,10 @@ namespace VirtualHole.Client.Controllers
 
 			_videoFeed.feeds.Clear();
 			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators),
-				VideoFeedQuery.CreateCommunityFeed(_client.client, creators),
-				VideoFeedQuery.CreateLiveFeed(_client.client, creators),
-				VideoFeedQuery.CreateScheduledFeed(_client.client, creators)
+				VideoFeedQuery.CreateDiscoverFeed(_client.GetClient(), creators),
+				VideoFeedQuery.CreateCommunityFeed(_client.GetClient(), creators),
+				VideoFeedQuery.CreateLiveFeed(_client.GetClient(), creators),
+				VideoFeedQuery.CreateScheduledFeed(_client.GetClient(), creators)
 			});
 		}
 

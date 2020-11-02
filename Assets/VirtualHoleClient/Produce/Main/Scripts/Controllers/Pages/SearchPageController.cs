@@ -28,7 +28,7 @@ namespace VirtualHole.Client.Controllers
 		private CreatorQuery CreatorQueryFactory(string searchString)
 		{
 			return new CreatorQuery(
-				_client.client,
+				_client.GetClient(),
 				new FindCreatorsRegexSettings {
 					searchQueries = new List<string>() { searchString },
 					isCheckSocialName = false,

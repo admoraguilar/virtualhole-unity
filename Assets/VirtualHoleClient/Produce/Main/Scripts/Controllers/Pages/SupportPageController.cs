@@ -25,7 +25,7 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			SupportListQuery supportListQuery = new SupportListQuery(_client.client);
+			SupportListQuery supportListQuery = new SupportListQuery(_client.GetClient());
 			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListQuery, cancellationToken);
 			_supportView.infoButtonData = data;
 		}

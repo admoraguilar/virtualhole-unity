@@ -10,15 +10,16 @@ namespace VirtualHole.Client.Data
 		[SerializeField]
 		private string _endpoint = string.Empty;
 
-		public VirtualHoleStorageClient client
-		{
-			get {
-				if(_client == null) {
-					_client = new VirtualHoleStorageClient(_endpoint);
-				}
-				return _client;
-			}
-		}
 		private VirtualHoleStorageClient _client = null;
+
+		public VirtualHoleStorageClient GetClient()
+		{
+			if(_client != null) { return _client; }
+			_client = new VirtualHoleStorageClient(_endpoint);
+#if !UNITY_EDITOR
+			_endpoint = string.Empty;
+#endif
+			return _client;
+		}
 	}
 }

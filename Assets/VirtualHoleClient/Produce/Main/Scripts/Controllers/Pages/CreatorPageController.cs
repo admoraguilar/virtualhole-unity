@@ -36,10 +36,10 @@ namespace VirtualHole.Client.Controllers
 			_creatorView.creator = creator;
 			_creatorView.feeds.Clear();
 			_creatorView.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_client.client, creators, 4),
-				VideoFeedQuery.CreateCommunityFeed(_client.client, creators, 4),
-				VideoFeedQuery.CreateLiveFeed(_client.client, creators, 4),
-				VideoFeedQuery.CreateScheduledFeed(_client.client, creators, 4)
+				VideoFeedQuery.CreateDiscoverFeed(_client.GetClient(), creators, 4),
+				VideoFeedQuery.CreateCommunityFeed(_client.GetClient(), creators, 4),
+				VideoFeedQuery.CreateLiveFeed(_client.GetClient(), creators, 4),
+				VideoFeedQuery.CreateScheduledFeed(_client.GetClient(), creators, 4)
 			});
 
 			await _creatorView.InitializeAsync();

@@ -16,17 +16,20 @@ namespace VirtualHole.Client.Data
 		[SerializeField]
 		private string _password = string.Empty;
 
-		public VirtualHoleDBClient client
-		{
-			get {
-				if(_client == null) {
-					_client = new VirtualHoleDBClient(
-						_connectionString, _userName,
-						_password);
-				}
-				return _client;
-			}
-		}
 		private VirtualHoleDBClient _client = null;
+
+		public VirtualHoleDBClient GetClient()
+		{
+			if(_client != null) { return _client; }
+			_client = new VirtualHoleDBClient(
+				_connectionString, _userName,
+				_password);
+#if !UNITY_EDITOR
+			_connectionString = string.Empty;
+			_userName = string.Empty;
+			_password = string.Empty;
+#endif
+			return _client;
+		}
 	}
 }
