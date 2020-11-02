@@ -19,6 +19,7 @@ namespace VirtualHole.Client.Data
 		public static async Task<Sprite> GetAvatarAsync(
 			Creator creator, CancellationToken cancellationToken = default)
 		{
+			if(creator == null) { return null; }
 			return await GetAvatarAsync(
 				creator.universalId, creator.avatarUrl, 
 				cancellationToken);
