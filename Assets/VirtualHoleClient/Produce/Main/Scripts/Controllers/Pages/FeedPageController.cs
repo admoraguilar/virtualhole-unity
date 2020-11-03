@@ -48,6 +48,11 @@ namespace VirtualHole.Client.Controllers
 			await _videoFeed.InitializeAsync();
 		}
 
+		protected virtual async void OnNodeLeave()
+		{
+
+		}
+
 		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
 			cellData.onOptionsClick += () => {
@@ -66,6 +71,7 @@ namespace VirtualHole.Client.Controllers
 		{
 			_flowTree.OnAttemptSetSameNodeAsCurrent += OnAttemptSetSameNodeAsCurrent;
 			_mainNode.OnVisit += OnNodeVisit;
+			_mainNode.OnLeave += OnNodeLeave;
 			_videoFeed.OnCellDataCreated += OnCellDataCreated;
 		}
 
@@ -73,6 +79,7 @@ namespace VirtualHole.Client.Controllers
 		{
 			_flowTree.OnAttemptSetSameNodeAsCurrent -= OnAttemptSetSameNodeAsCurrent;
 			_mainNode.OnVisit -= OnNodeVisit;
+			_mainNode.OnLeave -= OnNodeLeave;
 			_videoFeed.OnCellDataCreated -= OnCellDataCreated;
 		}
 	}

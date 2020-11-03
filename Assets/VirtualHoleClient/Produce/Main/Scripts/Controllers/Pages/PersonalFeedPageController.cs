@@ -14,6 +14,11 @@ namespace VirtualHole.Client.Controllers
 
 	public class PersonalFeedPageController : FeedPageController
 	{
+		[SerializeField]
+		private UserDataClientObject _userDataClient = null;
+
+		private List<string> _followedCreatorUniversalIds = new List<string>();
+
 		protected override Node _mainNode => mainFlowMap.personalFeedNode;
 		protected override VideoFeedScroll _videoFeed => _personalFeedFlowMap.videoFeed;
 		private Section _emptySection => _personalFeedFlowMap.emptySection;
@@ -24,19 +29,31 @@ namespace VirtualHole.Client.Controllers
 		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client)
 		{
 			return new CreatorQuery(client, new FindCreatorsRegexSettings {
-				searchQueries = new List<string>() { "Watame", "Matsuri", "Haato", "Subaru" }
+				searchQueries = _followedCreatorUniversalIds
 			});
 		}
 
 		protected override async void OnNodeVisit()
 		{
-			//if(UserCache.loadedProfile.followedCreators.Count > 0) {
-			//	_emptySection.gameObject.SetActive(false);
-			//	base.OnNodeVisit();
-			//} else {
-			//	_emptySection.gameObject.SetActive(true);
-			//	await _emptySection.LoadAsync();
-			//}
+			UserDataClient userDataClient = _userDataClient.client;
+			_followedCreatorUniversalIds = (await userDataClient.personalization.GetAsync()).followedCreatorUniversalIds;
+
+			if(_followedCreatorUniversalIds.Count > 0) {
+				_videoFeed.gameObject.SetActive(true);
+				_emptySection.gameObject.SetActive(false);
+				base.OnNodeVisit();
+			} else {
+				_videoFeed.gameObject.SetActive(false);
+				_emptySection.gameObject.SetActive(true);
+				await _emptySection.LoadAsync();
+			}
+		}
+
+		protected override async void OnNodeLeave()
+		{
+			await _videoFeed.UnloadAsync();
+			_videoFeed.gameObject.SetActive(false);
+			_emptySection.gameObject.SetActive(false);
 		}
 	}
 }

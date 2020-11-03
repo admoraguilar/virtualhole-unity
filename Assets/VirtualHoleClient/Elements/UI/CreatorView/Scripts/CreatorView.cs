@@ -77,29 +77,6 @@ namespace VirtualHole.Client.UI
 				socialButton.onClick.AddListener(() => Application.OpenURL(social.url));
 			}
 
-			//List<Creator> followedCreators = UserCache.loadedProfile.followedCreators;
-			List<Creator> followedCreators = new List<Creator>();
-			if(followedCreators.Exists(c => c.universalId == creator.universalId)) {
-				ColorHSV color = followButton.image.color;
-				color.v = 1f;
-				followButton.image.color = color;
-				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Following";
-
-				followButton.onClick.AddListener(() => {
-					int index = followedCreators.FindIndex(c => c.universalId == creator.universalId);
-					followedCreators.RemoveAt(index);
-				});
-			} else {
-				ColorHSV color = followButton.image.color;
-				color.v = .3f;
-				followButton.image.color = color;
-				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Follow";
-
-				followButton.onClick.AddListener(() => {
-					followedCreators.Add(creator);
-				});
-			}
-
 			foreach(VideoFeedQuery feed in feeds) {
 				VideoPeekScroll peekScroll = Instantiate(peekScrollTemplate, peekScrollContainer, false);
 				peekScroll.gameObject.SetActive(true);
@@ -116,6 +93,21 @@ namespace VirtualHole.Client.UI
 
 				peekScroll.feed = feed;
 				await peekScroll.InitializeAsync(cancellationToken);
+			}
+		}
+
+		public void SetFollowButtonState(bool isFollowing)
+		{
+			if(isFollowing) {
+				ColorHSV color = followButton.image.color;
+				color.v = 1f;
+				followButton.image.color = color;
+				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Following";
+			} else {
+				ColorHSV color = followButton.image.color;
+				color.v = .3f;
+				followButton.image.color = color;
+				followButton.GetComponentInChildren<TMP_Text>(true).text = $"Follow";
 			}
 		}
 

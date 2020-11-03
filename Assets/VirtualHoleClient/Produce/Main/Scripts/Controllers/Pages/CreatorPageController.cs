@@ -13,8 +13,11 @@ namespace VirtualHole.Client.Controllers
 	public class CreatorPageController : MonoBehaviour
 	{
 		[SerializeField]
-		private VirtualHoleDBClientObject _client = null;
-		
+		private VirtualHoleDBClientObject _dbClient = null;
+
+		[SerializeField]
+		private UserDataClientObject _userDataClient = null;
+
 		private FlowTree _flowTree => _mainFlowMap.flowTree;
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		private Node _creatorFeedNode => _mainFlowMap.creatorFeedNode;
@@ -34,12 +37,33 @@ namespace VirtualHole.Client.Controllers
 			IEnumerable<Creator> creators = new Creator[] { creator };
 
 			_creatorView.creator = creator;
+
+			List<string> followedCreatorUniversalIds = (await _userDataClient.client.personalization.GetAsync()).followedCreatorUniversalIds;
+			if(followedCreatorUniversalIds.Exists(c => c == creator.universalId)) {
+				_creatorView.SetFollowButtonState(true);
+			} else {
+				_creatorView.SetFollowButtonState(false);
+			}
+
+			_creatorView.followButton.onClick.RemoveAllListeners();
+			_creatorView.followButton.onClick.AddListener(async () => {
+				if(followedCreatorUniversalIds.Exists(c => c == creator.universalId)) {
+					followedCreatorUniversalIds.Remove(creator.universalId);
+					_creatorView.SetFollowButtonState(false);
+				} else {
+					followedCreatorUniversalIds.Add(creator.universalId);
+					_creatorView.SetFollowButtonState(true);
+				}
+
+				await _userDataClient.client.personalization.UpsertAsync();
+			});
+
 			_creatorView.feeds.Clear();
 			_creatorView.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_client.GetClient(), creators, 4),
-				VideoFeedQuery.CreateCommunityFeed(_client.GetClient(), creators, 4),
-				VideoFeedQuery.CreateLiveFeed(_client.GetClient(), creators, 4),
-				VideoFeedQuery.CreateScheduledFeed(_client.GetClient(), creators, 4)
+				VideoFeedQuery.CreateDiscoverFeed(_dbClient.GetClient(), creators, 4),
+				VideoFeedQuery.CreateCommunityFeed(_dbClient.GetClient(), creators, 4),
+				VideoFeedQuery.CreateLiveFeed(_dbClient.GetClient(), creators, 4),
+				VideoFeedQuery.CreateScheduledFeed(_dbClient.GetClient(), creators, 4)
 			});
 
 			await _creatorView.InitializeAsync();
