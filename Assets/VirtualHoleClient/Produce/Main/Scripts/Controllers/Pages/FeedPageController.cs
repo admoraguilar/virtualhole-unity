@@ -13,9 +13,6 @@ namespace VirtualHole.Client.Controllers
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
-		[SerializeField]
-		private VirtualHoleDBClientObject _client = null;
-
 		private FlowTree _flowTree => _mainFlowMap.flowTree;
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		protected MainFlowMap mainFlowMap => _mainFlowMap;
@@ -30,15 +27,15 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			CreatorQuery creatorQuery = CreateCreatorQuery(_client.GetClient());
+			CreatorQuery creatorQuery = CreateCreatorQuery(VirtualHoleDBClientFactory.Get());
 			await creatorQuery.LoadAsync(cancellationToken);
 
 			_videoFeed.feeds.Clear();
 			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_client.GetClient(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateCommunityFeed(_client.GetClient(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateLiveFeed(_client.GetClient(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateScheduledFeed(_client.GetClient(), creatorQuery.creatorLookup.Values)
+				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
+				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
+				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
+				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values)
 			});
 		}
 

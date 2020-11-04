@@ -12,9 +12,6 @@ namespace VirtualHole.Client.Controllers
 
 	public class SearchPageController : MonoBehaviour
 	{
-		[SerializeField]
-		private VirtualHoleDBClientObject _client = null;
-
 		private Node _searchNode => _mainFlowMap.searchNode;
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		[Space]
@@ -28,7 +25,7 @@ namespace VirtualHole.Client.Controllers
 		private CreatorQuery CreatorQueryFactory(string searchString)
 		{
 			return new CreatorQuery(
-				_client.GetClient(),
+				VirtualHoleDBClientFactory.Get(),
 				new FindCreatorsRegexSettings {
 					searchQueries = new List<string>() { searchString },
 					isCheckSocialName = false,

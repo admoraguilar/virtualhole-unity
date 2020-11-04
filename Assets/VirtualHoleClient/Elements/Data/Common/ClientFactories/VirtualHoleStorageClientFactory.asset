@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 628f2a5e9d8663841a7ae13a7292eefb, type: 3}
-  m_Name: VirtualHoleStorageClientObject
+  m_Name: VirtualHoleStorageClientFactory
   m_EditorClassIdentifier: 
   _endpoint: https://virtualhole.b-cdn.net

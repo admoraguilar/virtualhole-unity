@@ -14,9 +14,6 @@ namespace VirtualHole.Client.Controllers
 	
 	public class CreatorFeedController : MonoBehaviour
 	{
-		[SerializeField]
-		private VirtualHoleDBClientObject _client = null;
-
 		private Node _creatorPageNode => _mainFlowMap.creatorPageNode;
 		private Node _creatorFeedNode => _mainFlowMap.creatorFeedNode;
 		[Space]
@@ -41,10 +38,10 @@ namespace VirtualHole.Client.Controllers
 
 			_videoFeed.feeds.Clear();
 			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_client.GetClient(), creators),
-				VideoFeedQuery.CreateCommunityFeed(_client.GetClient(), creators),
-				VideoFeedQuery.CreateLiveFeed(_client.GetClient(), creators),
-				VideoFeedQuery.CreateScheduledFeed(_client.GetClient(), creators)
+				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creators),
+				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creators),
+				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creators),
+				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creators)
 			});
 		}
 

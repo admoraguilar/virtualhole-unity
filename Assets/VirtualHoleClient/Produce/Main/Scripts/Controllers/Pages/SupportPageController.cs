@@ -12,9 +12,6 @@ namespace VirtualHole.Client.Controllers
 
 	public class SupportPageController : MonoBehaviour
 	{
-		[SerializeField]
-		private VirtualHoleStorageClientObject _client = null;
-		
 		private Node _supportNode => _mainFlowMap.supportNode;
 		[SerializeField]
 		private MainFlowMap _mainFlowMap = null;
@@ -25,7 +22,7 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			SupportListData supportListData = new SupportListData(_client.GetClient());
+			SupportListData supportListData = new SupportListData(VirtualHoleStorageClientFactory.Get());
 			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListData, cancellationToken);
 			_supportView.infoButtonData = data;
 		}

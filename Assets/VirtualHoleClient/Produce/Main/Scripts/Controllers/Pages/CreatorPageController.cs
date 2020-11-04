@@ -13,9 +13,6 @@ namespace VirtualHole.Client.Controllers
 	public class CreatorPageController : MonoBehaviour
 	{
 		[SerializeField]
-		private VirtualHoleDBClientObject _dbClient = null;
-
-		[SerializeField]
 		private UserDataClientObject _userDataClient = null;
 
 		private FlowTree _flowTree => _mainFlowMap.flowTree;
@@ -60,10 +57,10 @@ namespace VirtualHole.Client.Controllers
 
 			_creatorView.feeds.Clear();
 			_creatorView.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(_dbClient.GetClient(), creators, 4),
-				VideoFeedQuery.CreateCommunityFeed(_dbClient.GetClient(), creators, 4),
-				VideoFeedQuery.CreateLiveFeed(_dbClient.GetClient(), creators, 4),
-				VideoFeedQuery.CreateScheduledFeed(_dbClient.GetClient(), creators, 4)
+				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
+				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
+				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
+				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creators, 4)
 			});
 
 			await _creatorView.InitializeAsync();
