@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Midnight;
 using UnityEngine;
+using Midnight;
 
 namespace VirtualHole.Client.Data
 {
@@ -57,7 +57,7 @@ namespace VirtualHole.Client.Data
 
 		public async Task<object> GetOrUpsert(string key, Func<Task<object>> dataFactory)
 		{
-			return GetOrUpsertAsync(key, GetCastedDataFactory);
+			return await GetOrUpsertAsync(key, GetCastedDataFactory);
 
 			async Task<TType> GetCastedDataFactory() => (TType)(await dataFactory());
 		}

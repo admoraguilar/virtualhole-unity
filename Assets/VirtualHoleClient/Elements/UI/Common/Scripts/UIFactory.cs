@@ -4,16 +4,15 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Humanizer;
-using Midnight.Web;
 using Midnight.Concurrency;
 
 namespace VirtualHole.Client.UI
 {
 	using Api.DB.Contents.Videos;
 	using Api.DB.Contents.Creators;
+	using Api.Storage.Data;
 
 	using Client.Data;
-	using Midnight;
 
 	public static class UIFactory
 	{
@@ -102,7 +101,7 @@ namespace VirtualHole.Client.UI
 			List<InfoButtonData> results = new List<InfoButtonData>();
 
 			SupportInfo[] supportInfos = await data.GetAsync(cancellationToken);
-			Image[] supportInfoImages = await data.GetImagesAsync(cancellationToken);
+			ImageData[] supportInfoImages = await data.GetImagesAsync(cancellationToken);
 
 			int index = 0;
 			foreach(SupportInfo supportInfo in supportInfos) {

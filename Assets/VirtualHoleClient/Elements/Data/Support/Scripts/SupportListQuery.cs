@@ -1,24 +1,13 @@
-﻿using Midnight;
-using Midnight.Concurrency;
-using Midnight.Web;
-using System.IO;
+﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
+using Midnight;
+using Midnight.Concurrency;
+using Midnight.Web;
 
 namespace VirtualHole.Client.Data
 {
-	public class Image
-	{
-		public string url = string.Empty;
-		public Sprite sprite = null;
-
-		public Image(string url, Sprite sprite)
-		{
-			this.url = url;
-			this.sprite = sprite;
-		}
-	}
+	using Api.Storage.Data;
 
 	public class SupportListQuery : ILocatableData
 	{
@@ -34,16 +23,16 @@ namespace VirtualHole.Client.Data
 			if(_settings == null) { _settings = new SupportListQuerySettings(); }
 		}
 
-		public async Task<Image[]> GetImagesAsync(CancellationToken cancellationToken = default)
+		public async Task<ImageData[]> GetImagesAsync(CancellationToken cancellationToken = default)
 		{
 			SupportInfo[] supportInfos = await GetAsync(cancellationToken);
-			Image[] images = new Image[supportInfos.Length];
+			ImageData[] images = new ImageData[supportInfos.Length];
 
 			await Concurrent.ForEachAsync(supportInfos, LoadDataAsync, cancellationToken);
 
 			int index = 0;
 			foreach(SupportInfo info in supportInfos) {
-				_settings.imagesCache.TryGet(info.imageUrl, out Image image);
+				_settings.imagesDataCache.TryGet(info.imageUrl, out ImageData image);
 				images[index] = image;
 				index++;
 			}
@@ -52,9 +41,9 @@ namespace VirtualHole.Client.Data
 
 			async Task LoadDataAsync(SupportInfo info)
 			{
-				await _settings.imagesCache.GetOrUpsertAsync(info.imageUrl, GetImageAsync);
+				await _settings.imagesDataCache.GetOrUpsertAsync(info.imageUrl, GetImageAsync);
 
-				async Task<Image> GetImageAsync() => new Image(
+				async Task<ImageData> GetImageAsync() => new ImageData(
 					info.imageUrl,
 					await ImageGetWebRequest.GetAsync(
 						_settings.storageClient.BuildObjectUri(info.imageUrl).AbsoluteUri, null,
@@ -68,7 +57,13 @@ namespace VirtualHole.Client.Data
 
 			async Task<SupportInfo[]> GetDataAsync()
 			{
-				string response = await _settings.storageClient.GetAsync(Path.Combine(subPath, filePath), cancellationToken);
+				string response = string.Empty;
+				using(new StopwatchScope(
+					nameof(SupportInfo),
+					$"Start getting {this.GetFullPath()}",
+					$"End getting {this.GetFullPath()}")) {
+					response = await _settings.storageClient.GetAsync(Path.Combine(subPath, filePath), cancellationToken);
+				}
 				return JsonUtilities.Deserialize<SupportInfo[]>(response);
 			}
 		}
