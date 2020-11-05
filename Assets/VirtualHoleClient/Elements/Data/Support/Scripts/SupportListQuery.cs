@@ -25,13 +25,13 @@ namespace VirtualHole.Client.Data
 
 		public async Task<ImageData[]> GetImagesAsync(CancellationToken cancellationToken = default)
 		{
-			SupportInfo[] supportInfos = await GetAsync(cancellationToken);
-			ImageData[] images = new ImageData[supportInfos.Length];
+			SupportInfo[] supportList = await GetAsync(cancellationToken);
+			ImageData[] images = new ImageData[supportList.Length];
 
-			await Concurrent.ForEachAsync(supportInfos, LoadDataAsync, cancellationToken);
+			await Concurrent.ForEachAsync(supportList, LoadDataAsync, cancellationToken);
 
 			int index = 0;
-			foreach(SupportInfo info in supportInfos) {
+			foreach(SupportInfo info in supportList) {
 				_settings.imagesDataCache.TryGet(info.imageUrl, out ImageData image);
 				images[index] = image;
 				index++;
@@ -39,21 +39,21 @@ namespace VirtualHole.Client.Data
 
 			return images;
 
-			async Task LoadDataAsync(SupportInfo info)
+			async Task LoadDataAsync(SupportInfo support)
 			{
-				await _settings.imagesDataCache.GetOrUpsertAsync(info.imageUrl, GetImageAsync);
+				await _settings.imagesDataCache.GetOrUpsertAsync(support.imageUrl, GetImageAsync);
 
 				async Task<ImageData> GetImageAsync() => new ImageData(
-					info.imageUrl,
+					support.imageUrl,
 					await ImageGetWebRequest.GetAsync(
-						_settings.storageClient.BuildObjectUri(info.imageUrl).AbsoluteUri, null,
+						_settings.storageClient.BuildObjectUri(support.imageUrl).AbsoluteUri, null,
 						cancellationToken));
 			}
 		}
 
 		public async Task<SupportInfo[]> GetAsync(CancellationToken cancellationToken = default)
 		{
-			return await _settings.supportInfoListCache.GetOrUpsertAsync(filePath, GetDataAsync);
+			return await _settings.supportListCache.GetOrUpsertAsync(filePath, GetDataAsync);
 
 			async Task<SupportInfo[]> GetDataAsync()
 			{

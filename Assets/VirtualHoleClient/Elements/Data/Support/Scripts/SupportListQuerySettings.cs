@@ -8,14 +8,14 @@ namespace VirtualHole.Client.Data
 	{
 		public VirtualHoleStorageClient storageClient { get; set; } = null;
 
-		public IDataCache<SupportInfo[]> supportInfoListCache { get; set; } = null;
+		public IDataCache<SupportInfo[]> supportListCache { get; set; } = null;
 		public IDataCache<ImageData> imagesDataCache { get; set; } = null;
 
 		public SupportListQuerySettings()
 		{
 			storageClient = VirtualHoleStorageClientFactory.Get();
 
-			supportInfoListCache = SimpleCache<SupportInfo[]>.Get();
+			supportListCache = SimpleCache<SupportInfo[]>.Get();
 			imagesDataCache = SimpleCache<ImageData>.Get();
 		}
 	}

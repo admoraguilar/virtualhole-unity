@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6e53fdef7704c6429f9e91c55f97b95, type: 3}
   m_Name: SupportListBuilder
   m_EditorClassIdentifier: 
-  supportInfos:
+  supportList:
   - url: https://patreon.com
     imageUrl: /static/images/buttons/holohole-patreon.png
     header: Patreon
