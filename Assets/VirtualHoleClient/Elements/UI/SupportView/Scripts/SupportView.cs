@@ -26,6 +26,10 @@ namespace VirtualHole.Client.UI
 			foreach(InfoButtonData data in infoButtonData) {
 				InfoButton button = Instantiate(_infoButtonPrefab, _contentContainer, false);
 				button.name = data.header;
+
+				button.button.onClick.RemoveAllListeners();
+				button.button.onClick.AddListener(() => data.onClick());
+
 				button.image.sprite = data.sprite;
 				button.headerText.text = data.header;
 				button.contentText.text = data.content;

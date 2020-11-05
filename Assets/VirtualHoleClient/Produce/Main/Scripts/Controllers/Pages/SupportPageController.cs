@@ -22,7 +22,7 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			SupportListData supportListData = new SupportListData(VirtualHoleStorageClientFactory.Get());
+			SupportListQuery supportListData = new SupportListQuery();
 			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListData, cancellationToken);
 			_supportView.infoButtonData = data;
 		}

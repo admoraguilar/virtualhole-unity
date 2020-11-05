@@ -13,7 +13,8 @@ namespace VirtualHole.Client.UI
 	using Api.DB.Contents.Creators;
 
 	using Client.Data;
-	
+	using Midnight;
+
 	public static class UIFactory
 	{
 		public static async Task<IEnumerable<CreatorScrollCellData>> CreateCreatorScrollCellDataAsync(
@@ -96,15 +97,14 @@ namespace VirtualHole.Client.UI
 		}
 
 		public static async Task<IEnumerable<InfoButtonData>> CreateInfoButtonDataAsync(
-			SupportListData data, CancellationToken cancellationToken = default)
+			SupportListQuery data, CancellationToken cancellationToken = default)
 		{
 			List<InfoButtonData> results = new List<InfoButtonData>();
 
-			Dictionary<string, Sprite> _spriteLookup = new Dictionary<string, Sprite>();
 			SupportInfo[] supportInfos = await data.GetAsync(cancellationToken);
+			Image[] supportInfoImages = await data.GetImagesAsync(cancellationToken);
 
-			await Concurrent.ForEachAsync(supportInfos, PreloadResources, cancellationToken);
-
+			int index = 0;
 			foreach(SupportInfo supportInfo in supportInfos) {
 				InfoButtonData infoButtonData = new InfoButtonData() {
 					header = supportInfo.header,
@@ -112,20 +112,13 @@ namespace VirtualHole.Client.UI
 					onClick = () => Application.OpenURL(supportInfo.url)
 				};
 
-				_spriteLookup.TryGetValue(supportInfo.imageUrl, out Sprite sprite);
-				infoButtonData.sprite = sprite;
-
+				infoButtonData.sprite = supportInfoImages[index].sprite;
 				results.Add(infoButtonData);
+
+				index++;
 			}
 
 			return results;
-
-			async Task PreloadResources(SupportInfo supportInfo)
-			{
-				if(!string.IsNullOrEmpty(supportInfo.imageUrl)) {
-					_spriteLookup[supportInfo.imageUrl] = await ImageGetWebRequest.GetAsync(data.BuildImageUrl(supportInfo));
-				}
-			}
 		}
 	}
 }

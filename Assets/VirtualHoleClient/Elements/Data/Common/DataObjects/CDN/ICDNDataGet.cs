@@ -6,7 +6,7 @@ namespace VirtualHole.Client.Data
 {
 	using Api.Storage;
 
-	public interface ICDNDataGet<T> : IDataSource 
+	public interface ICDNDataGet<T> : ILocatableData 
 	{ 
 		VirtualHoleStorageClient client { get; }
 	}

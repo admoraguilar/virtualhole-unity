@@ -3,7 +3,7 @@ using Midnight;
 
 namespace VirtualHole.Client.Data
 {
-	public interface ILocalDataUpsert<T> : IDataSource { }
+	public interface ILocalDataUpsert<T> : ILocatableData { }
 
 	public static class LocalDataUpsertDefaults
 	{
