@@ -42,7 +42,8 @@ namespace VirtualHole.Client.UI
 				// finished.
 				if(videoDTO.thumbnailSprite == null) { continue; }
 				results.Add(new VideoScrollCellData() {
-					videoDTO = videoDTO
+					videoDTO = videoDTO,
+					onCellClick = () => Application.OpenURL(videoDTO.raw.url)
 				});
 			}
 
@@ -62,7 +63,7 @@ namespace VirtualHole.Client.UI
 					onClick = () => Application.OpenURL(infoDTO.raw.url)
 				};
 
-				infoButtonData.sprite = infoDTO.imageSprite;
+				infoButtonData.image = infoDTO.imageSprite;
 				results.Add(infoButtonData);
 			}
 

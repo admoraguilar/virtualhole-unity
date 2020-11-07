@@ -23,7 +23,7 @@ namespace VirtualHole.Client.Controllers
 			return new CreatorQuery(
 				new FindCreatorsSettings {
 					isCheckForAffiliations = true,
-					affiliations = new List<string>() { "hololiveProduction" },
+					affiliations = new List<string>() { CreatorQuery.Affiliation.hololiveProduction },
 					batchSize = 100
 				});
 		}

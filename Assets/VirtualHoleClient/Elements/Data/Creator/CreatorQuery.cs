@@ -29,7 +29,7 @@ namespace VirtualHole.Client.Data
 		}
 	}
 
-	public class CreatorQuery : PaginatedQuery<Creator, CreatorDTO, CreatorQuerySettings>
+	public partial class CreatorQuery : PaginatedQuery<Creator, CreatorDTO, CreatorQuerySettings>
 	{
 		private FindCreatorsSettings _findCreatorsSettings = null;
 
@@ -72,6 +72,15 @@ namespace VirtualHole.Client.Data
 				isDone = true;
 				return results;
 			}
+		}
+	}
+
+	public partial class CreatorQuery
+	{
+		public static class Affiliation
+		{
+			public static string hololiveProduction => "hololiveProduction";
+			public static string community => "Community";
 		}
 	}
 }

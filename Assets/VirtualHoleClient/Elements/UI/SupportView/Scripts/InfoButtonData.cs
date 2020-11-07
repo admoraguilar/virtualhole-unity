@@ -5,9 +5,10 @@ namespace VirtualHole.Client.UI
 {
 	public class InfoButtonData
 	{
-		public Action onClick = null;
-		public Sprite sprite = null;
+		public Sprite image = null;
 		public string header = string.Empty;
 		public string content = string.Empty;
+
+		public Action onClick = null;
 	}
 }

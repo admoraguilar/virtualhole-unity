@@ -1,17 +1,16 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Api.DB;
-
+	using Api.DB.Contents.Creators;
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
-	using VirtualHole.Api.DB.Contents.Creators;
-	using System.Collections.Generic;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
@@ -54,10 +53,12 @@ namespace VirtualHole.Client.Controllers
 
 		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
-			cellData.onOptionsClick += () => {
-				Selection.instance.creatorDTO = cellData.videoDTO.creatorDTO;
-				_creatorPageNode.Set();
-			};
+			if(!cellData.videoDTO.creatorDTO.raw.affiliations.Contains(CreatorQuery.Affiliation.community)) {
+				cellData.onOptionsClick += () => {
+					Selection.instance.creatorDTO = cellData.videoDTO.creatorDTO;
+					_creatorPageNode.Set();
+				};
+			}
 		}
 
 		private void OnAttemptSetSameNodeAsCurrent(Node node)

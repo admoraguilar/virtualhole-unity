@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
@@ -20,16 +17,9 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private SupportFlowMap _supportFlowMap = null;
 
-		private async Task SupportViewDataFactoryAsync(CancellationToken cancellationToken = default)
-		{
-			SupportListQuery supportListData = new SupportListQuery();
-			IEnumerable<InfoButtonData> data = await UIFactory.CreateInfoButtonDataAsync(supportListData, cancellationToken);
-			_supportView.infoButtonData = data;
-		}
-
 		private async void OnSupportVisit()
 		{
-			_supportView.SetDataAsyncFactory(SupportViewDataFactoryAsync);
+			_supportView.query = new SupportListQuery();
 			await _supportView.InitializeAsync();
 		}
 

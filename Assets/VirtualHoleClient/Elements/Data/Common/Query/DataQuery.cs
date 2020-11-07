@@ -4,6 +4,16 @@ using System.Collections.Generic;
 
 namespace VirtualHole.Client.Data
 {
+	public class DataQueryDTO<TRaw>
+	{
+		public TRaw raw;
+
+		public DataQueryDTO(TRaw raw)
+		{
+			this.raw = raw;
+		}
+	}
+
 	public abstract class DataQuery<
 		TRaw, TRawContainer, TRawResult,
 		TDTO, TDTOContainer, TDTOResult,

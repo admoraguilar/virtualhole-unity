@@ -28,7 +28,7 @@ namespace VirtualHole.Client.Controllers
 					searchQueries = new List<string>() { searchString },
 					isCheckSocialName = false,
 					isCheckForAffiliations = true,
-					affiliations = new List<string>() { "hololiveProduction" }
+					affiliations = new List<string>() { CreatorQuery.Affiliation.hololiveProduction }
 				});
 		}
 
