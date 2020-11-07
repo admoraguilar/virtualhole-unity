@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd41bfcc9661df4fa63aa51ccdc8054, type: 3}
   m_Name: FrameRateHandler
   m_EditorClassIdentifier: 
-  isEnabled: 1
+  isEnabled: 0
   targetFramerate: 60
   activeRenderFrameInterval: 1
   idleRenderFrameInterval: 4
   idleSwitchSeconds: 7
+  downscaleRenderTextureSize: {x: 50, y: 50}
   debugRenderFrameInterval: 1
   debugEffectiveRenderFrameRate: 60
   debugWillCurrentFrameRender: 1
-  debugIsSameFrame: 1
+  debugIsSameFrame: 0
