@@ -15,7 +15,21 @@ namespace UnityEngine.UI
 			public RectTransform rectTransform = null;
 			public LayoutElement layoutElement = null;
 			
-			public CanvasGroup canvasGroup = null;
+			public CanvasGroup canvasGroup 
+			{
+				get { 
+					return _canvasGroup; 
+				} 
+				set {
+					_canvasGroup = value;
+
+					_orgCanvasGroupAlphaValue = canvasGroup.alpha;
+					_orgCanvasGroupInteractable = canvasGroup.interactable;
+					_orgCanvaGroupBlocksRaycastValue = canvasGroup.blocksRaycasts;
+				}
+			}
+			private CanvasGroup _canvasGroup = null;
+			
 			private float _orgCanvasGroupAlphaValue = 0f;
 			private bool _orgCanvasGroupInteractable = false;
 			private bool _orgCanvaGroupBlocksRaycastValue = false;
