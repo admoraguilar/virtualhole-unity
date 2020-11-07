@@ -1,5 +1,4 @@
-﻿using Midnight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace UnityEngine.UI
@@ -12,8 +11,35 @@ namespace UnityEngine.UI
 		{
 			public GameObject instance = null;
 			public LoopScrollCellDataProcessor processor = null;
+
 			public RectTransform rectTransform = null;
 			public LayoutElement layoutElement = null;
+			
+			public CanvasGroup canvasGroup = null;
+			private float _orgCanvasGroupAlphaValue = 0f;
+			private bool _orgCanvasGroupInteractable = false;
+			private bool _orgCanvaGroupBlocksRaycastValue = false;
+
+			public void SetActive(bool value)
+			{
+				if(canvasGroup != null) {
+					if(value) {
+						canvasGroup.alpha = _orgCanvasGroupAlphaValue;
+						canvasGroup.interactable = _orgCanvasGroupInteractable;
+						canvasGroup.blocksRaycasts = _orgCanvaGroupBlocksRaycastValue;
+					} else {
+						_orgCanvasGroupAlphaValue = canvasGroup.alpha;
+						_orgCanvasGroupInteractable = canvasGroup.interactable;
+						_orgCanvaGroupBlocksRaycastValue = canvasGroup.blocksRaycasts;
+
+						canvasGroup.alpha = 0f;
+						canvasGroup.interactable = false;
+						canvasGroup.blocksRaycasts = false;
+					}
+				} else {
+					instance.SetActive(value);
+				}
+			}
 		}
 
 		public LoopScrollCellDataProcessor[] dataProcessors = null;
@@ -66,7 +92,7 @@ namespace UnityEngine.UI
 		private void Refresh()
 		{
 			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
-				cellItem.instance.SetActive(false);
+				cellItem.SetActive(false);
 			}
 
 			if(_data == null) { return; }
@@ -83,17 +109,16 @@ namespace UnityEngine.UI
 					cell.instance = Instantiate(cell.processor.prefab, rectTransform, false);
 					cell.instance.name = cell.processor.prefab.name;
 
-					if(!cell.instance.TryGetComponent(out cell.rectTransform)) {
-						cell.rectTransform = cell.instance.AddOrGetComponent<RectTransform>();
-					}
+					cell.rectTransform = cell.instance.GetComponent<RectTransform>();
 
 					if(!cell.instance.TryGetComponent(out cell.layoutElement)) {
-						cell.layoutElement = cell.instance.AddOrGetComponent<LayoutElement>();
 						cell.layoutElement.minWidth = 1f;
 						cell.layoutElement.minHeight = 1f;
 						cell.layoutElement.preferredWidth = cell.rectTransform.sizeDelta.x;
 						cell.layoutElement.preferredHeight = cell.rectTransform.sizeDelta.y;
 					}
+
+					cell.canvasGroup = cell.instance.GetComponent<CanvasGroup>();
 
 					_cellLookup[dataType] = cell;
 				}
@@ -106,7 +131,7 @@ namespace UnityEngine.UI
 			if(cell != null && cell.processor != null && 
 			   cell.instance != null) {
 				cell.processor.ProcessData(cell.instance, _data);
-				cell.instance.SetActive(true);
+				cell.SetActive(true);
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
 				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
