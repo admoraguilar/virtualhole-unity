@@ -15,7 +15,7 @@
         "com.unity.scriptablebuildpipeline": "1.11.2",
         "jillejr.newtonsoft.json-for-unity": "12.0.301"
       },
-      "hash": "fe35ad1e74e2bf60e4fa9c61610d253b2da0ab72"
+      "hash": "0705227d2c53fd3dcacf6e0d10cb630554f074ba"
     },
     "com.midnight-cigarettes.virtualhole-api-unity": {
       "version": "ssh://git@github.com-midnight-cigarettes/midnight-cigarettes/com.midnight-cigarettes.holoverse-data-api-unity.git#develop",
