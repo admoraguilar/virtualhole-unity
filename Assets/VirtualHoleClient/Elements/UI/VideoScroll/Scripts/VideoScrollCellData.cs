@@ -1,19 +1,13 @@
 ﻿using System;
-using UnityEngine;
 
 namespace VirtualHole.Client.UI
 {
+	using Api.DB.Contents.Videos;
+	using Client.Data;
+
 	public class VideoScrollCellData
 	{
-		public Sprite thumbnailSprite = null;
-		public Sprite indicatorSprite = null;
-		public string title = string.Empty;
-		public string date = string.Empty;
-
-		public Sprite creatorSprite = null;
-		public string creatorName = string.Empty;
-		public string creatorUniversalId = string.Empty;
-
+		public VideoDTO<Video> videoDTO;
 		public Action onCellClick = null;
 		public Action onOptionsClick = null;
 	}

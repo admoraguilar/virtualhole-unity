@@ -1,53 +1,77 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine;
 using Midnight;
+using Midnight.Web;
 
 namespace VirtualHole.Client.Data
 {
 	using Api.DB;
 	using Api.DB.Common;
 	using Api.DB.Contents.Creators;
-
-	public class CreatorQuery
+	
+	public class CreatorDTO : DataQueryDTO<Creator>
 	{
-		public IReadOnlyDictionary<string, Creator> creatorLookup => _creatorLookup;
-		private Dictionary<string, Creator> _creatorLookup = new Dictionary<string, Creator>();
+		public Sprite avatarSprite;
 
-		private VirtualHoleDBClient _client = null;
-		private FindCreatorsSettings _findCreatorsSettings = null;
-		private bool _isLoaded = false;
+		public CreatorDTO(Creator creator) : base(creator) 
+		{ }
+	}
 
-		public CreatorQuery(VirtualHoleDBClient client, FindCreatorsSettings findCreatorsSettings)
+	public class CreatorQuerySettings : PaginatedQuerySettings<Creator, CreatorDTO>
+	{
+		public VirtualHoleDBClient dbClient { get; set; } = null;
+
+		public CreatorQuerySettings() : base()
 		{
-			_client = client;
+			dbClient = VirtualHoleDBClientFactory.Get();
+		}
+	}
+
+	public class CreatorQuery : PaginatedQuery<Creator, CreatorDTO, CreatorQuerySettings>
+	{
+		private FindCreatorsSettings _findCreatorsSettings = null;
+
+		public CreatorQuery(FindCreatorsSettings findCreatorsSettings, CreatorQuerySettings querySettings = null) : base(querySettings)
+		{
 			_findCreatorsSettings = findCreatorsSettings;
 		}
 
-		public async Task<IEnumerable<Creator>> LoadAsync(CancellationToken cancellationToken = default)
+		protected override CreatorDTO FromRawToDTO(Creator raw)
 		{
-			if(_isLoaded) { return _creatorLookup.Values; }
-
-			using(new StopwatchScope(nameof(CreatorQuery), "Start getting creators...", "End getting creators.")) {
-				CreatorClient creatorClient = _client.contents.creators;
-				using(FindResults<Creator> results = await creatorClient.FindCreatorsAsync(_findCreatorsSettings, cancellationToken)) {
-					while(await results.MoveNextAsync()) {
-						AddCreatorsToLookup(results.current);
-					}
-				}
-			}
-
-			_isLoaded = true;
-			return _creatorLookup.Values;
+			return new CreatorDTO(raw);
 		}
 
-		private void AddCreatorsToLookup(IEnumerable<Creator> creators)
+		protected override async Task ProcessDTOAsync(CreatorDTO dto, CancellationToken cancellationToken = default)
 		{
-			foreach(Creator result in creators) {
-				_creatorLookup[result.universalId] = result;
-			}
+			dto.avatarSprite = await ImageGetWebRequest.GetAsync(dto.raw.avatarUrl, null, cancellationToken);
+		}
 
-			CreatorCache.Add(creators);
+		protected override string GetCacheKey(Creator raw)
+		{
+			return raw.universalId;
+		}
+
+		protected override async Task<IEnumerable<Creator>> GetRawAsync_Impl(CancellationToken cancellationToken = default)
+		{
+			using(new StopwatchScope(
+				nameof(CreatorQuery),
+				$"Start getting {nameof(Creator)}s...",
+				$"End getting {nameof(Creator)}s.")) {
+
+				List<Creator> results = new List<Creator>();
+				CreatorClient creatorClient = _querySettings.dbClient.contents.creators;
+
+				using(FindResults<Creator> findResults = await creatorClient.FindCreatorsAsync(_findCreatorsSettings, cancellationToken)) {
+					while(await findResults.MoveNextAsync()) {
+						results.AddRange(findResults.current);
+					}
+				}
+
+				isDone = true;
+				return results;
+			}
 		}
 	}
 }

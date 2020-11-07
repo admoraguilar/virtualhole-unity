@@ -5,7 +5,6 @@ using Midnight.FlowTree;
 namespace VirtualHole.Client.Controllers
 {
 	using Api.DB.Contents.Creators;
-
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
@@ -30,13 +29,11 @@ namespace VirtualHole.Client.Controllers
 		{
 			await _creatorView.UnloadAsync();
 
-			Creator creator = CreatorCache.selectedCreator;
-			IEnumerable<Creator> creators = new Creator[] { creator };
-
-			_creatorView.creator = creator;
+			CreatorDTO creatorDTO = Selection.instance.creatorDTO;
+			_creatorView.creatorDTO = creatorDTO;
 
 			List<string> followedCreatorUniversalIds = (await _userDataClient.client.personalization.GetAsync()).followedCreatorUniversalIds;
-			if(followedCreatorUniversalIds.Exists(c => c == creator.universalId)) {
+			if(followedCreatorUniversalIds.Exists(c => c == creatorDTO.raw.universalId)) {
 				_creatorView.SetFollowButtonState(true);
 			} else {
 				_creatorView.SetFollowButtonState(false);
@@ -44,11 +41,11 @@ namespace VirtualHole.Client.Controllers
 
 			_creatorView.followButton.onClick.RemoveAllListeners();
 			_creatorView.followButton.onClick.AddListener(async () => {
-				if(followedCreatorUniversalIds.Exists(c => c == creator.universalId)) {
-					followedCreatorUniversalIds.Remove(creator.universalId);
+				if(followedCreatorUniversalIds.Exists(c => c == creatorDTO.raw.universalId)) {
+					followedCreatorUniversalIds.Remove(creatorDTO.raw.universalId);
 					_creatorView.SetFollowButtonState(false);
 				} else {
-					followedCreatorUniversalIds.Add(creator.universalId);
+					followedCreatorUniversalIds.Add(creatorDTO.raw.universalId);
 					_creatorView.SetFollowButtonState(true);
 				}
 
@@ -56,11 +53,13 @@ namespace VirtualHole.Client.Controllers
 			});
 
 			_creatorView.feeds.Clear();
+
+			IEnumerable<Creator> creators = new Creator[] { creatorDTO.raw };
 			_creatorView.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
-				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
-				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creators, 4),
-				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creators, 4)
+				VideoFeedQuery.CreateDiscoverFeed(creators, 4),
+				VideoFeedQuery.CreateCommunityFeed(creators, 4),
+				VideoFeedQuery.CreateLiveFeed(creators, 4),
+				VideoFeedQuery.CreateScheduledFeed(creators, 4)
 			});
 
 			await _creatorView.InitializeAsync();

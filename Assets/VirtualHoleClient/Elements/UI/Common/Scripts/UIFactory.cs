@@ -1,17 +1,11 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Humanizer;
-using Midnight.Concurrency;
 
 namespace VirtualHole.Client.UI
 {
 	using Api.DB.Contents.Videos;
-	using Api.DB.Contents.Creators;
-	using Api.Storage.Data;
-
 	using Client.Data;
 
 	public static class UIFactory
@@ -21,28 +15,16 @@ namespace VirtualHole.Client.UI
 		{
 			List<CreatorScrollCellData> results = new List<CreatorScrollCellData>();
 
-			IEnumerable<Creator> creatorResult = await query.LoadAsync(cancellationToken);
-			if(creatorResult == null) { return results; }
+			IEnumerable<CreatorDTO> creatorDTOs = await query.GetDTOAsync(cancellationToken);
+			if(creatorDTOs == null) { return results; }
 
-			List<Creator> creators = creatorResult.ToList();
-			await Concurrent.ForEachAsync(creators, PreloadResources, 50, cancellationToken);
-
-			foreach(Creator creator in query.creatorLookup.Values) {
-				CreatorScrollCellData cellData = new CreatorScrollCellData {
-					creatorAvatar = await CreatorCache.GetAvatarAsync(creator),
-					creatorName = creator.universalName,
-					creatorId = creator.universalId,
-					onClick = () => { }
-				};
-				results.Add(cellData);
+			foreach(CreatorDTO creatorDTO in creatorDTOs) {
+				results.Add(new CreatorScrollCellData {
+					creatorDTO = creatorDTO
+				});
 			}
 
 			return results;
-
-			async Task PreloadResources(Creator creator)
-			{
-				await CreatorCache.GetAvatarAsync(creator);
-			}
 		}
 
 		public static async Task<IEnumerable<VideoScrollCellData>> CreateVideoScrollCellDataAsync(
@@ -50,49 +32,21 @@ namespace VirtualHole.Client.UI
 		{
 			List<VideoScrollCellData> results = new List<VideoScrollCellData>();
 
-			IEnumerable<Video> videoResult = await query.LoadAsync(cancellationToken);
-			if(videoResult == null) { return results; }
+			IEnumerable<VideoDTO<Video>> videoDTOs = await query.GetDTOAsync(cancellationToken);
+			if(videoDTOs == null) { return results; }
 
-			List<Video> videos = videoResult.ToList();
-			VideoCache.Add(videos);
-
-			await Concurrent.ForEachAsync(videos, PreloadResources, 50, cancellationToken);
-
-			foreach(Video video in videos) {
-				Sprite thumbnail = await VideoCache.GetThumbnailAsync(video.platform, video.id);
-				Sprite creatorSprite = await CreatorCache.GetAvatarAsync(CreatorCache.Get(video.creatorIdUniversal));
-
+			foreach(VideoDTO<Video> videoDTO in videoDTOs) {
 				// Skip videos without thumbnails, possible reasons for these are
 				// they maybe privated or deleted.
 				// Mostly observed on scheduled videos or livestreams that are already
 				// finished.
-				if(thumbnail == null) { continue; }
-
-				VideoScrollCellData cellData = new VideoScrollCellData() {
-					thumbnailSprite = thumbnail,
-					title = video.title,
-					date = video.creationDate.Humanize(),
-					creatorSprite = creatorSprite,
-					creatorName = video.creator,
-					creatorUniversalId = video.creatorIdUniversal,
-					onCellClick = () => Application.OpenURL(video.url)
-				};
-
-				if(video is Broadcast broadcast) {
-					if(broadcast.isLive) { cellData.indicatorSprite = UIResources.GetIndicatorSprite(true); }
-					else { cellData.indicatorSprite = UIResources.GetIndicatorSprite(false); }
-				}
-
-				results.Add(cellData);
+				if(videoDTO.thumbnailSprite == null) { continue; }
+				results.Add(new VideoScrollCellData() {
+					videoDTO = videoDTO
+				});
 			}
 
 			return results;
-
-			async Task PreloadResources(Video video)
-			{
-				await VideoCache.GetThumbnailAsync(video);
-				await CreatorCache.GetAvatarAsync(CreatorCache.Get(video.creatorIdUniversal));
-			}
 		}
 
 		public static async Task<IEnumerable<InfoButtonData>> CreateInfoButtonDataAsync(
@@ -100,21 +54,16 @@ namespace VirtualHole.Client.UI
 		{
 			List<InfoButtonData> results = new List<InfoButtonData>();
 
-			SupportInfo[] supportList = await query.GetAsync(cancellationToken);
-			ImageData[] supportListImages = await query.GetImagesAsync(cancellationToken);
-
-			int index = 0;
-			foreach(SupportInfo supportInfo in supportList) {
+			IEnumerable<SupportInfoDTO> infoDTOs = await query.GetDTOAsync(cancellationToken);
+			foreach(SupportInfoDTO infoDTO in infoDTOs) {
 				InfoButtonData infoButtonData = new InfoButtonData() {
-					header = supportInfo.header,
-					content = supportInfo.content,
-					onClick = () => Application.OpenURL(supportInfo.url)
+					header = infoDTO.raw.header,
+					content = infoDTO.raw.content,
+					onClick = () => Application.OpenURL(infoDTO.raw.url)
 				};
 
-				infoButtonData.sprite = supportListImages[index].sprite;
+				infoButtonData.sprite = infoDTO.imageSprite;
 				results.Add(infoButtonData);
-
-				index++;
 			}
 
 			return results;

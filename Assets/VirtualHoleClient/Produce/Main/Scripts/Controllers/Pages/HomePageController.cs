@@ -4,7 +4,6 @@ using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Api.DB;
 	using Api.DB.Contents.Creators;
 
 	using Client.UI;
@@ -19,10 +18,9 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private HomeFlowMap _homeFlowMap = null;
 
-		protected override CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client)
+		protected override CreatorQuery CreateCreatorQuery()
 		{
 			return new CreatorQuery(
-				client,
 				new FindCreatorsSettings {
 					isCheckForAffiliations = true,
 					affiliations = new List<string>() { "hololiveProduction" },

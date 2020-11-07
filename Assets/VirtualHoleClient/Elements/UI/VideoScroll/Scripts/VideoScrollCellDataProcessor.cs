@@ -8,20 +8,21 @@ namespace VirtualHole.Client.UI
 	{
 		public override void ProcessData(VideoButton instance, VideoScrollCellData data)
 		{
-			instance.thumbnailImage.sprite = data.thumbnailSprite;
+			instance.thumbnailImage.sprite = data.videoDTO.thumbnailSprite;
 
-			if(data.indicatorSprite != null) {
+			if(data.videoDTO.indicatorSprite != null) {
 				instance.indicatorImage.gameObject.SetActive(true);
-				instance.indicatorImage.sprite = data.indicatorSprite;
+				instance.indicatorImage.sprite = data.videoDTO.indicatorSprite;
+				instance.dateText.text = data.videoDTO.scheduleDateDisplay;
 			} else {
 				instance.indicatorImage.gameObject.SetActive(false);
+				instance.dateText.text = data.videoDTO.creationDateDisplay;
 			}
 
-			instance.creatorImage.sprite = data.creatorSprite;
-			instance.creatorNameText.text = data.creatorName;
+			instance.creatorImage.sprite = data.videoDTO.creatorDTO.avatarSprite;
+			instance.creatorNameText.text = data.videoDTO.raw.creator;
 
-			instance.titleText.text = data.title;
-			instance.dateText.text = data.date;
+			instance.titleText.text = data.videoDTO.raw.title;
 
 			instance.button.onClick.RemoveAllListeners();
 			instance.button.onClick.AddListener(() => data.onCellClick());

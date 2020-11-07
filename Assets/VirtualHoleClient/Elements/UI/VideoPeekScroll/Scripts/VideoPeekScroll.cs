@@ -16,6 +16,7 @@ namespace VirtualHole.Client.UI
 		public event Action<VideoScrollCellData> OnCellDataCreated = delegate { };
 
 		public VideoFeedQuery feed { get; set; } = null;
+		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
 
 		public Image background => _background;
 		[SerializeField]
@@ -47,7 +48,9 @@ namespace VirtualHole.Client.UI
 		{
 			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(feed, cancellationToken);
 			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
-			scrollDataContainer.UpdateData(cellData);
+
+			_cellData.AddRange(cellData);
+			scrollDataContainer.UpdateData(_cellData);
 		}
 
 		protected override async Task UnloadAsync_Impl()
@@ -58,8 +61,9 @@ namespace VirtualHole.Client.UI
 
 		public void ClearFeed()
 		{
-			scrollDataContainer.UpdateData(null);
-			if(feed != null) { feed.Clear(); }
+			_cellData.Clear();
+			scrollDataContainer.UpdateData(_cellData);
+			if(feed != null) { feed.Reset(); }
 		}
 	}
 }

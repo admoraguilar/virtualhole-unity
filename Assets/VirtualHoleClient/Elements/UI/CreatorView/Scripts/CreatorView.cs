@@ -11,15 +11,15 @@ using Midnight;
 namespace VirtualHole.Client.UI
 {
 	using Api.DB.Contents;
-	using Api.DB.Contents.Creators;
-	
-	using Client.Data;
+	using Api.DB.Contents.Videos;
 
+	using Client.Data;
+	
 	public class CreatorView : UILifecycle
 	{
 		public event Action<VideoPeekScroll> OnVideoPeekScrollProcess = delegate { };
 
-		public Creator creator { get; set; } = null;
+		public CreatorDTO creatorDTO { get; set; } = null;
 		public List<VideoFeedQuery> feeds { get; private set; } = new List<VideoFeedQuery>();
 
 		public ScrollRect plainScroll => _plainScroll;
@@ -61,10 +61,10 @@ namespace VirtualHole.Client.UI
 
 		protected override async Task InitializeAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			avatarImage.sprite = await CreatorCache.GetAvatarAsync(creator, cancellationToken);
-			nameText.text = creator.universalName;
+			avatarImage.sprite = creatorDTO.avatarSprite;
+			nameText.text = creatorDTO.raw.universalName;
 
-			foreach(Social social in creator.socials) {
+			foreach(Social social in creatorDTO.raw.socials) {
 				Button socialButton = Instantiate(socialButtonTemplate, socialButtonContainer, false);
 				socialButton.gameObject.SetActive(true);
 

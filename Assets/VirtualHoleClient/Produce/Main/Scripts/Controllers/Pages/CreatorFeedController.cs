@@ -26,22 +26,23 @@ namespace VirtualHole.Client.Controllers
 
 		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			IEnumerable<Creator> creators = new Creator[] { CreatorCache.selectedCreator };
+			await Task.CompletedTask;
 
-			_videoFeed.contextButton.image.sprite = await CreatorCache.GetAvatarAsync(CreatorCache.selectedCreator, cancellationToken);
-			_videoFeed.contextButton.text.text = CreatorCache.selectedCreator.universalName;
-
+			CreatorDTO selectedCreatorDTO = Selection.instance.creatorDTO;
+			_videoFeed.contextButton.image.sprite = selectedCreatorDTO.avatarSprite;
+			_videoFeed.contextButton.text.text = selectedCreatorDTO.raw.universalName;
 			_videoFeed.contextButton.button.onClick.RemoveAllListeners();
 			_videoFeed.contextButton.button.onClick.AddListener(() => {
 				_creatorPageNode.Set();
 			});
 
+			IEnumerable<Creator> creators = new Creator[] { selectedCreatorDTO.raw };
 			_videoFeed.feeds.Clear();
 			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creators),
-				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creators),
-				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creators),
-				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creators)
+				VideoFeedQuery.CreateDiscoverFeed(creators),
+				VideoFeedQuery.CreateCommunityFeed(creators),
+				VideoFeedQuery.CreateLiveFeed(creators),
+				VideoFeedQuery.CreateScheduledFeed(creators)
 			});
 		}
 

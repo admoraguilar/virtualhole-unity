@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Midnight;
 
 namespace VirtualHole.Client.Data
 {
-	public class SimpleCache<TType> : IDataCache<TType> 
+	public class SimpleCache<TType> : ICache<TType> 
 		where TType : class
 	{
 		private static SimpleCache<TType> _cache = null;
@@ -19,17 +18,6 @@ namespace VirtualHole.Client.Data
 
 		private Dictionary<string, TType> _lookup = new Dictionary<string, TType>();
 
-		public async Task<TType> GetOrUpsertAsync(string key, Func<Task<TType>> dataFactory)
-		{
-			if(!TryGet(key, out TType data)) {
-				data = await dataFactory();
-				Upsert(key, data);
-			}
-
-			return data;
-		}
-
-
 		public TType GetOrUpsert(string key, Func<TType> dataFactory)
 		{
 			if(!TryGet(key, out TType data)) {
@@ -38,6 +26,11 @@ namespace VirtualHole.Client.Data
 			}
 
 			return data;
+		}
+
+		public bool Contains(string key)
+		{
+			return _lookup.ContainsKey(key);
 		}
 
 		public bool TryGet(string key, out TType data)
@@ -53,13 +46,6 @@ namespace VirtualHole.Client.Data
 		public void Remove(string key)
 		{
 			_lookup.Remove(key);
-		}
-
-		public async Task<object> GetOrUpsert(string key, Func<Task<object>> dataFactory)
-		{
-			return await GetOrUpsertAsync(key, GetCastedDataFactory);
-
-			async Task<TType> GetCastedDataFactory() => (TType)(await dataFactory());
 		}
 
 		object IDataCache.GetOrUpsert(string key, Func<object> dataFactory)

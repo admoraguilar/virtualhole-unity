@@ -10,6 +10,8 @@ namespace VirtualHole.Client.Controllers
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
+	using VirtualHole.Api.DB.Contents.Creators;
+	using System.Collections.Generic;
 
 	public abstract class FeedPageController : MonoBehaviour
 	{
@@ -23,19 +25,19 @@ namespace VirtualHole.Client.Controllers
 		protected abstract Node _mainNode { get; }
 		protected abstract VideoFeedScroll _videoFeed { get; }
 
-		protected abstract CreatorQuery CreateCreatorQuery(VirtualHoleDBClient client);
+		protected abstract CreatorQuery CreateCreatorQuery();
 
 		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{
-			CreatorQuery creatorQuery = CreateCreatorQuery(VirtualHoleDBClientFactory.Get());
-			await creatorQuery.LoadAsync(cancellationToken);
+			CreatorQuery creatorQuery = CreateCreatorQuery();
+			IEnumerable<Creator> creators = await creatorQuery.GetRawAsync(cancellationToken);
 
 			_videoFeed.feeds.Clear();
 			_videoFeed.feeds.AddRange(new VideoFeedQuery[] {
-				VideoFeedQuery.CreateDiscoverFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateCommunityFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateLiveFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values),
-				VideoFeedQuery.CreateScheduledFeed(VirtualHoleDBClientFactory.Get(), creatorQuery.creatorLookup.Values)
+				VideoFeedQuery.CreateDiscoverFeed(creators),
+				VideoFeedQuery.CreateCommunityFeed(creators),
+				VideoFeedQuery.CreateLiveFeed(creators),
+				VideoFeedQuery.CreateScheduledFeed(creators)
 			});
 		}
 
@@ -47,13 +49,13 @@ namespace VirtualHole.Client.Controllers
 
 		protected virtual async void OnNodeLeave()
 		{
-
+			await Task.CompletedTask;
 		}
 
 		private void OnCellDataCreated(VideoScrollCellData cellData)
 		{
 			cellData.onOptionsClick += () => {
-				CreatorCache.selectedCreator = CreatorCache.Get(cellData.creatorUniversalId);
+				Selection.instance.creatorDTO = cellData.videoDTO.creatorDTO;
 				_creatorPageNode.Set();
 			};
 		}

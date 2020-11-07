@@ -5,7 +5,6 @@ using Midnight.FlowTree;
 namespace VirtualHole.Client.Controllers
 {
 	using Api.DB.Contents.Creators;
-
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
@@ -25,7 +24,6 @@ namespace VirtualHole.Client.Controllers
 		private CreatorQuery CreatorQueryFactory(string searchString)
 		{
 			return new CreatorQuery(
-				VirtualHoleDBClientFactory.Get(),
 				new FindCreatorsRegexSettings {
 					searchQueries = new List<string>() { searchString },
 					isCheckSocialName = false,
@@ -43,7 +41,7 @@ namespace VirtualHole.Client.Controllers
 		private void OnCellDataCreated(CreatorScrollCellData cellData)
 		{
 			cellData.onClick += () => {
-				CreatorCache.selectedCreator = CreatorCache.Get(cellData.creatorId);
+				Selection.instance.creatorDTO = cellData.creatorDTO;
 				_creatorPageNode.Set();
 			};
 		}

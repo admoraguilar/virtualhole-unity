@@ -14,34 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   supportList:
   - url: https://patreon.com
-    imageUrl: /static/images/buttons/holohole-patreon.png
+    imagePath: static/images/buttons/holohole-patreon.png
     header: Patreon
     content: Paying for current resources being used by the app such as servers.
       Any will be greatly appreciated, and will also contribute to implementing of
       more features!
   - url: https://discord.com/app
-    imageUrl: /static/images/buttons/holohole-discord.png
+    imagePath: static/images/buttons/holohole-discord.png
     header: Discord
     content: Need help? Or just wanna mingle along and stay updated with the app's
       development? Get on to the Discord!
   - url: https://reddit.com/r/Hololive
-    imageUrl: /static/images/buttons/hololive-reddit.png
+    imagePath: static/images/buttons/hololive-reddit.png
     header: r/Hololive
     content: Welcome to the rabbit hole. Welcome to the family.
   - url: https://en.hololive.tv/
-    imageUrl: /static/images/buttons/hololive-logo.png
+    imagePath: static/images/buttons/hololive-logo.png
     header: The Official hololive Website!
     content: VTuber agency from Japan that makes fans go wild, the world over!  "Hololive
       Project"
   - url: https://cover-corp.com/
-    imageUrl: /static/images/buttons/cover-corp-logo.png
+    imagePath: static/images/buttons/cover-corp-logo.png
     header: COVER Corp.
     content: hololive's parent company.
   - url: https://twitter.com/simpukun
-    imageUrl: /static/images/buttons/simpukun-twitter.png
+    imagePath: static/images/buttons/simpukun-twitter.png
     header: 'Twitter: simpukun'
     content: Will share Holohole text updates here, or about Haachama...
   - url: https://www.youtube.com/channel/UCctpQVVauTrc-MyfnIW9AHQ
-    imageUrl: /static/images/buttons/simpukun-youtube.png
+    imagePath: static/images/buttons/simpukun-youtube.png
     header: 'YouTube: simpukun'
     content: Will share Holohole video updates here, or about Haachama...

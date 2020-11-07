@@ -10,7 +10,10 @@ using Midnight;
 
 namespace VirtualHole.Client.UI
 {
+	using Api.DB.Contents.Videos;
+
 	using Client.Data;
+	using FancyScrollView.Example01;
 
 	public class VideoFeedScroll : UILifecycle
 	{
@@ -35,6 +38,7 @@ namespace VirtualHole.Client.UI
 		public event Action OnNearScrollEnd = delegate { };
 
 		public List<VideoFeedQuery> feeds { get; private set; } = new List<VideoFeedQuery>();
+		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
 
 		public LoopScrollRect scroll => _scroll;
 		[SerializeField]
@@ -84,7 +88,9 @@ namespace VirtualHole.Client.UI
 
 			IEnumerable<VideoScrollCellData> cellData = await UIFactory.CreateVideoScrollCellDataAsync(feed, cancellationToken);
 			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
-			scrollDataContainer.UpdateData(cellData);
+
+			_cellData.AddRange(cellData);
+			scrollDataContainer.UpdateData(_cellData);
 		}
 
 		protected override async Task UnloadAsync_Impl()
@@ -96,10 +102,11 @@ namespace VirtualHole.Client.UI
 
 		public void ClearFeed()
 		{
-			scrollDataContainer.UpdateData(null);
+			_cellData.Clear();
+			scrollDataContainer.UpdateData(_cellData);
 			if(feeds != null && feeds.Count > dropdown.value) {
 				VideoFeedQuery feed = feeds[dropdown.value];
-				feed.Clear();
+				feed.Reset();
 			}
 		}
 
