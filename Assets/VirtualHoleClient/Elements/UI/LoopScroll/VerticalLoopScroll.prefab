@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcaef019dd39da5459b61ad10d9e4388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefabs: []
+  dataProcessors: []
   _dataContainer: {fileID: -5445146389208805559}
 --- !u!1 &7128403961701160068
 GameObject:
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: -1
+  m_MinWidth: 1
   m_MinHeight: 1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -644,8 +644,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10, y: 0}
-  m_SizeDelta: {x: -20.00003, y: 0}
+  m_AnchoredPosition: {x: -9.999996, y: 0}
+  m_SizeDelta: {x: -20.000008, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7128403963259352385
 CanvasRenderer:

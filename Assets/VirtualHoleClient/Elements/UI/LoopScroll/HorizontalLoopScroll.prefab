@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcaef019dd39da5459b61ad10d9e4388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellPrefabs: []
+  dataProcessors: []
   _dataContainer: {fileID: 1098177360831004677}
 --- !u!1 &4588356231678326654
 GameObject:
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: 1
-  m_MinHeight: -1
+  m_MinHeight: 1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1

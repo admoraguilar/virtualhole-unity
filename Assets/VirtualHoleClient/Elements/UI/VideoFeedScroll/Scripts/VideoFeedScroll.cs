@@ -10,10 +10,7 @@ using Midnight;
 
 namespace VirtualHole.Client.UI
 {
-	using Api.DB.Contents.Videos;
-
 	using Client.Data;
-	using FancyScrollView.Example01;
 
 	public class VideoFeedScroll : UILifecycle
 	{

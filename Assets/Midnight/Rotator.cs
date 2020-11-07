@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using Midnight;
 
-namespace VirtualHole.Client.Utilities
+namespace Midnight
 {
 	public class Rotator : MonoBehaviour
 	{

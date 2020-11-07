@@ -202,60 +202,10 @@ PrefabInstance:
       propertyPath: paddingTail
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 8207812875186262964, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.95
-      objectReference: {fileID: 0}
     - target: {fileID: 8207812875943342711, guid: 331e3941c49079e47b4cabf5e085153b,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876308126628, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876308126628, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_VerticalScrollbar
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_ContentBounds.m_Extent.y
-      value: 829.5231
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_PrevContentBounds.m_Center.x
-      value: -0.000030517578
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_PrevContentBounds.m_Extent.x
-      value: 486.45734
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_PrevContentBounds.m_Extent.y
-      value: 829.5231
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_PrevViewBounds.m_Extent.x
-      value: 486.45734
-      objectReference: {fileID: 0}
-    - target: {fileID: 8207812876310664077, guid: 331e3941c49079e47b4cabf5e085153b,
-        type: 3}
-      propertyPath: m_PrevViewBounds.m_Extent.y
-      value: 829.5231
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 331e3941c49079e47b4cabf5e085153b, type: 3}

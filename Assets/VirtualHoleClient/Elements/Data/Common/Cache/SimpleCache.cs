@@ -48,19 +48,19 @@ namespace VirtualHole.Client.Data
 			_lookup.Remove(key);
 		}
 
-		object IDataCache.GetOrUpsert(string key, Func<object> dataFactory)
+		object ICache.GetOrUpsert(string key, Func<object> dataFactory)
 		{
 			return GetOrUpsert(key, () => (TType)dataFactory());
 		}
 
-		bool IDataCache.TryGet(string key, out object data)
+		bool ICache.TryGet(string key, out object data)
 		{
 			bool result = TryGet(key, out TType cachedData);
 			data = cachedData;
 			return result;
 		}
 
-		void IDataCache.Upsert(string key, object data)
+		void ICache.Upsert(string key, object data)
 		{
 			TType castData = data as TType;
 			if(castData == null) { MLog.LogError(nameof(SimpleCache<Sprite>), $"Data is not of type {nameof(TType)}"); }

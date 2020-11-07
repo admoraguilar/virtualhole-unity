@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Midnight.Pages;
 
 namespace VirtualHole.Client.ComponentMaps
 {
