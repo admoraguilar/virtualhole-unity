@@ -42,6 +42,7 @@ namespace VirtualHole.Client.UI
 
 			CreatorQuery creatorQuery = creatorQueryFactory(searchField.text);
 			IEnumerable<CreatorScrollCellData> cellData = await UIFactory.CreateCreatorScrollCellDataAsync(creatorQuery, cancellationToken);
+
 			foreach(CreatorScrollCellData cell in cellData) { OnCellDataCreated(cell); }
 			scrollDataContainer.UpdateData(cellData);
 		}

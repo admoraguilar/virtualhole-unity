@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Midnight;
+using Midnight.Concurrency;
 
 namespace VirtualHole.Client.UI
 {
@@ -36,6 +37,7 @@ namespace VirtualHole.Client.UI
 
 		public List<VideoFeedQuery> feeds { get; private set; } = new List<VideoFeedQuery>();
 		private List<VideoScrollCellData> _cellData = new List<VideoScrollCellData>();
+		private CancellationTokenSource _cts = null;
 
 		public LoopScrollRect scroll => _scroll;
 		[SerializeField]
@@ -87,7 +89,7 @@ namespace VirtualHole.Client.UI
 			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
 
 			_cellData.AddRange(cellData);
-			scrollDataContainer.UpdateData(_cellData);
+			scrollDataContainer.UpdateData(_cellData, true);
 		}
 
 		protected override async Task UnloadAsync_Impl()
@@ -119,10 +121,11 @@ namespace VirtualHole.Client.UI
 
 		private async void OnDropdownValueChanged(int value)
 		{
+			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
 			ClearFeed();
 
 			_loadingParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
-			await LoadAsync();
+			await LoadAsync(_cts.Token);
 			_loadingParameters = null;
 
 			OnDropdownValueChangedCallback(value);
@@ -130,9 +133,14 @@ namespace VirtualHole.Client.UI
 
 		private async void OnScrollValueChanged(Vector2 position)
 		{
-			if(position.y >= .8f) {
-				await LoadAsync();
-				OnNearScrollEnd();
+			bool isNearScrollEnd = position.y >= .8f;
+			if(isNearScrollEnd) { OnNearScrollEnd(); }
+
+			if(isLoading) { return; }
+
+			if(isNearScrollEnd) {
+				CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+				await LoadAsync(_cts.Token);	
 			}
 		}
 
