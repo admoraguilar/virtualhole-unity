@@ -85,7 +85,8 @@ namespace VirtualHole.Client.Data
 				dto.creatorDTO = creatorDTO;
 			}
 
-			dto.thumbnailSprite = await ImageGetWebRequest.GetAsync(dto.raw.thumbnailUrl, null, cancellationToken);
+			//dto.thumbnailSprite = await ImageGetWebRequest.GetAsync(dto.raw.thumbnailUrl, null, cancellationToken);
+			dto.thumbnailSprite = await QueryUtilities.GetImageAsync(dto.raw.thumbnailUrl, cancellationToken);
 			dto.creationDateDisplay = dto.raw.creationDate.Humanize();
 
 			if(dto.raw is Broadcast broadcast) {

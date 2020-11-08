@@ -45,8 +45,11 @@ namespace VirtualHole.Client.Data
 
 		protected async override Task ProcessDTOAsync(SupportInfoDTO dto, CancellationToken cancellationToken = default)
 		{
-			dto.imageSprite = await ImageGetWebRequest.GetAsync(
-				_querySettings.storageClient.BuildObjectUri(dto.raw.imagePath).AbsoluteUri, null,
+			//dto.imageSprite = await ImageGetWebRequest.GetAsync(
+			//	_querySettings.storageClient.BuildObjectUri(dto.raw.imagePath).AbsoluteUri, null,
+			//	cancellationToken);
+			dto.imageSprite = await QueryUtilities.GetImageAsync(
+				_querySettings.storageClient.BuildObjectUri(dto.raw.imagePath).AbsoluteUri,
 				cancellationToken);
 		}
 

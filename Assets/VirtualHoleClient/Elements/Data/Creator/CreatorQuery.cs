@@ -45,7 +45,8 @@ namespace VirtualHole.Client.Data
 
 		protected override async Task ProcessDTOAsync(CreatorDTO dto, CancellationToken cancellationToken = default)
 		{
-			dto.avatarSprite = await ImageGetWebRequest.GetAsync(dto.raw.avatarUrl, null, cancellationToken);
+			//dto.avatarSprite = await ImageGetWebRequest.GetAsync(dto.raw.avatarUrl, null, cancellationToken);
+			dto.avatarSprite = await QueryUtilities.GetImageAsync(dto.raw.avatarUrl, cancellationToken);
 		}
 
 		protected override string GetCacheKey(Creator raw)
