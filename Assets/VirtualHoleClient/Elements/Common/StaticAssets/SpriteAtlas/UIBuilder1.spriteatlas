@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UIBuilder1
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: b5417c938ed083a41968d555b4e29dea, type: 3}
+    - {fileID: 102900000, guid: c7808af9b71c4424aa0c3bfcf3753187, type: 3}
+    totalSpriteSurfaceArea: 1114112
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 409d3c014c7413f44a38e5fb50bee834, type: 3}
+  - {fileID: 21300000, guid: bd1827223b914d74db0a3687c8bc8c56, type: 3}
+  - {fileID: 21300000, guid: 2050fa1969307344f8df919e1019d895, type: 3}
+  - {fileID: 21300000, guid: 648859a9c379c494bb7bcb8bed66f797, type: 3}
+  - {fileID: 21300000, guid: e837d73ac9a37fa4c8a275087cd8bb87, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - FadeGradient-512
+  - Triangle-512
+  - RoundedSquare-512
+  - TripleDot-512
+  - Circle-512
+  m_Tag: UIBuilder1
+  m_IsVariant: 0
