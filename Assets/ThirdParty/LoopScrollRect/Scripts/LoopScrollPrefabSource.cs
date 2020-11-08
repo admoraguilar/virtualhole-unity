@@ -26,12 +26,12 @@ namespace UnityEngine.UI
 			return SG.ResourceManager.Instance.GetObjectFromPool(prefab, autoActive);
 		}
 
-		public virtual void ReturnObject(Transform transform)
+		public virtual void ReturnObject(Transform transform, bool autoInactive = false)
 		{
 			ILoopScrollCellReturnReceiver receiver = LoopScrollUtilities.GetComponentFromLookup(_cellReturnReceiverLookup, transform);
 			if(receiver != null) { receiver.ScrollCellReturn(); }
 
-			SG.ResourceManager.Instance.ReturnObjectToPool(transform.gameObject);
+			SG.ResourceManager.Instance.ReturnObjectToPool(transform.gameObject, autoInactive);
 		}
 	}
 }

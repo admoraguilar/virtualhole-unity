@@ -58,17 +58,20 @@ namespace SG
                 po = go.AddComponent<PoolObject>();
             }
             po.poolName = poolName;
-            AddObjectToPool(po);
+            AddObjectToPool(po, true);
 
             //populate the pool
             populatePool(Mathf.Max(initialCount, 1));
         }
 
         //o(1)
-        private void AddObjectToPool(PoolObject po)
+        private void AddObjectToPool(PoolObject po, bool autoInactive)
         {
             //add to pool
-            po.gameObject.SetActive(false);
+			if(autoInactive) {
+				po.gameObject.SetActive(false);
+			}
+            
             po.gameObject.name = poolName;
             availableObjStack.Push(po);
             po.isPooled = true;
@@ -81,7 +84,7 @@ namespace SG
             for (int index = 0; index < initialCount; index++)
             {
                 PoolObject po = GameObject.Instantiate(availableObjStack.Peek());
-                AddObjectToPool(po);
+                AddObjectToPool(po, true);
             }
         }
 
@@ -131,7 +134,7 @@ namespace SG
         }
 
         //o(1)
-        public void ReturnObjectToPool(PoolObject po)
+        public void ReturnObjectToPool(PoolObject po, bool autoInactive)
         {
             if (poolName.Equals(po.poolName))
             {
@@ -147,7 +150,7 @@ namespace SG
                 }
                 else
                 {
-                    AddObjectToPool(po);
+                    AddObjectToPool(po, autoInactive);
                 }
             }
             else

@@ -82,7 +82,7 @@ namespace SG
 		/// Return obj to the pool
 		/// </summary>
 		/// <param name="go"></param>
-		public void ReturnObjectToPool(GameObject go)
+		public void ReturnObjectToPool(GameObject go, bool autoInactive = true)
 		{
 			PoolObject po = go.GetComponent<PoolObject>();
 			if(po == null) {
@@ -92,7 +92,7 @@ namespace SG
 			} else {
 				Pool pool = null;
 				if(poolDict.TryGetValue(po.poolName, out pool)) {
-					pool.ReturnObjectToPool(po);
+					pool.ReturnObjectToPool(po, autoInactive);
 				}
 #if UNITY_EDITOR
 				else {
@@ -106,7 +106,7 @@ namespace SG
 		/// Return obj to the pool
 		/// </summary>
 		/// <param name="t"></param>
-		public void ReturnTransformToPool(Transform t)
+		public void ReturnTransformToPool(Transform t, bool autoInactive = true)
 		{
 			if(t == null) {
 #if UNITY_EDITOR
@@ -114,7 +114,7 @@ namespace SG
 #endif
 				return;
 			}
-			ReturnObjectToPool(t.gameObject);
+			ReturnObjectToPool(t.gameObject, autoInactive);
 		}
 	}
 }
