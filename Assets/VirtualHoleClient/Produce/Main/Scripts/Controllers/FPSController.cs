@@ -7,6 +7,12 @@ namespace VirtualHole.Client.Controllers
 		[SerializeField]
 		private int _targetFramerate = 60;
 
+		[SerializeField]
+		private bool _runOnSuspend = true;
+
+		[SerializeField]
+		private bool _runOnFocus = false;
+
 		private void SetTargetFramerateActive(bool active)
 		{
 			if(Application.isEditor) {
@@ -24,11 +30,13 @@ namespace VirtualHole.Client.Controllers
 
 		private void OnApplicationPause(bool pause)
 		{
+			if(!_runOnSuspend) { return; }
 			SetTargetFramerateActive(!pause);
 		}
 
 		private void OnApplicationFocus(bool focus)
 		{
+			if(!_runOnFocus) { return; }
 			SetTargetFramerateActive(focus);
 		}
 	}
