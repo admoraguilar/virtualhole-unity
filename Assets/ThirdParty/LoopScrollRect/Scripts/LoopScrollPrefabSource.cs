@@ -17,13 +17,13 @@ namespace UnityEngine.UI
 		private Dictionary<int, ILoopScrollCellReturnReceiver> _cellReturnReceiverLookup = new Dictionary<int, ILoopScrollCellReturnReceiver>();
 		private bool _isInitialized = false;
 
-		public virtual GameObject GetObject()
+		public virtual GameObject GetObject(bool autoActive = false)
 		{
 			if(!_isInitialized) {
 				_isInitialized = true;
 				SG.ResourceManager.Instance.InitPool(prefab, poolSize);
 			}
-			return SG.ResourceManager.Instance.GetObjectFromPool(prefab);
+			return SG.ResourceManager.Instance.GetObjectFromPool(prefab, autoActive);
 		}
 
 		public virtual void ReturnObject(Transform transform)
