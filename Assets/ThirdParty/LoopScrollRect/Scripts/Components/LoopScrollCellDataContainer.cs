@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Midnight;
 
 namespace UnityEngine.UI
@@ -25,6 +26,16 @@ namespace UnityEngine.UI
 
 		public void UpdateData(IEnumerable<object> values, bool doNextFrame = false)
 		{
+			// NOTES: Nov 9, 2020
+			// We just update right away if this is a clear, no matter if the
+			// scroll rect is enabled or not.
+			// This is to prevent that 1 frame flick of the last set of
+			// cells
+			if(values == null || values.Count() <= 0) {
+				DoUpdate(values);
+				return;
+			}
+
 			// NOTES: Oct 31, 2020
 			// * Seems like the main source of weird calculation on LoopScrollRect
 			// actually stems from the Content having a 0 width or 0 height, for either
@@ -64,6 +75,11 @@ namespace UnityEngine.UI
 			yield return _waitTilObjectEnabled;
 			if(doNextFrame) { yield return null; }
 
+			DoUpdate(values);
+		}
+
+		private void DoUpdate(IEnumerable<object> values)
+		{
 			_data.Clear();
 			_data.AddRange(values);
 
