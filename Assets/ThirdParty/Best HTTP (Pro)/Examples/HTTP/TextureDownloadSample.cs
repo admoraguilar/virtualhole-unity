@@ -11,14 +11,24 @@ namespace BestHTTP.Examples
         /// <summary>
         /// The URL of the server that will serve the image resources
         /// </summary>
-        const string BaseURL = "https://besthttp.azurewebsites.net/Content/";
+        const string BaseURL = "https://yt3.ggpht.com/a/";
 
         #region Private Fields
 
         /// <summary>
         /// The downloadable images
         /// </summary>
-        string[] Images = new string[9] { "One.png", "Two.png", "Three.png", "Four.png", "Five.png", "Six.png", "Seven.png", "Eight.png", "Nine.png" };
+        string[] Images = new string[] {
+			"AATXAJw8RXWyEofFZFI5EwEb7lXDq3Cm6l0SThQxT9XG=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJwaRkjEGAJYsolluzMRIgGvapzUY06q87q4yGJJ_Q=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJztvRXzNX8UtsaUZfLLBh32VBBwNPcvy_TklUjnWA=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJw3IoOJZlLAn_Eyy0r6gJHR3vt64XHfuXCailaCPw=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJzbRjSTNu3QQ7pia2yR5oVTcds7MpmeA3a1xE-h=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJxvfkV0UikqTA-yx4opKjGB36TXtUG9jLX1PO1FOQ=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJzO_bOBHuKPycvddNd88hozl2OjaNC-uR7lOAXa=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJwvh1krTC77V1xFYngwDN4W7x96yl4WBxV5cOaA=s900-c-k-c0x00ffffff-no-rj",
+			"AATXAJx28lrJ1bpfUSNv3cakn59hdqx7YOGpnvJJ9Tof=s900-c-k-c0x00ffffff-no-rj"
+		};
 
         /// <summary>
         /// The downloaded images will be stored as textures in this array
