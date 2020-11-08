@@ -29,7 +29,7 @@ namespace UnityEngine.UI
 		}
 		private LoopScrollRect _loopScrollRect = null;
 
-		public void UpdateData(IEnumerable<object> values)
+		public void UpdateData(IEnumerable<object> values, bool shouldUpdateNextFrame = false)
 		{
 			// NOTES: Oct 31, 2020
 			// * Seems like the main source of weird calculation on LoopScrollRect
@@ -75,7 +75,7 @@ namespace UnityEngine.UI
 			}
 		}
 
-		private void ProcessUpdateActions()
+		private void ProcessUpdateActions(bool shouldUpdateNextFrame = false)
 		{
 			// NOTES:
 			// * The reason this was done is it seems like
@@ -94,11 +94,17 @@ namespace UnityEngine.UI
 			// it'll scroll down a bit for some instances
 			if(_updateAction.action == null || !gameObject.activeInHierarchy) { return; }
 
-			StartCoroutine(DelayedUpdate());
+			if(!shouldUpdateNextFrame) { InvokeUpdate(); } 
+			else { StartCoroutine(DelayedUpdate()); }
 
 			IEnumerator DelayedUpdate()
 			{
 				yield return null;
+				InvokeUpdate();
+			}
+
+			void InvokeUpdate()
+			{
 				_updateAction.action();
 				_updateAction.action = null;
 

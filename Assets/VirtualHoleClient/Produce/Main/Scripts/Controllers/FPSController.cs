@@ -9,8 +9,12 @@ namespace VirtualHole.Client.Controllers
 
 		private void SetTargetFramerateActive(bool active)
 		{
-			if(!active) { Application.targetFrameRate = 1; } 
-			else { Application.targetFrameRate = _targetFramerate; }
+			if(Application.isEditor) {
+				Application.targetFrameRate = _targetFramerate;
+			} else {
+				if(!active) { Application.targetFrameRate = 1; } 
+				else { Application.targetFrameRate = _targetFramerate; }
+			}
 		}
 
 		private void Start()

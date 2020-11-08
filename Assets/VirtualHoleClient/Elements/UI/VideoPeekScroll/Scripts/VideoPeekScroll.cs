@@ -50,7 +50,7 @@ namespace VirtualHole.Client.UI
 			foreach(VideoScrollCellData cell in cellData) { OnCellDataCreated(cell); }
 
 			_cellData.AddRange(cellData);
-			scrollDataContainer.UpdateData(_cellData);
+			scrollDataContainer.UpdateData(_cellData, true);
 		}
 
 		protected override async Task UnloadAsync_Impl()
