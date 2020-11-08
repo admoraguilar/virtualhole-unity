@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace UnityEngine.UI
@@ -93,10 +94,16 @@ namespace UnityEngine.UI
 			// it'll scroll down a bit for some instances
 			if(_updateAction.action == null || !gameObject.activeInHierarchy) { return; }
 
-			_updateAction.action();
-			_updateAction.action = null;
+			StartCoroutine(DelayedUpdate());
 
-			_updateAction.data.Clear();
+			IEnumerator DelayedUpdate()
+			{
+				yield return null;
+				_updateAction.action();
+				_updateAction.action = null;
+
+				_updateAction.data.Clear();
+			}
 		}
 
 		private void OnEnable()
