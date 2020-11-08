@@ -61,16 +61,16 @@ namespace UnityEngine.UI
 					// a fix, remember to reload the editor layout again next time
 					if(wasZeroOrLess) { loopScrollRect.RefillCells(); }
 
-					// Hack the scroll rect to have a very tiny bit of movement to
-					// force it to update its cells
-					loopScrollRect.verticalNormalizedPosition += Mathf.Epsilon;
-					loopScrollRect.horizontalNormalizedPosition += Mathf.Epsilon;
+					//// Hack the scroll rect to have a very tiny bit of movement to
+					//// force it to update its cells
+					//loopScrollRect.verticalNormalizedPosition += Mathf.Epsilon;
+					//loopScrollRect.horizontalNormalizedPosition += Mathf.Epsilon;
 				}
 
-				if(!wasZeroOrLess) {
-					// NOTES: Still works fine even if the cells are not refreshed?
-					loopScrollRect.RefreshCells();
-				}
+				//if(!wasZeroOrLess) {
+				//	// NOTES: Still works fine even if the cells are not refreshed?
+				//	loopScrollRect.RefreshCells();
+				//}
 			}
 		}
 

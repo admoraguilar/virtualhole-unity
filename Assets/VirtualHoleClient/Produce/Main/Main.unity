@@ -601,6 +601,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CreatorPageSection
       objectReference: {fileID: 0}
+    - target: {fileID: 5333414658766716473, guid: 52226a3b54c7471449f2f2ca57edec2b,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5877752536700064466, guid: 52226a3b54c7471449f2f2ca57edec2b,
         type: 3}
       propertyPath: m_SizeDelta.y
