@@ -67,10 +67,10 @@ namespace UnityEngine.UI
 					loopScrollRect.horizontalNormalizedPosition += Mathf.Epsilon;
 				}
 
-				//if(!wasZeroOrLess) {
-				//	// NOTES: Still works fine even if the cells are not refreshed?
-				//	loopScrollRect.RefreshCells();
-				//}
+				if(!wasZeroOrLess) {
+					// NOTES: Still works fine even if the cells are not refreshed?
+					loopScrollRect.RefreshCells();
+				}
 			}
 		}
 
