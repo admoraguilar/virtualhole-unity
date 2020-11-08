@@ -595,7 +595,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c7a709859f6c742bfe0d6808317cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollMultiplierApex: 2.5
+  scrollMultiplierApex: 4
   flickCountToReachApex: 5
 --- !u!114 &4859367980949823524
 MonoBehaviour:
