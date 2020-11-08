@@ -7,14 +7,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Midnight;
+using Midnight.Concurrency;
 
 namespace VirtualHole.Client.UI
 {
 	using Api.DB.Contents;
-	using Api.DB.Contents.Videos;
-
 	using Client.Data;
-	
+
 	public class CreatorView : UILifecycle
 	{
 		public event Action<VideoPeekScroll> OnVideoPeekScrollProcess = delegate { };
@@ -92,6 +91,12 @@ namespace VirtualHole.Client.UI
 				OnVideoPeekScrollProcess(peekScroll);
 
 				peekScroll.feed = feed;
+			}
+
+			await Concurrent.ForEachAsync(_peekScrollInstances, InitializePeekScrollInstancesAsync, cancellationToken);
+
+			async Task InitializePeekScrollInstancesAsync(VideoPeekScroll peekScroll)
+			{
 				await peekScroll.InitializeAsync(cancellationToken);
 			}
 		}

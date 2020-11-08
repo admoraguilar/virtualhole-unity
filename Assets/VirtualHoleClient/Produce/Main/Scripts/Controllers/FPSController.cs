@@ -20,7 +20,7 @@ namespace VirtualHole.Client.Controllers
 
 		private void OnApplicationPause(bool pause)
 		{
-			SetTargetFramerateActive(pause);
+			SetTargetFramerateActive(!pause);
 		}
 
 		private void OnApplicationFocus(bool focus)
