@@ -2507,6 +2507,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetFramerate: 60
+  _runOnSuspend: 1
+  _runOnFocus: 0
 --- !u!1 &1168806929
 GameObject:
   m_ObjectHideFlags: 0
