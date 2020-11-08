@@ -570,6 +570,11 @@ PrefabInstance:
       propertyPath: m_Spacing
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 7203265578860187290, guid: 841a09e870f3d8745925059129785a6c,
+        type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7203265580350080606, guid: 841a09e870f3d8745925059129785a6c,
         type: 3}
       propertyPath: m_Name

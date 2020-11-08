@@ -652,6 +652,11 @@ PrefabInstance:
       propertyPath: m_Spacing
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 7128403961701160070, guid: c0e977bddec7b5a4bbbf070868bf58ac,
+        type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7128403961701160071, guid: c0e977bddec7b5a4bbbf070868bf58ac,
         type: 3}
       propertyPath: m_SizeDelta.y
