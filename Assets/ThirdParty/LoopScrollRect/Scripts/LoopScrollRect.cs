@@ -702,20 +702,22 @@ namespace UnityEngine.UI
                 deletedItemTypeStart--;
                 nextItem = content.GetChild(0) as RectTransform;
                 nextItem.SetSiblingIndex(itemIdx - itemTypeStart + deletedItemTypeStart);
-            }
+				dataSource.ProvideData(nextItem, itemIdx);
+			}
             else if (deletedItemTypeEnd > 0)
             {
                 deletedItemTypeEnd--;
                 nextItem = content.GetChild(content.childCount - 1) as RectTransform;
                 nextItem.SetSiblingIndex(itemIdx - itemTypeStart + deletedItemTypeStart);
-            }
+				dataSource.ProvideData(nextItem, itemIdx);
+			}
             else
             {
                 nextItem = prefabSource.GetObject().transform as RectTransform;
                 nextItem.transform.SetParent(content, false);
-                nextItem.gameObject.SetActive(true);
+				dataSource.ProvideData(nextItem, itemIdx);
+				nextItem.gameObject.SetActive(true);
             }
-            dataSource.ProvideData(nextItem, itemIdx);
             return nextItem;
         }
         protected void ReturnToTempPool(bool fromStart, int count = 1)

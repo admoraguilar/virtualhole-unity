@@ -9,51 +9,11 @@ namespace UnityEngine.UI
 	{
 		private class LoopScrollCell
 		{
-			public GameObject instance = null;
+			public GameObject gameObject = null;
 			public LoopScrollCellDataProcessor processor = null;
 
 			public RectTransform rectTransform = null;
 			public LayoutElement layoutElement = null;
-			
-			public CanvasGroup canvasGroup 
-			{
-				get { 
-					return _canvasGroup; 
-				} 
-				set {
-					_canvasGroup = value;
-
-					_orgCanvasGroupAlphaValue = canvasGroup.alpha;
-					_orgCanvasGroupInteractable = canvasGroup.interactable;
-					_orgCanvaGroupBlocksRaycastValue = canvasGroup.blocksRaycasts;
-				}
-			}
-			private CanvasGroup _canvasGroup = null;
-			
-			private float _orgCanvasGroupAlphaValue = 0f;
-			private bool _orgCanvasGroupInteractable = false;
-			private bool _orgCanvaGroupBlocksRaycastValue = false;
-
-			public void SetActive(bool value)
-			{
-				if(canvasGroup != null) {
-					if(value) {
-						canvasGroup.alpha = _orgCanvasGroupAlphaValue;
-						canvasGroup.interactable = _orgCanvasGroupInteractable;
-						canvasGroup.blocksRaycasts = _orgCanvaGroupBlocksRaycastValue;
-					} else {
-						_orgCanvasGroupAlphaValue = canvasGroup.alpha;
-						_orgCanvasGroupInteractable = canvasGroup.interactable;
-						_orgCanvaGroupBlocksRaycastValue = canvasGroup.blocksRaycasts;
-
-						canvasGroup.alpha = 0f;
-						canvasGroup.interactable = false;
-						canvasGroup.blocksRaycasts = false;
-					}
-				} else {
-					instance.SetActive(value);
-				}
-			}
 		}
 
 		public LoopScrollCellDataProcessor[] dataProcessors = null;
@@ -105,11 +65,10 @@ namespace UnityEngine.UI
 
 		private void Refresh()
 		{
-			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
-				cellItem.SetActive(false);
+			if(_data == null) {
+				SetActiveCells(false);
+				return;
 			}
-
-			if(_data == null) { return; }
 
 			Type dataType = _data.GetType();
 			if(!_cellLookup.TryGetValue(dataType, out LoopScrollCell cell)) {
@@ -120,19 +79,17 @@ namespace UnityEngine.UI
 
 					cell.processor = dataProcessor;
 
-					cell.instance = Instantiate(cell.processor.prefab, rectTransform, false);
-					cell.instance.name = cell.processor.prefab.name;
+					cell.gameObject = Instantiate(cell.processor.prefab, rectTransform, false);
+					cell.gameObject.name = cell.processor.prefab.name;
 
-					cell.rectTransform = cell.instance.GetComponent<RectTransform>();
+					cell.rectTransform = cell.gameObject.GetComponent<RectTransform>();
 
-					if(!cell.instance.TryGetComponent(out cell.layoutElement)) {
+					if(!cell.gameObject.TryGetComponent(out cell.layoutElement)) {
 						cell.layoutElement.minWidth = 1f;
 						cell.layoutElement.minHeight = 1f;
 						cell.layoutElement.preferredWidth = cell.rectTransform.sizeDelta.x;
 						cell.layoutElement.preferredHeight = cell.rectTransform.sizeDelta.y;
 					}
-
-					cell.canvasGroup = cell.instance.GetComponent<CanvasGroup>();
 
 					_cellLookup[dataType] = cell;
 				}
@@ -143,12 +100,23 @@ namespace UnityEngine.UI
 			}
 
 			if(cell != null && cell.processor != null && 
-			   cell.instance != null) {
-				cell.processor.ProcessData(cell.instance, _data);
-				cell.SetActive(true);
+			   cell.gameObject != null) {
+				cell.processor.ProcessData(cell.gameObject, _data);
+				cell.gameObject.SetActive(true);
+				SetActiveCells(false, cell);
 
 				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
 				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
+			} else {
+				SetActiveCells(false);
+			}
+		}
+
+		private void SetActiveCells(bool value, LoopScrollCell cell = null)
+		{
+			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
+				if(cellItem == cell && cell != null) { continue; }
+				cellItem.gameObject.SetActive(value);
 			}
 		}
 
