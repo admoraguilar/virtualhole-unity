@@ -3,14 +3,12 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
-using Midnight.Web;
 
 namespace VirtualHole.Client.Data
 {
-	using Api.DB;
-	using Api.DB.Common;
-	using Api.DB.Contents.Creators;
-	
+	using APIWrapper.Contents.Creators;
+	using VirtualHole.APIWrapper;
+
 	public class CreatorDTO : DataQueryDTO<Creator>
 	{
 		public Sprite avatarSprite;
@@ -21,21 +19,21 @@ namespace VirtualHole.Client.Data
 
 	public class CreatorQuerySettings : PaginatedQuerySettings<Creator, CreatorDTO>
 	{
-		public VirtualHoleDBClient dbClient { get; set; } = null;
+		public VirtualHoleAPIWrapperClient apiWrapperClient { get; set; } = null;
 
 		public CreatorQuerySettings() : base()
 		{
-			dbClient = VirtualHoleDBClientFactory.Get();
+			apiWrapperClient = VirtualHoleAPIWrapperClientFactory.Get();
 		}
 	}
 
 	public partial class CreatorQuery : PaginatedQuery<Creator, CreatorDTO, CreatorQuerySettings>
 	{
-		private FindCreatorsSettings _findCreatorsSettings = null;
+		private ListCreatorsRequest _request = null;
 
-		public CreatorQuery(FindCreatorsSettings findCreatorsSettings, CreatorQuerySettings querySettings = null) : base(querySettings)
+		public CreatorQuery(ListCreatorsRequest request, CreatorQuerySettings querySettings = null) : base(querySettings)
 		{
-			_findCreatorsSettings = findCreatorsSettings;
+			_request = request;
 		}
 
 		protected override CreatorDTO FromRawToDTO(Creator raw)
@@ -45,8 +43,7 @@ namespace VirtualHole.Client.Data
 
 		protected override async Task ProcessDTOAsync(CreatorDTO dto, CancellationToken cancellationToken = default)
 		{
-			//dto.avatarSprite = await ImageGetWebRequest.GetAsync(dto.raw.avatarUrl, null, cancellationToken);
-			dto.avatarSprite = await QueryUtilities.GetImageAsync(dto.raw.avatarUrl, cancellationToken);
+			dto.avatarSprite = await HTTPUtilities.GetImageAsync(dto.raw.avatarUrl, cancellationToken);
 		}
 
 		protected override string GetCacheKey(Creator raw)
@@ -62,13 +59,8 @@ namespace VirtualHole.Client.Data
 				$"End getting {nameof(Creator)}s.")) {
 
 				List<Creator> results = new List<Creator>();
-				CreatorClient creatorClient = _querySettings.dbClient.contents.creators;
-
-				using(FindResults<Creator> findResults = await creatorClient.FindCreatorsAsync(_findCreatorsSettings, cancellationToken)) {
-					while(await findResults.MoveNextAsync()) {
-						results.AddRange(findResults.current);
-					}
-				}
+				CreatorClient creatorClient = _querySettings.apiWrapperClient.contents.creators;
+				results.AddRange(await creatorClient.ListCreatorsAsync(_request, cancellationToken));
 
 				isDone = true;
 				return results;

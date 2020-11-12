@@ -4,7 +4,7 @@ using Midnight;
 
 namespace VirtualHole.Client.UI
 {
-	using Api.DB.Contents;
+	using APIWrapper.Contents;
 	
 	[CreateAssetMenu(menuName = "VirtualHole/UI/UI Resources")]
 	public class UIResources : SingletonObject<UIResources>

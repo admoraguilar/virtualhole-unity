@@ -7,7 +7,7 @@ using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Api.DB.Contents.Creators;
+	using APIWrapper.Contents.Creators;
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;

@@ -4,8 +4,7 @@ using Midnight.FlowTree;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Api.DB.Contents.Creators;
-
+	using APIWrapper.Contents.Creators;
 	using Client.UI;
 	using Client.Data;
 	using Client.ComponentMaps;
@@ -21,7 +20,7 @@ namespace VirtualHole.Client.Controllers
 		protected override CreatorQuery CreateCreatorQuery()
 		{
 			return new CreatorQuery(
-				new FindCreatorsSettings {
+				new ListCreatorsRequest {
 					isCheckForAffiliations = true,
 					affiliations = new List<string>() { CreatorQuery.Affiliation.hololiveProduction },
 					batchSize = 100

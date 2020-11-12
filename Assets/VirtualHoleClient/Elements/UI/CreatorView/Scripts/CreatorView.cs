@@ -11,7 +11,7 @@ using Midnight.Concurrency;
 
 namespace VirtualHole.Client.UI
 {
-	using Api.DB.Contents;
+	using APIWrapper.Contents;
 	using Client.Data;
 
 	public class CreatorView : UILifecycle

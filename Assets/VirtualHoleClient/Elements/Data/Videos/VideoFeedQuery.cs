@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Humanizer;
 using Midnight;
-using Midnight.Web;
 
 namespace VirtualHole.Client.Data
 {
-	using Api.DB;
-	using Api.DB.Common;
-	using Api.DB.Contents.Videos;
-	using Api.DB.Contents.Creators;
+	using APIWrapper;
+	using APIWrapper.Contents.Videos;
+	using APIWrapper.Contents.Creators;
 	using Client.UI;
 
 	public class VideoDTO<T> : DataQueryDTO<T>
@@ -29,12 +27,12 @@ namespace VirtualHole.Client.Data
 
 	public class VideoFeedQuerySettings : PaginatedQuerySettings<Video, VideoDTO<Video>>
 	{
-		public VirtualHoleDBClient dbClient { get; set; } = null;
+		public VirtualHoleAPIWrapperClient apiWrapperClient { get; set; } = null;
 		public ICache<CreatorDTO> creatorDTOCache { get; set; } = null; 
 
 		public VideoFeedQuerySettings() : base()
 		{
-			dbClient = VirtualHoleDBClientFactory.Get();
+			apiWrapperClient = VirtualHoleAPIWrapperClientFactory.Get();
 			creatorDTOCache = SimpleCache<CreatorDTO>.Get();
 		}
 	}
@@ -42,15 +40,16 @@ namespace VirtualHole.Client.Data
 	public class VideoFeedQuery<T> : VideoFeedQuery
 		where T : Video
 	{
-		private FindVideosSettings<T> _findVideosSettings = null;
-		private FindResults<T> _findVideoResults = null;
+		private ListVideosRequest _request = null;
+		private int _page = 0;
 
 		public VideoFeedQuery(
-			string name, FindVideosSettings<T> findVideosSettings = null,
+			string name, ListVideosRequest request = null,
 			VideoFeedQuerySettings querySettings = null) 
 			: base(name, querySettings)
 		{
-			_findVideosSettings = findVideosSettings;
+			_request = request;
+			_request.skip = 0;
 		}
 
 		protected override async Task PreProcessDTOAsync(IEnumerable<Video> raws, CancellationToken cancellationToken = default)
@@ -65,7 +64,7 @@ namespace VirtualHole.Client.Data
 
 			if(creatorIdsToLoad.Count > 0) {
 				CreatorQuery creatorQuery = new CreatorQuery(
-					new FindCreatorsRegexSettings() {
+					new ListCreatorsRegexRequest() {
 						searchQueries = creatorIdsToLoad,
 						isCheckForAffiliations = false,
 						isCheckCustomKeywords = false,
@@ -85,8 +84,7 @@ namespace VirtualHole.Client.Data
 				dto.creatorDTO = creatorDTO;
 			}
 
-			//dto.thumbnailSprite = await ImageGetWebRequest.GetAsync(dto.raw.thumbnailUrl, null, cancellationToken);
-			dto.thumbnailSprite = await QueryUtilities.GetImageAsync(dto.raw.thumbnailUrl, cancellationToken);
+			dto.thumbnailSprite = await HTTPUtilities.GetImageAsync(dto.raw.thumbnailUrl, cancellationToken);
 			dto.creationDateDisplay = dto.raw.creationDate.Humanize();
 
 			if(dto.raw is Broadcast broadcast) {
@@ -107,21 +105,20 @@ namespace VirtualHole.Client.Data
 
 		protected override async Task<IEnumerable<Video>> GetRawAsync_Impl(CancellationToken cancellationToken = default)
 		{
-			IEnumerable<Video> results = default;
+			List<Video> results = new List<Video>();
 
 			using(new StopwatchScope(
 					GetType().Name,
 					$"Start load {name}...",
 					$"End load {name}.")) {
-				if(_findVideoResults == null) {
-					VideoClient videoClient = _querySettings.dbClient.contents.videos;
-					_findVideoResults = await videoClient.FindVideosAsync(_findVideosSettings, cancellationToken);
-					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
-				}
+				_request.skip = _request.batchSize * _page;
 
-				if(_findVideoResults != null) {
-					results = _findVideoResults.current;
-					if(!await _findVideoResults.MoveNextAsync()) { DisposeResults(); }
+				VideoClient videoClient = _querySettings.apiWrapperClient.contents.videos;
+				results.AddRange(await videoClient.ListVideosAsync<T, ListVideosRequest>(_request, cancellationToken));
+				_page++;
+
+				if(results.Count <= 0) {
+					DisposeResults();
 				}
 			}
 
@@ -131,14 +128,12 @@ namespace VirtualHole.Client.Data
 		public override void Reset()
 		{
 			base.Reset();
-			_findVideoResults = null;
+			_page = 0;
 		}
 
 		private void DisposeResults()
 		{
 			MLog.Log(GetType().Name, $"No more [{name}] videos found!");
-			_findVideoResults.Dispose();
-			_findVideoResults = null;
 			isDone = true;
 		}
 	}
@@ -150,9 +145,9 @@ namespace VirtualHole.Client.Data
 			int batchSize = 20) =>
 			new VideoFeedQuery<Video>(
 				"Discover",
-				new FindCreatorVideosSettings<Video>() {
+				new ListCreatorVideosRequest() {
 					creators = new List<Creator>(creators),
-					sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
+					sortMode = SortMode.ByCreationDate,
 					isSortAscending = false,
 					batchSize = batchSize
 				});
@@ -162,9 +157,9 @@ namespace VirtualHole.Client.Data
 			int batchSize = 20) =>
 			new VideoFeedQuery<Video>(
 				"Community",
-				new FindCreatorRelatedVideosSettings<Video> {
+				new ListCreatorRelatedVideosRequest() {
 					creators = new List<Creator>(creators),
-					sortMode = FindVideosSettings<Video>.SortMode.ByCreationDate,
+					sortMode = SortMode.ByCreationDate,
 					isSortAscending = false,
 					batchSize = batchSize,
 				});
@@ -174,11 +169,11 @@ namespace VirtualHole.Client.Data
 			int batchSize = 20) =>
 			new VideoFeedQuery<Broadcast>(
 				"Live",
-				new FindCreatorVideosSettings<Broadcast> {
+				new ListCreatorVideosRequest() {
 					isBroadcast = true,
 					isLive = true,
 					creators = new List<Creator>(creators),
-					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
+					sortMode = SortMode.BySchedule,
 					isSortAscending = false,
 					batchSize = batchSize
 				});
@@ -188,11 +183,11 @@ namespace VirtualHole.Client.Data
 			int batchSize = 20) =>
 			new VideoFeedQuery<Broadcast>(
 				"Schedule",
-				new FindCreatorVideosSettings<Broadcast> {
+				new ListCreatorVideosRequest() {
 					isBroadcast = true,
 					isLive = false,
 					creators = new List<Creator>(creators),
-					sortMode = FindVideosSettings<Broadcast>.SortMode.BySchedule,
+					sortMode = SortMode.BySchedule,
 					isSortAscending = false,
 					batchSize = batchSize
 				});
