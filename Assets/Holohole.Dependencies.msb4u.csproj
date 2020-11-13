@@ -32,11 +32,10 @@
   <!-- SDK.props is imported inside this props file -->
   <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.props" />
 
+	<!-- SDK.targets is imported inside this props file -->
+  <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.targets" />
   <ItemGroup>
 
   </ItemGroup>
-
-	<!-- SDK.targets is imported inside this props file -->
-  <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.targets" />
   
 </Project>

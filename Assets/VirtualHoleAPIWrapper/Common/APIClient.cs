@@ -26,8 +26,10 @@ namespace VirtualHole.APIWrapper
 			HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Post);
 			request.AddHeader("Content-Type", "application/json");
 
-			string bodyAsJson = JsonConvert.SerializeObject(body, JsonUtilities.DefaultSettings);
-			request.RawData = Encoding.UTF8.GetBytes(bodyAsJson);
+			await Task.Run(() => {
+				string bodyAsJson = JsonConvert.SerializeObject(body, JsonUtilities.DefaultSettings);
+				request.RawData = Encoding.UTF8.GetBytes(bodyAsJson);
+			});
 
 			HTTPRequestAsyncHandler requestAsync = new HTTPRequestAsyncHandler(request);
 
@@ -40,7 +42,9 @@ namespace VirtualHole.APIWrapper
 				throw new HttpRequestException(response.Message);
 			} else {
 				if(request.State == HTTPRequestStates.Finished) {
-					result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+					await Task.Run(() => {
+						result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+					});
 					return result;
 				}
 			}
@@ -53,7 +57,6 @@ namespace VirtualHole.APIWrapper
 			CancellationToken cancellationToken = default)
 		{
 			HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Get);
-
 			HTTPRequestAsyncHandler requestAsync = new HTTPRequestAsyncHandler(request);
 
 			T result = default;
@@ -63,7 +66,9 @@ namespace VirtualHole.APIWrapper
 				throw request.Exception;
 			} else {
 				if(request.State == HTTPRequestStates.Finished) {
-					result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+					await Task.Run(() => {
+						result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+					});
 					return result;
 				}
 			}
