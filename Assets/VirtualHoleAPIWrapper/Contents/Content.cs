@@ -16,6 +16,7 @@ namespace VirtualHole.APIWrapper.Contents
 		public string creatorIdUniversal = string.Empty;
 
 		public DateTimeOffset creationDate = DateTimeOffset.MinValue;
+		public string creationDateDisplay = string.Empty;
 		public string[] tags = new string[0];
 	}
 }

@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Midnight;
 
 namespace BestHTTP
 {
@@ -32,7 +33,7 @@ namespace BestHTTP
 			if(_request.RawData != null) {
 				message += $"Request Body: {Encoding.UTF8.GetString(_request.RawData)} {Environment.NewLine}";
 			}
-			UDebug.Log(message);
+			MLog.Log(message);
 
 			_stopwatch.Start();
 			_request.Send();
@@ -51,7 +52,7 @@ namespace BestHTTP
 			void OnRequestFinished(HTTPRequest req, HTTPResponse res)
 			{
 				_stopwatch.Stop();
-				UDebug.Log(
+				MLog.Log(
 					$"[HTTP]" +
 					$"End Request Result: ({_stopwatch.Elapsed.TotalSeconds:0.00}s | " +
 						$"{ConvertSizeByteToKilobyte(req.Downloaded):0.00}kb) " +

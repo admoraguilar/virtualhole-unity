@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Humanizer;
 using Midnight;
 
 namespace VirtualHole.Client.Data
@@ -85,11 +84,11 @@ namespace VirtualHole.Client.Data
 			}
 
 			dto.thumbnailSprite = await HTTPUtilities.GetImageAsync(dto.raw.thumbnailUrl, cancellationToken);
-			dto.creationDateDisplay = dto.raw.creationDate.Humanize();
+			dto.creationDateDisplay = dto.raw.creationDateDisplay;
 
 			if(dto.raw is Broadcast broadcast) {
 				dto.indicatorSprite = UIResources.GetIndicatorSprite(broadcast.isLive);
-				dto.scheduleDateDisplay = broadcast.schedule.Humanize();
+				dto.scheduleDateDisplay = broadcast.scheduleDisplay;
 			}
 		}
 
