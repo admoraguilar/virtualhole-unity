@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
@@ -25,9 +26,13 @@ namespace BestHTTP
 
 			_request.Callback = OnRequestFinished;
 
-			UDebug.Log(
+			string message = 
 				$"[HTTP]" +
-				$"Start Requst: {_request.Uri.AbsoluteUri} {Environment.NewLine}");
+				$"Start Request: {_request.Uri.AbsoluteUri} {Environment.NewLine}";
+			if(_request.RawData != null) {
+				message += $"Request Body: {Encoding.UTF8.GetString(_request.RawData)} {Environment.NewLine}";
+			}
+			UDebug.Log(message);
 
 			_stopwatch.Start();
 			_request.Send();

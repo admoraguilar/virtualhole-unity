@@ -29,18 +29,18 @@ namespace VirtualHole.APIWrapper.Contents.Videos
 		public async Task<List<T>> ListCreatorRelatedVideosAsync<T>(
 			ListCreatorRelatedVideosRequest request, CancellationToken cancellationToken = default)
 		{
-			string slug = "ListCreatorRelatedVideos";
-			if(typeof(T) == typeof(Broadcast)) { slug = "ListCreatorRelatedBroadcast"; }
-			return await PostAsync<List<T>>(CreateUri(slug), request, cancellationToken);
+			Uri uri = CreateUri("ListCreatorRelatedVideos");
+			if(typeof(T) == typeof(Broadcast)) { uri = CreateUri("ListCreatorRelatedBroadcasts"); }
+			return await PostAsync<List<T>>(uri, request, cancellationToken);
 		}
 
 		public async Task<List<T>> ListCreatorVideosAsync<T>(
 			ListCreatorVideosRequest request, CancellationToken cancellationToken = default)
 			where T : Video
 		{
-			string slug = "ListCreatorVideos";
-			if(typeof(T) == typeof(Broadcast)) { slug = "ListCreatorBroadcast"; }
-			return await PostAsync<List<T>>(CreateUri(slug), request, cancellationToken);
+			Uri uri = CreateUri("ListCreatorVideos");
+			if(typeof(T) == typeof(Broadcast)) { uri = CreateUri("ListCreatorBroadcasts", "Broadcasts"); }
+			return await PostAsync<List<T>>(uri, request, cancellationToken);
 		}
 	}
 }

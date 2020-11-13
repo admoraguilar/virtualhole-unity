@@ -7,6 +7,7 @@ namespace VirtualHole.APIWrapper.Storage.Dynamic
 	public class DynamicClient : APIClient
 	{
 		public override string path => "dynamic";
+		public override string version => string.Empty;
 
 		public DynamicClient(string domain) : base(domain)
 		{ }

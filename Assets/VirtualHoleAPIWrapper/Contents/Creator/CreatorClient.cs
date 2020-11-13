@@ -17,7 +17,7 @@ namespace VirtualHole.APIWrapper.Contents.Creators
 		{
 			if(request is ListCreatorsRegexRequest regexRequest) { return await ListCreatorRegexAsync(regexRequest, cancellationToken); }
 			else if(request is ListCreatorsStrictRequest strictRequest) { return await ListCreatorsStrictAsync(strictRequest, cancellationToken); }
-			else { return await ListCreatorsAsync(request, cancellationToken); }
+			else { return await ListCreatorsSimpleAsync(request, cancellationToken); }
 		}
 
 		public async Task<List<Creator>> ListCreatorRegexAsync(
@@ -32,7 +32,7 @@ namespace VirtualHole.APIWrapper.Contents.Creators
 			return await PostAsync<List<Creator>>(CreateUri("ListCreatorsStrict"), request, cancellationToken);
 		}
 
-		public async Task<List<Creator>> ListCreatorsAsync(
+		public async Task<List<Creator>> ListCreatorsSimpleAsync(
 			ListCreatorsRequest request, CancellationToken cancellationToken = default)
 		{
 			return await PostAsync<List<Creator>>(CreateUri("ListCreators"), request, cancellationToken);

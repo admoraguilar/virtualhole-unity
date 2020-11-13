@@ -71,9 +71,13 @@ namespace VirtualHole.APIWrapper
 			return result;
 		}
 
-		protected Uri CreateUri(string slug)
+		protected Uri CreateUri(string slug, string overridePath = "")
 		{
-			return UriUtilities.CreateUri(domain, version, path, slug);
+			// TODO: overridePath is a hack, think of a better way to handle
+			// multiple paths in one APIClient
+			return UriUtilities.CreateUri(
+				domain, version, 
+				string.IsNullOrEmpty(overridePath) ? path : overridePath, slug);
 		}
 	}
 }
