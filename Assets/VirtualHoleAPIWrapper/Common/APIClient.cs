@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace VirtualHole.APIWrapper
 			CancellationToken cancellationToken = default)
 		{
 			HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Post);
+			request.AddHeader("Content-Type", "application/json");
 
 			string bodyAsJson = JsonConvert.SerializeObject(body, JsonUtilities.DefaultSettings);
 			request.RawData = Encoding.UTF8.GetBytes(bodyAsJson);
@@ -34,6 +36,8 @@ namespace VirtualHole.APIWrapper
 			HTTPResponse response = await requestAsync.SendAsync(cancellationToken);
 			if(response == null) {
 				throw request.Exception;
+			} else if(!response.IsSuccess) {
+				throw new HttpRequestException(response.Message);
 			} else {
 				if(request.State == HTTPRequestStates.Finished) {
 					result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
@@ -69,9 +73,7 @@ namespace VirtualHole.APIWrapper
 
 		protected Uri CreateUri(string slug)
 		{
-			return UriUtilities.CreateUri(
-				new Uri(new Uri(domain), version).AbsoluteUri, 
-				path, slug);
+			return UriUtilities.CreateUri(domain, version, path, slug);
 		}
 	}
 }

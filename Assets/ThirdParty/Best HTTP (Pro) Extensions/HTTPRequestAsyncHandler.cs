@@ -26,7 +26,7 @@ namespace BestHTTP
 			_request.Callback = OnRequestFinished;
 
 			UDebug.Log(
-				$"{nameof(HTTPRequestAsyncHandler)} {Environment.NewLine}" +
+				$"[HTTP]" +
 				$"Start Requst: {_request.Uri.AbsoluteUri} {Environment.NewLine}");
 
 			_stopwatch.Start();
@@ -47,10 +47,10 @@ namespace BestHTTP
 			{
 				_stopwatch.Stop();
 				UDebug.Log(
-					$"{nameof(HTTPRequestAsyncHandler)} {Environment.NewLine}" +
-					$"End Request Result: {req.Uri.AbsoluteUri} {Environment.NewLine}" +
-					$"Seconds: {_stopwatch.Elapsed.TotalSeconds:0.00}s {Environment.NewLine}" +
-					$"Size: {ConvertSizeByteToKilobyte(req.Downloaded):0.00}kb");
+					$"[HTTP]" +
+					$"End Request Result: ({_stopwatch.Elapsed.TotalSeconds:0.00}s | " +
+						$"{ConvertSizeByteToKilobyte(req.Downloaded):0.00}kb) " +
+							$"({req.Uri.AbsoluteUri}) {Environment.NewLine}");
 
 				response = res;
 				isDone = true;

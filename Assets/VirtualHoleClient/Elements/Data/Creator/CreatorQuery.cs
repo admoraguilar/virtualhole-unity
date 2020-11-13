@@ -34,6 +34,7 @@ namespace VirtualHole.Client.Data
 		public CreatorQuery(ListCreatorsRequest request, CreatorQuerySettings querySettings = null) : base(querySettings)
 		{
 			_request = request;
+			_request.batchSize = 100;
 		}
 
 		protected override CreatorDTO FromRawToDTO(Creator raw)
@@ -59,8 +60,18 @@ namespace VirtualHole.Client.Data
 				$"End getting {nameof(Creator)}s.")) {
 
 				List<Creator> results = new List<Creator>();
+
 				CreatorClient creatorClient = _querySettings.apiWrapperClient.contents.creators;
-				results.AddRange(await creatorClient.ListCreatorsAsync(_request, cancellationToken));
+
+				int requestPage = 0;
+				List<Creator> request = new List<Creator>();
+				do {
+					request = await creatorClient.ListCreatorsAsync(_request, cancellationToken);
+					results.AddRange(request);
+
+					_request.skip = _request.batchSize * requestPage;
+					requestPage++;
+				} while(request.Count > 0);
 
 				isDone = true;
 				return results;
