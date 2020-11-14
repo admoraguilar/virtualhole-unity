@@ -88,7 +88,7 @@ namespace VirtualHole.Client.Data
 
 			if(dto.raw is Broadcast broadcast) {
 				dto.indicatorSprite = UIResources.GetIndicatorSprite(broadcast.isLive);
-				dto.scheduleDateDisplay = broadcast.scheduleDisplay;
+				dto.scheduleDateDisplay = broadcast.scheduleDateDisplay;
 			}
 		}
 

@@ -7,7 +7,7 @@ namespace VirtualHole.APIWrapper.Contents.Videos
 	{
 		public bool isLive = false;
 		public long viewerCount = 0;
-		public DateTimeOffset schedule = DateTimeOffset.MinValue;
-		public string scheduleDisplay = string.Empty;
+		public DateTimeOffset scheduleDate = DateTimeOffset.MinValue;
+		public string scheduleDateDisplay = string.Empty;
 	}
 }
