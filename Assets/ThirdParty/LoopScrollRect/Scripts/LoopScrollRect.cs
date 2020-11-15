@@ -8,7 +8,7 @@ namespace UnityEngine.UI
     [AddComponentMenu("")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RectTransform))]
-    public abstract class LoopScrollRect : UIBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IScrollHandler, ICanvasElement, ILayoutElement, ILayoutGroup
+    public abstract class LoopScrollRect : UIBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IScrollHandler, ICanvasElement, ILayoutElement, ILayoutGroup, IScrollRect
     {
         //==========LoopScrollRect==========
         [Tooltip("Prefab Source")]

@@ -60,6 +60,8 @@ namespace VirtualHole.Client.Controllers
 
 		private void SetPairActive(NodeCanvasPair pair, bool value)
 		{
+			if(pair.canvas == null) { return; }
+
 			pair.canvas.enabled = value;
 			pair.canvas.GetComponent<GraphicRaycaster>().enabled = value;
 		}
