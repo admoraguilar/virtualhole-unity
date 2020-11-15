@@ -1,6 +1,4 @@
-﻿using Midnight;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace VirtualHole.Client.UI
@@ -17,19 +15,16 @@ namespace VirtualHole.Client.UI
 			if(data.videoDTO.indicatorSprite != null) {
 				instance.indicatorImage.gameObject.SetActive(true);
 				instance.indicatorImage.sprite = data.videoDTO.indicatorSprite;
-				//instance.dateText.text = data.videoDTO.scheduleDateDisplay;
-				instance.dateText.SetText(data.videoDTO.scheduleDateDisplay);
+				instance.dateText.SetText(data.videoDTO.scheduleDateDisplay, false);
 			} else {
 				instance.indicatorImage.gameObject.SetActive(false);
-				//instance.dateText.text = data.videoDTO.creationDateDisplay;
-				instance.dateText.SetText(data.videoDTO.creationDateDisplay);
+				instance.dateText.SetText(data.videoDTO.creationDateDisplay, false);
 			}
 
 			instance.creatorImage.sprite = data.videoDTO.creatorDTO.avatarSprite;
 			instance.creatorNameText.text = data.videoDTO.raw.creator;
 
-			//instance.titleText.text = data.videoDTO.raw.title;
-			instance.titleText.SetText(data.videoDTO.raw.title);
+			instance.titleText.SetText(data.videoDTO.raw.title, false);
 
 			instance.button.onClick.RemoveAllListeners();
 			instance.button.onClick.AddListener(() => data.onCellClick());
@@ -41,8 +36,6 @@ namespace VirtualHole.Client.UI
 			} else {
 				instance.optionsButton.gameObject.SetActive(false);
 			}
-
-			Debug.Log($"{instance.name} scroll cell processed", instance);
 		}
 	}
 }

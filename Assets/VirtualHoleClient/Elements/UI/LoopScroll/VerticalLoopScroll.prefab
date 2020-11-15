@@ -541,7 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabSource:
     prefab: {fileID: 7128403961489689338}
-    poolSize: 5
+    poolSize: 10
   totalCount: 0
   reverseDirection: 0
   rubberScale: 1

@@ -9,7 +9,7 @@ namespace VirtualHole.Client.UI
 		public override void ProcessData(CreatorButton instance, CreatorScrollCellData data)
 		{
 			instance.creatorAvatarImage.sprite = data.creatorDTO.avatarSprite;
-			instance.creatorNameText.text = data.creatorDTO.raw.universalName;
+			instance.creatorNameText.SetText(data.creatorDTO.raw.universalName, false);
 
 			if(data.onClick != null) {
 				instance.button.onClick.RemoveAllListeners();
