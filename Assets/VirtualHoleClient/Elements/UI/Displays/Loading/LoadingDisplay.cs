@@ -2,10 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Midnight;
+using Midnight.Pages;
 
 namespace VirtualHole.Client.Pages
 {
-	public class LoadingDisplay : MonoBehaviour
+	public class LoadingDisplay : MonoBehaviour, ILoadingDisplay
 	{
 		[SerializeField]
 		private Sprite[] _spinnerSpritePool = null;
@@ -33,6 +34,11 @@ namespace VirtualHole.Client.Pages
 				foreach(Sprite spr in sprPool) { _spinnerSpriteQueue.Enqueue(spr); }
 			}
 			spinnerSprite = _spinnerSpriteQueue.Dequeue();
+		}
+
+		public void SetProgress(float value)
+		{
+			
 		}
 
 		private void OnEnable()
