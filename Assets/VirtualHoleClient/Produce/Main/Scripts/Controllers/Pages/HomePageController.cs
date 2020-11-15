@@ -15,7 +15,7 @@ namespace VirtualHole.Client.Controllers
 		protected override VideoFeedScroll _videoFeed => _homeFlowMap.videoFeed;
 		[Space]
 		[SerializeField]
-		private HomeFlowMap _homeFlowMap = null;
+		private HomePageMap _homeFlowMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery()
 		{

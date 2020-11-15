@@ -15,7 +15,7 @@ namespace VirtualHole.Client.Controllers
 
 		private SupportView _supportView => _supportFlowMap.supportView;
 		[SerializeField]
-		private SupportFlowMap _supportFlowMap = null;
+		private SupportPageMap _supportFlowMap = null;
 
 		private async void OnSupportVisit()
 		{

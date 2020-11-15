@@ -22,7 +22,7 @@ namespace VirtualHole.Client.Controllers
 
 		private VideoFeedScroll _videoFeed => _creatorFeedFlowMap.videoFeed;
 		[SerializeField]
-		private CreatorFeedFlowMap _creatorFeedFlowMap = null;
+		private CreatorFeedPageMap _creatorFeedFlowMap = null;
 
 		private async Task VideoFeedDataFactoryAsync(CancellationToken cancellationToken = default)
 		{

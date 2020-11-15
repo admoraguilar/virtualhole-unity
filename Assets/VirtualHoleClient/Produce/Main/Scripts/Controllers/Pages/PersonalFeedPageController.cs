@@ -22,7 +22,7 @@ namespace VirtualHole.Client.Controllers
 		private Section _emptySection => _personalFeedFlowMap.emptySection;
 		[Space]
 		[SerializeField]
-		private PersonalFeedFlowMap _personalFeedFlowMap = null;
+		private PersonalFeedPageMap _personalFeedFlowMap = null;
 
 		protected override CreatorQuery CreateCreatorQuery()
 		{

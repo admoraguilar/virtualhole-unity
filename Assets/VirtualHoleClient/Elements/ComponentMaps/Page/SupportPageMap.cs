@@ -4,7 +4,7 @@ namespace VirtualHole.Client.ComponentMaps
 {
 	using Client.UI;
 
-	public class SupportFlowMap : MonoBehaviour
+	public class SupportPageMap : MonoBehaviour
 	{
 		public SupportView supportView => _supportView;
 		[SerializeField]

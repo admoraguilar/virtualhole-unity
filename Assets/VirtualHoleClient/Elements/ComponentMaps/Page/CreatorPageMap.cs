@@ -4,7 +4,7 @@ namespace VirtualHole.Client.ComponentMaps
 {
 	using Client.UI;
 	
-	public class CreatorPageFlowMap : MonoBehaviour
+	public class CreatorPageMap : MonoBehaviour
 	{
 		public CreatorView creatorView => _creatorView;
 		[SerializeField]

@@ -3,8 +3,8 @@
 namespace VirtualHole.Client.ComponentMaps
 {
 	using Client.UI;
-
-	public class CreatorFeedFlowMap : MonoBehaviour
+	
+	public class HomePageMap : MonoBehaviour
 	{
 		public VideoFeedScroll videoFeed => _videoFeed;
 		[SerializeField]

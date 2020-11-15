@@ -19,7 +19,7 @@ namespace VirtualHole.Client.Controllers
 
 		private SearchView _searchView => _mainFlowSearchMap.searchView;
 		[SerializeField]
-		private SearchFlowMap _mainFlowSearchMap = null;
+		private SearchPageMap _mainFlowSearchMap = null;
 
 		private CreatorQuery CreatorQueryFactory(string searchString)
 		{

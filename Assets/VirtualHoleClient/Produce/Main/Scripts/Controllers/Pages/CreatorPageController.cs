@@ -23,7 +23,7 @@ namespace VirtualHole.Client.Controllers
 
 		private CreatorView _creatorView => _mainFlowCreatorPageMap.creatorView;
 		[SerializeField]
-		private CreatorPageFlowMap _mainFlowCreatorPageMap = null;
+		private CreatorPageMap _mainFlowCreatorPageMap = null;
 
 		private async void OnCreatorPageVisit()
 		{

@@ -4,7 +4,7 @@ namespace VirtualHole.Client.ComponentMaps
 {
 	using Client.UI;
 
-	public class SearchFlowMap : MonoBehaviour
+	public class SearchPageMap : MonoBehaviour
 	{
 		public SearchView searchView => _searchView;
 		[SerializeField]
