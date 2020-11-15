@@ -119,10 +119,5 @@ namespace UnityEngine.UI
 				cellItem.gameObject.SetActive(value);
 			}
 		}
-
-		private void Start()
-		{
-			ScrollCellIndex(_index);
-		}
 	}
 }
