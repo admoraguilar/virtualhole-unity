@@ -52,7 +52,7 @@ namespace VirtualHole.Client.UI
 
 			int index = 0;
 			foreach(ItemData data in _itemData) {
-				NavigationBarItem item = GetOrCreatorItem(index++);
+				NavigationBarItem item = GetOrCreateItem(index++);
 				item.name = data.text;
 
 				item.button.onClick.AddListener(data.onClick.Invoke);
@@ -65,7 +65,7 @@ namespace VirtualHole.Client.UI
 			}
 		}
 
-		private NavigationBarItem GetOrCreatorItem(int index)
+		private NavigationBarItem GetOrCreateItem(int index)
 		{
 			while(_items.Count <= index) {
 				NavigationBarItem item = Instantiate(template, _itemContainer, false);
