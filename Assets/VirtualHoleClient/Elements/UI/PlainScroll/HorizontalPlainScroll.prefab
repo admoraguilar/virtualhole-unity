@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 2467679947618833011}
   - component: {fileID: 4560152193177206879}
   - component: {fileID: 4539521035337207738}
+  - component: {fileID: -457112933171614157}
   m_Layer: 5
   m_Name: HorizontalPlainScroll
   m_TagString: Untagged
@@ -434,7 +435,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 150
   m_Viewport: {fileID: 745938814584583563}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -457,6 +458,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6a843751d0ed044881802138f4c8d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-457112933171614157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3878601530769429986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b21e830f0b061e4479066c8a3bcabde4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadzone: 300
 --- !u!1 &5230439711115137474
 GameObject:
   m_ObjectHideFlags: 0

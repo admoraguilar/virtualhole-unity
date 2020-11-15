@@ -609,6 +609,7 @@ GameObject:
   - component: {fileID: 4627152044985662682}
   - component: {fileID: 7452799709806958433}
   - component: {fileID: 7839444591789348284}
+  - component: {fileID: 5862688880626128358}
   m_Layer: 5
   m_Name: HorizontalLoopScroll
   m_TagString: Untagged
@@ -764,3 +765,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c37d2d93f39e28c4f97232a3852f62e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5862688880626128358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203265580350080606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17789c6b3b6df464e88e5a64e7c16578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadzone: 300

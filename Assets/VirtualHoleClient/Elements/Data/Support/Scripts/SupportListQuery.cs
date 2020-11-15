@@ -1,15 +1,14 @@
-﻿using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using Midnight;
-using Midnight.Web;
 
 namespace VirtualHole.Client.Data
 {
-	using Api.Storage;
-	using Api.Storage.Data;
+	using APIWrapper;
+	using APIWrapper.Storage;
+	using APIWrapper.Storage.Dynamic;
 
 	public class SupportInfoDTO : DataQueryDTO<SupportInfo>
 	{
@@ -21,20 +20,16 @@ namespace VirtualHole.Client.Data
 
 	public class SupportListQuerySettings : PaginatedQuerySettings<SupportInfo, SupportInfoDTO>
 	{
-		public VirtualHoleStorageClient storageClient { get; set; } = null;
+		public VirtualHoleAPIWrapperClient apiWrapperClient { get; set; } = null;
 
 		public SupportListQuerySettings() : base()
 		{
-			storageClient = VirtualHoleStorageClientFactory.Get();
+			apiWrapperClient = VirtualHoleAPIWrapperClientFactory.Get();
 		}
 	}
 
-	public class SupportListQuery : PaginatedQuery<SupportInfo, SupportInfoDTO, SupportListQuerySettings>, ILocatableData
+	public class SupportListQuery : PaginatedQuery<SupportInfo, SupportInfoDTO, SupportListQuerySettings>
 	{
-		public string rootPath => _querySettings.storageClient.endpoint;
-		public string subPath => "dynamic";
-		public string filePath => "support-list.json";
-
 		public SupportListQuery(SupportListQuerySettings querySettings = null) : base(querySettings) 
 		{ }
 
@@ -45,12 +40,8 @@ namespace VirtualHole.Client.Data
 
 		protected async override Task ProcessDTOAsync(SupportInfoDTO dto, CancellationToken cancellationToken = default)
 		{
-			//dto.imageSprite = await ImageGetWebRequest.GetAsync(
-			//	_querySettings.storageClient.BuildObjectUri(dto.raw.imagePath).AbsoluteUri, null,
-			//	cancellationToken);
-			dto.imageSprite = await QueryUtilities.GetImageAsync(
-				_querySettings.storageClient.BuildObjectUri(dto.raw.imagePath).AbsoluteUri,
-				cancellationToken);
+			StorageClient storageClient = _querySettings.apiWrapperClient.storage;
+			dto.imageSprite = await storageClient.@static.GetImageAsync(dto.raw.imagePath, cancellationToken);
 		}
 
 		protected override string GetCacheKey(SupportInfo raw)
@@ -62,11 +53,10 @@ namespace VirtualHole.Client.Data
 		{
 			using(new StopwatchScope(
 					nameof(SupportInfo),
-					$"Start getting {this.GetFullPath()}",
-					$"End getting {this.GetFullPath()}")) {
-				string response = await _querySettings.storageClient.GetAsync(Path.Combine(subPath, filePath), cancellationToken);
-				SupportInfo[] result = JsonUtilities.Deserialize<SupportInfo[]>(response);
-
+					$"Start getting support-list",
+					$"End getting support-list")) {
+				StorageClient storageClient = _querySettings.apiWrapperClient.storage;
+				List<SupportInfo> result = await storageClient.dynamic.ListSupportInfoAsync(cancellationToken);
 				isDone = true;
 				return result;
 			}

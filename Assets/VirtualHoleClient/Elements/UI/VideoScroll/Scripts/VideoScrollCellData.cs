@@ -2,7 +2,7 @@
 
 namespace VirtualHole.Client.UI
 {
-	using Api.DB.Contents.Videos;
+	using APIWrapper.Contents.Videos;
 	using Client.Data;
 
 	public class VideoScrollCellData

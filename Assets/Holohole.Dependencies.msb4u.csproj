@@ -32,12 +32,10 @@
   <!-- SDK.props is imported inside this props file -->
   <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.props" />
 
-  <ItemGroup>
-	  <PackageReference Include="Humanizer.Core" Version="2.8.26" />
-	  <PackageReference Include="MongoDB.Driver" Version="2.11.2" />
-  </ItemGroup>
-
 	<!-- SDK.targets is imported inside this props file -->
   <Import Project="$(MSBuildForUnityGeneratedProjectDirectory)\$(MSBuildProjectName).g.targets" />
+  <ItemGroup>
+
+  </ItemGroup>
   
 </Project>

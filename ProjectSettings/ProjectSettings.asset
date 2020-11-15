@@ -136,9 +136,7 @@ PlayerSettings:
   - {fileID: 11400000, guid: 0ab370a8adb82d64d9cd89aea236e27b, type: 2}
   - {fileID: 11400000, guid: 326a4ca50aff2ba46957f4522b09ab61, type: 2}
   - {fileID: 11400000, guid: d4e9b0474b963fa4b92d72ba2a5287e0, type: 2}
-  - {fileID: 11400000, guid: 98ab370eab473d64cb9fdbdb4a5807f2, type: 2}
-  - {fileID: 11400000, guid: a2f83a4c1cd73da4093fd14ee919a8ad, type: 2}
-  - {fileID: 11400000, guid: b04455d471d074a4885cd3b1189c36ec, type: 2}
+  - {fileID: 11400000, guid: 9db15f877ed45f048af5ccdac7998a8f, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -809,7 +807,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    7: MLOG
+    7: 
   platformArchitecture: {}
   scriptingBackend:
     Android: 0
@@ -818,7 +816,7 @@ PlayerSettings:
   managedStrippingLevel:
     Android: 0
   incrementalIl2cppBuild: {}
-  allowUnsafeCode: 0
+  allowUnsafeCode: 1
   useDeterministicCompilation: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1

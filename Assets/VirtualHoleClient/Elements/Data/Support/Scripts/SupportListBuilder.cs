@@ -4,7 +4,7 @@ using Midnight;
 
 namespace VirtualHole.Client.Data
 {
-	using Api.Storage.Data;
+	using APIWrapper.Storage.Dynamic;
 
 	[CreateAssetMenu(menuName = "VirtualHole/Data/Support List Builder")]
 	public class SupportListBuilder : ScriptableObject
