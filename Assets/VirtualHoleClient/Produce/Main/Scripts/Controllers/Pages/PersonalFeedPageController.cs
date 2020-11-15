@@ -19,7 +19,7 @@ namespace VirtualHole.Client.Controllers
 
 		protected override Node _mainNode => mainFlowMap.personalFeedNode;
 		protected override VideoFeedScroll _videoFeed => _personalFeedFlowMap.videoFeed;
-		private Section _emptySection => _personalFeedFlowMap.emptySection;
+		private GameObject _emptySection => _personalFeedFlowMap.emptyDisplay;
 		[Space]
 		[SerializeField]
 		private PersonalFeedPageMap _personalFeedFlowMap = null;
@@ -43,7 +43,6 @@ namespace VirtualHole.Client.Controllers
 			} else {
 				_videoFeed.gameObject.SetActive(false);
 				_emptySection.gameObject.SetActive(true);
-				await _emptySection.LoadAsync();
 			}
 		}
 

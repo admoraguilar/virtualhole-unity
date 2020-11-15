@@ -1234,6 +1234,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5923252444353279183, guid: ae4c487debec9434ea3dcead442b31dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5923252444353317681, guid: ae4c487debec9434ea3dcead442b31dd,
         type: 3}
       propertyPath: m_Color.r

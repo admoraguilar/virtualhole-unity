@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Midnight.Pages;
 
 namespace VirtualHole.Client.ComponentMaps
 {
@@ -11,8 +10,8 @@ namespace VirtualHole.Client.ComponentMaps
 		[SerializeField]
 		private VideoFeedScroll _videoFeed = null;
 
-		public Section emptySection => _emptySection;
+		public GameObject emptyDisplay => _emptyDisplay;
 		[SerializeField]
-		private Section _emptySection = null;
+		private GameObject _emptyDisplay = null;
 	}
 }

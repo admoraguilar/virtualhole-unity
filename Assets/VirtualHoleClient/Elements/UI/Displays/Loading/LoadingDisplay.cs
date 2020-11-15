@@ -38,7 +38,7 @@ namespace VirtualHole.Client.Pages
 
 		public void SetProgress(float value)
 		{
-			
+
 		}
 
 		private void OnEnable()
