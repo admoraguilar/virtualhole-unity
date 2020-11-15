@@ -5,7 +5,7 @@ using Midnight;
 namespace VirtualHole.Client.UI
 {
 	[RequireComponent(typeof(ScrollRect))]
-	public class ScrollVelocityClamper : MonoBehaviour
+	public class VanillaScrollVelocityClamper : MonoBehaviour
 	{
 		public float deadzone = .2f;
 

@@ -43,15 +43,15 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		private LoopScrollCellDataContainer scrollDataContainer
+		private ScrollCellDataContainer scrollDataContainer
 		{
 			get {
 				return this.GetComponent(
 					ref _scrollDataContainer,
-					() => scroll == null ? null : scroll.GetComponent<LoopScrollCellDataContainer>());
+					() => scroll == null ? null : scroll.GetComponent<ScrollCellDataContainer>());
 			}
 		}
-		private LoopScrollCellDataContainer _scrollDataContainer = null;
+		private ScrollCellDataContainer _scrollDataContainer = null;
 
 		public ContextButton contextButton => _contextButton;
 		[SerializeField]
