@@ -1,0 +1,20 @@
+{
+    "name": "Tests",
+    "references": [
+        "Flexbox4Unity-assembly",
+        "Flexbox4Unity-Editor-assembly"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
