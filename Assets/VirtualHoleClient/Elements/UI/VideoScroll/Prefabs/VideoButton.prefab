@@ -747,6 +747,7 @@ GameObject:
   - component: {fileID: 1879085786}
   - component: {fileID: 4134916011671619781}
   - component: {fileID: 651196330132861614}
+  - component: {fileID: -5003505676889517734}
   m_Layer: 5
   m_Name: VideoButton
   m_TagString: Untagged
@@ -857,6 +858,86 @@ MonoBehaviour:
   _dateText: {fileID: 6301536505072250005}
   _button: {fileID: 4134916011671619781}
   _optionsButton: {fileID: 8594215027118850546}
+--- !u!114 &-5003505676889517734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4134916011671619787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50619c2aef4099f4395fcb557da9515a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flexBasis:
+    mode: 4
+    value: 0
+  cssDefaultWidth:
+    mode: 3
+    value: 0
+  cssDefaultHeight:
+    mode: 3
+    value: 0
+  cssMinWidth:
+    mode: 0
+    value: 1080
+  cssMaxWidth:
+    mode: 0
+    value: 1080
+  cssMinHeight:
+    mode: 0
+    value: 600
+  cssMaxHeight:
+    mode: 0
+    value: 600
+  boxSizing: 0
+  flexShrink: 0
+  flexGrow: 1
+  flexOrder: 0
+  cssMargins:
+    isActive: 0
+    left:
+      mode: 0
+      value: 0
+    top:
+      mode: 0
+      value: 0
+    right:
+      mode: 0
+      value: 0
+    bottom:
+      mode: 0
+      value: 0
+  cssPadding:
+    isActive: 0
+    left:
+      mode: 0
+      value: 0
+    top:
+      mode: 0
+      value: 0
+    right:
+      mode: 0
+      value: 0
+    bottom:
+      mode: 0
+      value: 0
+  isSelfAlignmentActive: 0
+  alignSelf: 3
+  _settings: {fileID: 11400000, guid: c01e6cb94119b0c4184ecb497622eaa6, type: 2}
+  flexWrapGrow: 1
+  flexWrapShrink: 1
+  lastReportedUnityTextWidthInPixels: 0
+  createdWithVersion:
+    major: 3
+    minor: 3
+    patch: 0
+  upgradedToVersion:
+    major: 3
+    minor: 3
+    patch: 0
+  RelayoutWheneverSelected: 0
 --- !u!1 &4134916011753441505
 GameObject:
   m_ObjectHideFlags: 0

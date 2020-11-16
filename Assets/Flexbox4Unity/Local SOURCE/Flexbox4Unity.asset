@@ -26,6 +26,6 @@ MonoBehaviour:
   drawFlexHierarchyUsing: 0
   flexHierarchyContainersOutlineColour: {r: 0, g: 1, b: 0, a: 1}
   flexHierarchyGizmosInsetAmount: 10
-  debugRefreshTriggers: 1
-  debugRelayoutCalls: 1
+  debugRefreshTriggers: 0
+  debugRelayoutCalls: 0
   debugShowForceLayoutButton: 0
