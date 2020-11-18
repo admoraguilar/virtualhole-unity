@@ -22,7 +22,7 @@ MonoBehaviour:
   autoUpgradeScenesOnOpening: 1
   invoiceNumber: 
   v2layoutAlgorithm: {fileID: 0}
-  v3layoutAlgorithm: {fileID: 11400000, guid: 6aa9bfd16258eee499cdf7785bc0c93a, type: 2}
+  v3layoutAlgorithm: {fileID: 11400000, guid: d6ae6202b12fff04e9318738a40bd094, type: 2}
   drawFlexHierarchyUsing: 0
   flexHierarchyContainersOutlineColour: {r: 0, g: 1, b: 0, a: 1}
   flexHierarchyGizmosInsetAmount: 10

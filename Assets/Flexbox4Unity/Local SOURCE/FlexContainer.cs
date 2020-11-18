@@ -43,7 +43,6 @@ namespace Flexbox4Unity
  *  - when the container is too small in cross-direction to fit the FIXED basis sizes of some elements, those elements
  *     WILL OVERFLOW (this is correct! Confirmed with CSS3). To prevent overflow, CSS has nothing? (TBC/TODO); you can use ASPECT basis
  *     in some cases.
- *  - min-size and max-size MAY be added in a future version, but I'd like to integrate them with Unity's formal min/max sizes
  */
 #if UNITY_2018_2 || UNITY_2018_1 || UNITY_2017 || UNITY_5 || UNITY_4
 [ExecuteInEditMode]
@@ -54,7 +53,7 @@ namespace Flexbox4Unity
  public class FlexContainer : UIBehaviour, ILayoutGroup, ILayoutElement
  {
 #if V3_EXPERIMENTAL_DISABLABLE_RELAYOUT
-  private static bool _suppressingAutoLayout = false;
+  protected static bool _suppressingAutoLayout = false;
 
   public static void DisableAutomaticRelayout( bool suppressWarning = false )
   {
@@ -421,7 +420,8 @@ public FlexWrap wrap { get { return FlexWrap.NOWRAP; } }
 
   #endregion
 
-  void ILayoutController.SetLayoutHorizontal()
+  //void ILayoutController.SetLayoutHorizontal()
+  public virtual void SetLayoutHorizontal()
   {
 #if V3_EXPERIMENTAL_DISABLABLE_RELAYOUT
    if( _suppressingAutoLayout )
@@ -446,7 +446,7 @@ public FlexWrap wrap { get { return FlexWrap.NOWRAP; } }
 
   public bool experimental_DontUseLayoutRebuilder_WhenChildrenAddedRemoved = false;
 
-  protected void OnTransformChildrenChanged()
+  protected virtual void OnTransformChildrenChanged()
   {
 #if V3_EXPERIMENTAL_DISABLABLE_RELAYOUT
    if( _suppressingAutoLayout )
