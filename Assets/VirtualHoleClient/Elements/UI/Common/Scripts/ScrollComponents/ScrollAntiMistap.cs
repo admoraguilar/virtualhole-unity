@@ -1,8 +1,7 @@
 ﻿
 namespace UnityEngine.UI
 {
-	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollAntiMistap : MonoBehaviour
+	public class ScrollAntiMistap : MonoBehaviour
 	{
 		[SerializeField]
 		private GameObject _antiMistapImage = null;
@@ -11,21 +10,19 @@ namespace UnityEngine.UI
 		private float _antiMistapTime = .1f;
 		private float _antiMistapTimer = 0f;
 
-		protected LoopScrollRect loopScrollRect
+		protected IScrollRect scrollRect
 		{
 			get {
-				if(_loopScrollRect == null) {
-					_loopScrollRect = GetComponent<LoopScrollRect>();
-				}
-				return _loopScrollRect;
+				if(_scrollRect == null) { _scrollRect = GetComponent<IScrollRect>(); }
+				return _scrollRect;
 			}
 		}
-		private LoopScrollRect _loopScrollRect = null;
+		private IScrollRect _scrollRect = null;
 
 		private void FixedUpdate()
 		{
-			if(Mathf.Abs(loopScrollRect.velocity.x) > 0.1f || 
-			   Mathf.Abs(loopScrollRect.velocity.y) > 0.1f) {
+			if(Mathf.Abs(scrollRect.velocity.x) > 0.1f || 
+			   Mathf.Abs(scrollRect.velocity.y) > 0.1f) {
 				_antiMistapImage?.SetActive(true);
 				_antiMistapTimer = 0f;
 			} else {

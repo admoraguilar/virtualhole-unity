@@ -5,35 +5,35 @@ namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(RectTransform))]
 	[RequireComponent(typeof(LayoutElement))]
-	public class LoopScrollCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
+	public class ScrollCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
 	{
-		private class LoopScrollCell
+		private class ScrollCell
 		{
 			public GameObject gameObject = null;
-			public LoopScrollCellDataProcessor processor = null;
+			public ScrollCellDataProcessor processor = null;
 
 			public RectTransform rectTransform = null;
 			public LayoutElement layoutElement = null;
 		}
 
-		public LoopScrollCellDataProcessor[] dataProcessors = null;
+		public ScrollCellDataProcessor[] dataProcessors = null;
 
-		private Dictionary<Type, LoopScrollCell> _cellLookup = new Dictionary<Type, LoopScrollCell>();
+		private Dictionary<Type, ScrollCell> _cellLookup = new Dictionary<Type, ScrollCell>();
 		private object _data = null;
 		private int _index = 0;
 
-		protected LoopScrollCellDataContainer dataContainer
+		protected ScrollCellDataContainer dataContainer
 		{
 			get {
 				if(_dataContainer == null) {
-					LoopScrollCellDataContainer[] cs = GetComponentsInParent<LoopScrollCellDataContainer>(true);
+					ScrollCellDataContainer[] cs = GetComponentsInParent<ScrollCellDataContainer>(true);
 					_dataContainer = cs != null && cs.Length > 0 ? cs[0] : null;
 				}
 				return _dataContainer;
 			}
 		}
 		[SerializeField]
-		private LoopScrollCellDataContainer _dataContainer = null;
+		private ScrollCellDataContainer _dataContainer = null;
 
 		protected LayoutElement layoutElement
 		{
@@ -71,10 +71,10 @@ namespace UnityEngine.UI
 			}
 
 			Type dataType = _data.GetType();
-			if(!_cellLookup.TryGetValue(dataType, out LoopScrollCell cell)) {
-				cell = new LoopScrollCell();
+			if(!_cellLookup.TryGetValue(dataType, out ScrollCell cell)) {
+				cell = new ScrollCell();
 
-				foreach(LoopScrollCellDataProcessor dataProcessor in dataProcessors) {
+				foreach(ScrollCellDataProcessor dataProcessor in dataProcessors) {
 					if(dataProcessor.dataType != dataType) { continue; }
 
 					cell.processor = dataProcessor;
@@ -95,7 +95,7 @@ namespace UnityEngine.UI
 				}
 
 				if(cell.processor == null) {
-					Debug.LogWarning($"[{nameof(LoopScrollCellBridge)}] No compatible data processor for [{dataType.GetType().Name}]", this);
+					Debug.LogWarning($"[{nameof(ScrollCellBridge)}] No compatible data processor for [{dataType.GetType().Name}]", this);
 				}
 			}
 
@@ -112,9 +112,9 @@ namespace UnityEngine.UI
 			}
 		}
 
-		private void SetActiveCells(bool value, LoopScrollCell cell = null)
+		private void SetActiveCells(bool value, ScrollCell cell = null)
 		{
-			foreach(LoopScrollCell cellItem in _cellLookup.Values) {
+			foreach(ScrollCell cellItem in _cellLookup.Values) {
 				if(cellItem == cell && cell != null) { continue; }
 				cellItem.gameObject.SetActive(value);
 			}

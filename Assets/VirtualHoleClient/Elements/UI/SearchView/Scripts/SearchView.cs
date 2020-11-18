@@ -27,9 +27,9 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		public LoopScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
+		public ScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
 		[SerializeField]
-		private LoopScrollCellDataContainer _scrollDataContainer = null;
+		private ScrollCellDataContainer _scrollDataContainer = null;
 
 		private List<CreatorScrollCellData> _scrollCellData = new List<CreatorScrollCellData>();
 		private CancellationTokenSource _cts = null;

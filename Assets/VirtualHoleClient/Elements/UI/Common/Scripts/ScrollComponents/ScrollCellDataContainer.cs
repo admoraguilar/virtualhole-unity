@@ -5,8 +5,7 @@ using Midnight;
 
 namespace UnityEngine.UI
 {
-	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollCellDataContainer : MonoBehaviour
+	public class ScrollCellDataContainer : MonoBehaviour
 	{
 		public IReadOnlyList<object> data => _data;
 		private List<object> _data = new List<object>();

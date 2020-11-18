@@ -1,22 +1,30 @@
-﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Midnight;
+﻿using UnityEngine.EventSystems;
 
-namespace VirtualHole.Client.UI
+namespace UnityEngine.UI
 {
 	/// Source: https://forum.unity.com/threads/nested-scrollrect.268551/page-2#post-4214161
-	[RequireComponent(typeof(ScrollRect))]
 	public class ScrollPropagator :
 		MonoBehaviour, IInitializePotentialDragHandler,
 		IDragHandler, IBeginDragHandler, IEndDragHandler
 	{
 		private bool _shouldRouteToParent = false;
 
-		public ScrollRect scrollRect => this.GetComponent(ref _scrollRect, () => GetComponent<ScrollRect>());
-		private ScrollRect _scrollRect = null;
+		protected IScrollRect scrollRect
+		{
+			get {
+				if(_scrollRect == null) { _scrollRect = GetComponent<IScrollRect>(); }
+				return _scrollRect;
+			}
+		}
+		private IScrollRect _scrollRect = null;
 
-		public new Transform transform => this.GetComponent(ref _transform, () => base.transform);
+		public new Transform transform
+		{
+			get {
+				if(_transform == null) { _transform = base.transform; }
+				return _transform;
+			}
+		}
 		private Transform _transform = null;
 
 		public void OnInitializePotentialDrag(PointerEventData eventData)

@@ -2,8 +2,7 @@
 
 namespace UnityEngine.UI
 {
-	[RequireComponent(typeof(LoopScrollRect))]
-	public class LoopScrollFlickScroll : MonoBehaviour, IEndDragHandler
+	public class ScrollFlickScroll : MonoBehaviour, IEndDragHandler
 	{
 		public float scrollMultiplierApex = 2.5f;
 		public int flickCountToReachApex = 5;
@@ -14,25 +13,25 @@ namespace UnityEngine.UI
 		private float _flickValidityTime = 1.5f;
 		private float _flickTimer = 0f;
 
-		public LoopScrollRect loopScrollRect 
+		protected IScrollRect scrollRect
 		{
 			get {
-				if(_loopScrollRect == null) { _loopScrollRect = GetComponent<LoopScrollRect>(); }
-				return _loopScrollRect;
+				if(_scrollRect == null) { _scrollRect = GetComponent<IScrollRect>(); }
+				return _scrollRect;
 			}
 		}
-		private LoopScrollRect _loopScrollRect = null;
+		private IScrollRect _scrollRect = null;
 
 		public void OnEndDrag(PointerEventData eventData)
 		{
 			float flickRegisterTime = .13f;
 
-			if(loopScrollRect.dragTime <= flickRegisterTime) {
+			if(scrollRect.dragTime <= flickRegisterTime) {
 				_flickTimer = 0f;
 
 				Vector2 flickDirection = new Vector2(
-					loopScrollRect.horizontal ? -eventData.delta.x : 0f,
-					loopScrollRect.vertical ? eventData.delta.y : 0f); ;
+					scrollRect.horizontal ? -eventData.delta.x : 0f,
+					scrollRect.vertical ? eventData.delta.y : 0f); ;
 
 				if(flickDirection != Vector2.zero) {
 					bool isHorizontalSameDirection = Mathf.Sign(_lastVelocity.x) == Mathf.Sign(flickDirection.x);
@@ -44,10 +43,10 @@ namespace UnityEngine.UI
 					float xSine = Mathf.InverseLerp(0f, flickCountToReachApex, _flickCounter.x);
 					float ySine = Mathf.InverseLerp(0f, flickCountToReachApex, _flickCounter.y);
 
-					Vector2 finalVelocity = loopScrollRect.velocity;
+					Vector2 finalVelocity = scrollRect.velocity;
 					finalVelocity.x *= scrollMultiplierApex * EaseOutCirc(xSine);
 					finalVelocity.y *= scrollMultiplierApex * EaseOutCirc(ySine);
-					loopScrollRect.velocity = finalVelocity;
+					scrollRect.velocity = finalVelocity;
 					_lastVelocity = finalVelocity;
 				}
 			}

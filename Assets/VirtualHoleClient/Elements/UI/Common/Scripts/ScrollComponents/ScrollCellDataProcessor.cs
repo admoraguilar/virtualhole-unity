@@ -2,7 +2,7 @@
 
 namespace UnityEngine.UI
 {
-	public abstract class LoopScrollCellDataProcessor<TObject, TData> : LoopScrollCellDataProcessor
+	public abstract class ScrollCellDataProcessor<TObject, TData> : ScrollCellDataProcessor
 		where TObject : Component
 	{
 		public TObject[] prefabs = null;
@@ -18,7 +18,7 @@ namespace UnityEngine.UI
 		public abstract void ProcessData(TObject instance, TData data);
 	}
 
-	public abstract class LoopScrollCellDataProcessor : ScriptableObject
+	public abstract class ScrollCellDataProcessor : ScriptableObject
 	{
 		public abstract GameObject prefab { get; }
 		public abstract Type dataType { get; }

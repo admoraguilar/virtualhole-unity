@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace VirtualHole.Client.UI
 {
 	[CreateAssetMenu(menuName = "VirtualHole/UI/Creator Scroll Cell Data Processor")]
-	public class CreatorScrollCellDataProcessor : LoopScrollCellDataProcessor<CreatorButton, CreatorScrollCellData>
+	public class CreatorScrollCellDataProcessor : ScrollCellDataProcessor<CreatorButton, CreatorScrollCellData>
 	{
 		public override void ProcessData(CreatorButton instance, CreatorScrollCellData data)
 		{
