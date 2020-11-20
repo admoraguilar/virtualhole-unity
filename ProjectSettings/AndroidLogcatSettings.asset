@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "e9a12e95",
         "name": "com.Simpukun.Holohole",
-        "processId": 13988,
+        "processId": 32610,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -96,12 +96,6 @@
             "deviceId": "e9a12e95",
             "name": "com.Simpukun.Holohole",
             "processId": 32610,
-            "exited": false
-        },
-        {
-            "deviceId": "e9a12e95",
-            "name": "com.Simpukun.Holohole",
-            "processId": 13988,
             "exited": false
         }
     ],

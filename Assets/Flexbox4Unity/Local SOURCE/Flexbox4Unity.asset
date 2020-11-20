@@ -28,4 +28,4 @@ MonoBehaviour:
   flexHierarchyGizmosInsetAmount: 10
   debugRefreshTriggers: 0
   debugRelayoutCalls: 0
-  debugShowForceLayoutButton: 0
+  debugShowForceLayoutButton: 1
