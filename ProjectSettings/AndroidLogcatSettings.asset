@@ -4,7 +4,7 @@
         "deviceId": "e9a12e95",
         "name": "com.Simpukun.Holohole",
         "processId": 17829,
-        "exited": false
+        "exited": true
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
