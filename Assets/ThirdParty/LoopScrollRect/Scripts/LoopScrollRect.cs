@@ -1318,7 +1318,7 @@ namespace UnityEngine.UI
             // Don't do this in Rebuild
             if (Application.isPlaying && updateItems && UpdateItems(m_ViewBounds, m_ContentBounds))
             {
-                Canvas.ForceUpdateCanvases();
+                //Canvas.ForceUpdateCanvases();
                 m_ContentBounds = GetBounds();
             }
             // ============LoopScrollRect============
