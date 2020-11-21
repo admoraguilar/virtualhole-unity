@@ -1873,11 +1873,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 7128403962202060157, guid: c0e977bddec7b5a4bbbf070868bf58ac,
-        type: 3}
-      propertyPath: m_VerticalScrollbar
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7128403962208501076, guid: c0e977bddec7b5a4bbbf070868bf58ac,
         type: 3}
       propertyPath: m_AnchorMax.x
