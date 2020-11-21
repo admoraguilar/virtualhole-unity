@@ -135,8 +135,8 @@ PlayerSettings:
   - {fileID: 11400000, guid: 4892910b120c964428234a37ca47928e, type: 2}
   - {fileID: 11400000, guid: 0ab370a8adb82d64d9cd89aea236e27b, type: 2}
   - {fileID: 11400000, guid: 326a4ca50aff2ba46957f4522b09ab61, type: 2}
-  - {fileID: 11400000, guid: d4e9b0474b963fa4b92d72ba2a5287e0, type: 2}
   - {fileID: 11400000, guid: 9db15f877ed45f048af5ccdac7998a8f, type: 2}
+  - {fileID: 11400000, guid: d4e9b0474b963fa4b92d72ba2a5287e0, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -255,7 +255,7 @@ PlayerSettings:
   clonedFromGUID: c0afd0d1d80e3634a9dac47e8a0426ea
   templatePackageId: com.unity.template.3d@4.2.8
   templateDefaultScene: Assets/Scenes/SampleScene.unity
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 2
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 2800000, guid: d1423fe39e0964549b794dab842df13f, type: 3}
   AndroidKeystoreName: 
@@ -807,14 +807,15 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
+    1: MLOG
     7: 
   platformArchitecture: {}
   scriptingBackend:
-    Android: 0
+    Android: 1
     Standalone: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel:
-    Android: 0
+    Android: 1
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 1
   useDeterministicCompilation: 1
