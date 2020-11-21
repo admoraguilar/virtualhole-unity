@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,8 +7,9 @@ using System.Collections;
 using UnityEngine;
 using BestHTTP;
 using StbImageSharp;
-using Midnight.Coroutines;
+using SkiaSharp;
 using Midnight;
+using Midnight.Coroutines;
 
 namespace VirtualHole.APIWrapper
 {
@@ -17,7 +19,9 @@ namespace VirtualHole.APIWrapper
 		{
 			HTTPRequest request = null;
 			HTTPResponse response = null;
-			ImageResult imgResult = null;
+
+			byte[] resizeImage = null;
+			ImageResult finalImage = null;
 
 			using(StopwatchScope s = new StopwatchScope(
 				nameof(HTTPUtilities),
@@ -26,6 +30,21 @@ namespace VirtualHole.APIWrapper
 				await Task.Run(async () => {
 					request = new HTTPRequest(new Uri(url));
 					response = await request.GetHTTPResponseAsync(cancellationToken);
+
+					using(SKBitmap skBitmap = SKBitmap.Decode(response.Data)) {
+						int width = (int)(skBitmap.Width * .3f);
+						int height = (int)(skBitmap.Height * .3f);
+
+						using(SKBitmap scaledBitmap = skBitmap.Resize(
+							new SKImageInfo(width, height), SKFilterQuality.Low)) {
+							using(SKImage scaledImage = SKImage.FromBitmap(scaledBitmap)) {
+								using(SKData imageData = scaledImage.Encode()) {
+									resizeImage = imageData.ToArray();
+								}
+							}
+						}
+					}
+
 				}, cancellationToken);
 			}
 
@@ -33,7 +52,7 @@ namespace VirtualHole.APIWrapper
 			if(response != null) {
 				if(request.State == HTTPRequestStates.Finished) {
 					await Task.Run(() => {
-						imgResult = ImageResult.FromMemory(response.Data, ColorComponents.RedGreenBlueAlpha, true);
+						finalImage = ImageResult.FromMemory(resizeImage, ColorComponents.RedGreenBlueAlpha, true);
 					}, cancellationToken);
 
 					CoroutineJob job = new CoroutineJob() {
@@ -52,10 +71,10 @@ namespace VirtualHole.APIWrapper
 			IEnumerator CreateTexture()
 			{
 				// Slice across several frames, byte[] to Texture2D operations as they are expensive.
-				Texture2D tex2D = new Texture2D(imgResult.Width, imgResult.Height, TextureFormat.RGBA32, false);
+				Texture2D tex2D = new Texture2D(finalImage.Width, finalImage.Height, TextureFormat.RGBA32, false);
 				yield return null;
 
-				tex2D.LoadRawTextureData(imgResult.Data);
+				tex2D.LoadRawTextureData(finalImage.Data);
 				tex2D.Apply();
 
 				result = Sprite.Create(

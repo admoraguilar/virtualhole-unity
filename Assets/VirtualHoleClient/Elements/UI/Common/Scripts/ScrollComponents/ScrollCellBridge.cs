@@ -83,7 +83,7 @@ namespace UnityEngine.UI
 
 					cell.rectTransform = cell.gameObject.GetComponent<RectTransform>();
 
-					if(cell.gameObject.TryGetComponent(out cell.layoutElement)) {
+					if(!cell.gameObject.TryGetComponent(out cell.layoutElement)) {
 						cell.layoutElement.minWidth = 1f;
 						cell.layoutElement.minHeight = 1f;
 						cell.layoutElement.preferredWidth = cell.rectTransform.sizeDelta.x;
