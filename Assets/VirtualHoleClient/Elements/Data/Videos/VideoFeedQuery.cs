@@ -10,6 +10,7 @@ namespace VirtualHole.Client.Data
 	using APIWrapper.Contents.Videos;
 	using APIWrapper.Contents.Creators;
 	using Client.UI;
+	using Midnight.Tasks;
 
 	public class VideoDTO<T> : DataQueryDTO<T>
 		where T : Video

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Midnight;
-using Midnight.Concurrency;
+using Midnight.Tasks;
 
 namespace VirtualHole.Client.UI
 {
@@ -121,7 +121,7 @@ namespace VirtualHole.Client.UI
 
 		private async void OnDropdownValueChanged(int value)
 		{
-			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+			CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 			ClearFeed();
 
 			_loadingParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
@@ -139,7 +139,7 @@ namespace VirtualHole.Client.UI
 			if(isLoading) { return; }
 
 			if(isNearScrollEnd) {
-				CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+				CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 				await LoadAsync(_cts.Token);	
 			}
 		}

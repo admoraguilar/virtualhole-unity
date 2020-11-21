@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Midnight;
-using Midnight.Concurrency;
+using Midnight.Tasks;
 
 namespace VirtualHole.Client.UI
 {
@@ -51,7 +51,7 @@ namespace VirtualHole.Client.UI
 		{
 			if(string.IsNullOrEmpty(searchField.text)) { return; }
 
-			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+			CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 
 			try {
 				await Task.Delay(TimeSpan.FromSeconds(searchInputDelaySeconds), _cts.Token);

@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Midnight;
-using Midnight.Concurrency;
+using Midnight.Tasks;
+using Midnight.Coroutines;
 
 namespace VirtualHole.Client.UI
 {

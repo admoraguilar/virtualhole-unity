@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Midnight;
+using Midnight.Coroutines;
 
 namespace UnityEngine.UI
 {
@@ -41,7 +41,7 @@ namespace UnityEngine.UI
 			// horizontal or vertical version.
 			// Adding a LayoutElement that gives the Content at least 1 width or height
 			// eliminated the problem.
-			CoroutineUtilities.Start(UpdateRoutine(values, doNextFrame), false);
+			CoroutineUtilities.Start(UpdateRoutine(values, doNextFrame));
 		}
 
 		private IEnumerator UpdateRoutine(IEnumerable<object> values, bool doNextFrame = false)
