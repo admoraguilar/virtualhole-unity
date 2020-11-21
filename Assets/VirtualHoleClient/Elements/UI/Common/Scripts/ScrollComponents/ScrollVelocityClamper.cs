@@ -3,7 +3,7 @@ namespace UnityEngine.UI
 {
 	public class ScrollVelocityClamper : MonoBehaviour
 	{
-		public float deadzone = 300f;
+		public float deadzone = 400f;
 
 		protected IScrollRect scrollRect
 		{

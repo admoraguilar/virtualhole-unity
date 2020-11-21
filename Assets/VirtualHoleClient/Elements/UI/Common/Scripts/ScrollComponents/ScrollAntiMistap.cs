@@ -8,6 +8,9 @@ namespace UnityEngine.UI
 		private float _antiMistapTime = .1f;
 		private float _antiMistapTimer = 0f;
 
+		[SerializeField]
+		private float _requiredVelocity = 100f;
+
 		public CanvasGroup canvasGroup
 		{
 			get {
@@ -28,8 +31,8 @@ namespace UnityEngine.UI
 
 		private void FixedUpdate()
 		{
-			if(Mathf.Abs(scrollRect.velocity.x) > 0.1f || 
-			   Mathf.Abs(scrollRect.velocity.y) > 0.1f) {
+			if(Mathf.Abs(scrollRect.velocity.x) > _requiredVelocity || 
+			   Mathf.Abs(scrollRect.velocity.y) > _requiredVelocity) {
 				canvasGroup.interactable = false;
 				_antiMistapTimer = 0f;
 			} else {

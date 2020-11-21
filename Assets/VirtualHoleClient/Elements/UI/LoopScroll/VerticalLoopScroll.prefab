@@ -525,8 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c7a709859f6c742bfe0d6808317cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollMultiplierApex: 4
-  flickCountToReachApex: 5
+  scrollMultiplierApex: 5
+  flickCountToReachApex: 3
 --- !u!114 &4859367980949823524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,6 +540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _antiMistapTime: 0.1
+  _requiredVelocity: 100
 --- !u!114 &1978312896025450893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17789c6b3b6df464e88e5a64e7c16578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deadzone: 300
+  deadzone: 400
 --- !u!1 &7128403962208501077
 GameObject:
   m_ObjectHideFlags: 0

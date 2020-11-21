@@ -4,8 +4,8 @@ namespace UnityEngine.UI
 {
 	public class ScrollFlickScroll : MonoBehaviour, IEndDragHandler
 	{
-		public float scrollMultiplierApex = 2.5f;
-		public int flickCountToReachApex = 5;
+		public float scrollMultiplierApex = 5f;
+		public int flickCountToReachApex = 3;
 
 		private Vector2 _lastVelocity = Vector2.zero;
 		private Vector2 _flickCounter = Vector2.zero;
