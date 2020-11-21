@@ -32,11 +32,11 @@ namespace VirtualHole.APIWrapper
 					response = await request.GetHTTPResponseAsync(cancellationToken);
 
 					using(SKBitmap skBitmap = SKBitmap.Decode(response.Data)) {
-						int width = (int)(skBitmap.Width * .3f);
-						int height = (int)(skBitmap.Height * .3f);
+						int width = (int)(skBitmap.Width * .4f);
+						int height = (int)(skBitmap.Height * .4f);
 
 						using(SKBitmap scaledBitmap = skBitmap.Resize(
-							new SKImageInfo(width, height), SKFilterQuality.Low)) {
+							new SKImageInfo(width, height), SKFilterQuality.Medium)) {
 							using(SKImage scaledImage = SKImage.FromBitmap(scaledBitmap)) {
 								using(SKData imageData = scaledImage.Encode()) {
 									resizeImage = imageData.ToArray();
