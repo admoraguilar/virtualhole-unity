@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace UnityEngine.UI
 {
 	[RequireComponent(typeof(RectTransform))]
-	[RequireComponent(typeof(LayoutElement))]
 	public class ScrollCellBridge : MonoBehaviour, ILoopScrollIndexReceiver
 	{
 		private class ScrollCell
@@ -84,7 +83,7 @@ namespace UnityEngine.UI
 
 					cell.rectTransform = cell.gameObject.GetComponent<RectTransform>();
 
-					if(!cell.gameObject.TryGetComponent(out cell.layoutElement)) {
+					if(cell.gameObject.TryGetComponent(out cell.layoutElement)) {
 						cell.layoutElement.minWidth = 1f;
 						cell.layoutElement.minHeight = 1f;
 						cell.layoutElement.preferredWidth = cell.rectTransform.sizeDelta.x;
@@ -105,8 +104,10 @@ namespace UnityEngine.UI
 				cell.gameObject.SetActive(true);
 				SetActiveCells(false, cell);
 
-				layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
-				layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
+				if(layoutElement != null) {
+					layoutElement.preferredWidth = cell.layoutElement.preferredWidth;
+					layoutElement.preferredHeight = cell.layoutElement.preferredHeight;
+				}
 			} else {
 				SetActiveCells(false);
 			}

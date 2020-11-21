@@ -84,8 +84,13 @@ namespace Flexbox4Unity
   public override void AlgorithmLayout(FlexContainer container, Vector2 availableSize)
   {
    RootFlexContainer rfc = container as RootFlexContainer;
-   if( rfc != null )
-    Debug.Log( "RootFlexContainer being laid out!" );
+   if( rfc != null ) {
+	if( container.showDebugMessages ) 
+	{
+	 Debug.Log("RootFlexContainer being laid out!");
+	}
+   }
+    
    
    samplerMainAlgorithm.Begin();
    try
@@ -149,8 +154,11 @@ namespace Flexbox4Unity
         totalContentSize.y += (child.transform as RectTransform).rect.height;
        }
       }
-      
-      Debug.Log( "Setting ROOT FlexContainer's size using total aggregate size of children = "+totalContentSize );
+
+	  if(container.showDebugMessages) 
+	  {
+		Debug.Log("Setting ROOT FlexContainer's size using total aggregate size of children = " + totalContentSize);
+	  }
       rfc.SetSizeDontRelayout( totalContentSize );
      }
 

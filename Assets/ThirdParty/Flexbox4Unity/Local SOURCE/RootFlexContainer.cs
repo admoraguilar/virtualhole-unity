@@ -48,21 +48,31 @@ namespace Flexbox4Unity
   }
   public override void SetLayoutHorizontal()
   {
-   Debug.Log("SetLayoutHorizontal()" );
+   if( showDebugMessages ) 
+   {
+	Debug.Log("SetLayoutHorizontal()");
+   }
+  
    if( !_isRespondingToInternalSetSize ) 
     base.SetLayoutHorizontal();
   }
 
   protected override void OnTransformChildrenChanged()
   {
-   Debug.Log( "OnTransformChildrenChanged()" );
+   if( showDebugMessages ) {
+	Debug.Log("OnTransformChildrenChanged()");
+   }
    if( !_isRespondingToInternalSetSize )
    base.OnTransformChildrenChanged();
   }
   
   protected override void OnRectTransformDimensionsChange()
   {
-   Debug.Log( "OnRectTransformDimensionsChange()" );
+   if( showDebugMessages) 
+   {
+	Debug.Log("OnRectTransformDimensionsChange()");
+   }
+   
    if( !_isRespondingToInternalSetSize )
     base.OnRectTransformDimensionsChange();
   }
