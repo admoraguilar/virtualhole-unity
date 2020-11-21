@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using BestHTTP;
+using Midnight;
 
 namespace VirtualHole.APIWrapper
 {
@@ -23,57 +24,61 @@ namespace VirtualHole.APIWrapper
 			Uri uri, object body,
 			CancellationToken cancellationToken = default)
 		{
-			HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Post);
-			request.AddHeader("Content-Type", "application/json");
+			using(StopwatchScope s = new StopwatchScope(
+				nameof(APIClient), 
+				$"Send: {uri.AbsoluteUri}",
+				$"Receive: {uri.AbsoluteUri}")) {
+				return await Task.Run(async () => {
+					HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Post);
+					request.AddHeader("Content-Type", "application/json");
 
-			await Task.Run(() => {
-				string bodyAsJson = JsonConvert.SerializeObject(body, JsonUtilities.DefaultSettings);
-				request.RawData = Encoding.UTF8.GetBytes(bodyAsJson);
-			});
+					string bodyAsJson = JsonConvert.SerializeObject(body, JsonUtilities.DefaultSettings);
+					request.RawData = Encoding.UTF8.GetBytes(bodyAsJson);
 
-			HTTPRequestAsyncHandler requestAsync = new HTTPRequestAsyncHandler(request);
+					T result = default;
 
-			T result = default;
+					HTTPResponse response = await request.GetHTTPResponseAsync(cancellationToken);
+					if(response == null) {
+						throw request.Exception;
+					} else if(!response.IsSuccess) {
+						throw new HttpRequestException(response.Message);
+					} else {
+						if(request.State == HTTPRequestStates.Finished) {
+							result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+							return result;
+						}
+					}
 
-			HTTPResponse response = await requestAsync.SendAsync(cancellationToken);
-			if(response == null) {
-				throw request.Exception;
-			} else if(!response.IsSuccess) {
-				throw new HttpRequestException(response.Message);
-			} else {
-				if(request.State == HTTPRequestStates.Finished) {
-					await Task.Run(() => {
-						result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
-					});
 					return result;
-				}
+				}, cancellationToken);
 			}
-
-			return result;
 		}
 
 		public async Task<T> GetAsync<T>(
 			Uri uri,
 			CancellationToken cancellationToken = default)
 		{
-			HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Get);
-			HTTPRequestAsyncHandler requestAsync = new HTTPRequestAsyncHandler(request);
+			using(StopwatchScope s = new StopwatchScope(
+				nameof(APIClient),
+				$"Send: {uri.AbsoluteUri}",
+				$"Receive: {uri.AbsoluteUri}")) {
+				return await Task.Run(async () => {
+					HTTPRequest request = new HTTPRequest(uri, HTTPMethods.Get);
+					T result = default;
 
-			T result = default;
+					HTTPResponse response = await request.GetHTTPResponseAsync(cancellationToken);
+					if(response == null) {
+						throw request.Exception;
+					} else {
+						if(request.State == HTTPRequestStates.Finished) {
+							result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
+							return result;
+						}
+					}
 
-			HTTPResponse response = await requestAsync.SendAsync(cancellationToken);
-			if(response == null) {
-				throw request.Exception;
-			} else {
-				if(request.State == HTTPRequestStates.Finished) {
-					await Task.Run(() => {
-						result = JsonConvert.DeserializeObject<T>(response.DataAsText, JsonUtilities.DefaultSettings);
-					});
 					return result;
-				}
+				}, cancellationToken);
 			}
-
-			return result;
 		}
 
 		protected Uri CreateUri(string slug, string overridePath = "")
