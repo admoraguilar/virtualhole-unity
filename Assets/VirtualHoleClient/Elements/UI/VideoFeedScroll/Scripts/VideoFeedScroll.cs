@@ -110,6 +110,8 @@ namespace VirtualHole.Client.UI
 
 		public void ScrollToTop()
 		{
+			if(scroll.totalCount < 0) { return; }
+
 			if(scroll.totalCount > 30) {
 				scroll.verticalNormalizedPosition = 10f / _scroll.totalCount; 
 			}
