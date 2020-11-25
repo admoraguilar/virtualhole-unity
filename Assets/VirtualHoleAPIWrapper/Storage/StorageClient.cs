@@ -1,9 +1,8 @@
-﻿
+﻿using VirtualHole.APIWrapper.Storage.Static;
+using VirtualHole.APIWrapper.Storage.Dynamic;
+
 namespace VirtualHole.APIWrapper.Storage
 {
-	using Dynamic;
-	using Static;
-
 	public class StorageClient
 	{
 		public DynamicClient dynamic { get; set; } = null;

@@ -1,9 +1,8 @@
 ﻿using System;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class CreatorScrollCellData
 	{
 		public CreatorDTO creatorDTO = null;

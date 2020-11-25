@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight;
+using Midnight.Logs;
 using Midnight.Tasks;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class SearchView : UILifecycle
 	{
 		public event Action<CreatorScrollCellData> OnCellDataCreated = delegate { };

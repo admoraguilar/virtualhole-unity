@@ -7,7 +7,7 @@ PlayerSettings:
   productGUID: 1a7394858a699e14194dd956d84bb42d
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 1
-  AndroidEnableSustainedPerformanceMode: 1
+  AndroidEnableSustainedPerformanceMode: 0
   defaultScreenOrientation: 0
   targetDevice: 2
   useOnDemandResources: 0
@@ -129,7 +129,7 @@ PlayerSettings:
   bundleVersion: 0.0.1
   preloadedAssets:
   - {fileID: 11400000, guid: 2459a7bdcdcc65847834aaafff699fc8, type: 2}
-  - {fileID: 11400000, guid: 63b7b833b9ad2f64dbe714a34fa96993, type: 2}
+  - {fileID: 11400000, guid: 00a36f02ef895f4419351bd2a97350cb, type: 2}
   - {fileID: 11400000, guid: 0109d0b305c387f4eb095f814f61a28f, type: 2}
   - {fileID: 11400000, guid: 1d640b085c4beca4eaa36ecd7273f923, type: 2}
   - {fileID: 11400000, guid: 4892910b120c964428234a37ca47928e, type: 2}
@@ -137,6 +137,7 @@ PlayerSettings:
   - {fileID: 11400000, guid: 326a4ca50aff2ba46957f4522b09ab61, type: 2}
   - {fileID: 11400000, guid: 9db15f877ed45f048af5ccdac7998a8f, type: 2}
   - {fileID: 11400000, guid: d4e9b0474b963fa4b92d72ba2a5287e0, type: 2}
+  - {fileID: 11400000, guid: 63b7b833b9ad2f64dbe714a34fa96993, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -808,7 +809,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: MLOG
-    7: 
+    7: MLOG
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

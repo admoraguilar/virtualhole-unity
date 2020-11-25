@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Midnight
+namespace Midnight.Unity
 {
 	public class Rotator : MonoBehaviour
 	{

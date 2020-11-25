@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using Midnight;
+using Midnight.Unity;
+using VirtualHole.APIWrapper;
 
 namespace VirtualHole.Client.Data
 {
-	using APIWrapper;
-
 	[CreateAssetMenu(menuName = "VirtualHole/Client Factory/API Wrapper")]
 	public class VirtualHoleAPIWrapperClientFactory : SingletonObject<VirtualHoleAPIWrapperClientFactory>
 	{

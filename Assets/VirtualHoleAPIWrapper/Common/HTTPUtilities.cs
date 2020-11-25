@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
@@ -8,8 +6,8 @@ using UnityEngine;
 using BestHTTP;
 using StbImageSharp;
 using SkiaSharp;
-using Midnight;
-using Midnight.Coroutines;
+using Midnight.Logs;
+using Midnight.Unity.Coroutines;
 
 namespace VirtualHole.APIWrapper
 {

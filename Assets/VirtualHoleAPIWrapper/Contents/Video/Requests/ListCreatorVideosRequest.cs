@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
+using VirtualHole.APIWrapper.Contents.Creators;
 
 namespace VirtualHole.APIWrapper.Contents.Videos
 {
-	using Creators;
-
 	public class ListCreatorVideosRequest : ListVideosRequest
 	{
 		public bool isBroadcast = false;

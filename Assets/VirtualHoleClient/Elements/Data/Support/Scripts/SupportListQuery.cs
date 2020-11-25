@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
+using Midnight.Logs;
+using VirtualHole.APIWrapper;
+using VirtualHole.APIWrapper.Storage;
+using VirtualHole.APIWrapper.Storage.Dynamic;
 
 namespace VirtualHole.Client.Data
 {
-	using APIWrapper;
-	using APIWrapper.Storage;
-	using APIWrapper.Storage.Dynamic;
-
 	public class SupportInfoDTO : DataQueryDTO<SupportInfo>
 	{
 		public Sprite imageSprite;

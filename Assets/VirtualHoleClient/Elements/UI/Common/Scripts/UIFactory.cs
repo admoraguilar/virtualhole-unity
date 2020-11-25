@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using VirtualHole.Client.Data;
+using VirtualHole.APIWrapper.Contents.Videos;
 
 namespace VirtualHole.Client.UI
 {

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using Midnight.Mobile;
-using Midnight.FlowTree;
+using Midnight.Unity.Mobile;
+using Midnight.Unity.FlowTree;
+using VirtualHole.Client.ComponentMaps;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Client.ComponentMaps;
-
 	public class AndroidBackwardNavigator : MonoBehaviour
 	{
 		private FlowTree _flowTree => _mainFlowMap.flowTree;

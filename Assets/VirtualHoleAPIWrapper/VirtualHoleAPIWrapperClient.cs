@@ -1,9 +1,8 @@
-﻿
+﻿using VirtualHole.APIWrapper.Contents;
+using VirtualHole.APIWrapper.Storage;
+
 namespace VirtualHole.APIWrapper 
 {
-	using Contents;
-	using Storage;
-
 	public class VirtualHoleAPIWrapperClient
 	{
 		public string contentsDomain { get; private set; } = string.Empty;

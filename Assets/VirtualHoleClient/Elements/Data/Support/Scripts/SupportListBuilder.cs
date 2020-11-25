@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
+using Midnight.Unity;
+using VirtualHole.APIWrapper.Storage.Dynamic;
 
 namespace VirtualHole.Client.Data
 {
-	using APIWrapper.Storage.Dynamic;
-
 	[CreateAssetMenu(menuName = "VirtualHole/Data/Support List Builder")]
 	public class SupportListBuilder : ScriptableObject
 	{

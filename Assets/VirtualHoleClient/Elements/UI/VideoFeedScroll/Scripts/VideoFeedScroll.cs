@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight;
 using Midnight.Tasks;
+using Midnight.Unity;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class VideoFeedScroll : UILifecycle
 	{
 		[Serializable]

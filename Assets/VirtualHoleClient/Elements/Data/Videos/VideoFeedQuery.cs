@@ -2,16 +2,14 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
+using Midnight.Logs;
+using VirtualHole.APIWrapper;
+using VirtualHole.APIWrapper.Contents.Videos;
+using VirtualHole.APIWrapper.Contents.Creators;
+using VirtualHole.Client.UI;
 
 namespace VirtualHole.Client.Data
 {
-	using APIWrapper;
-	using APIWrapper.Contents.Videos;
-	using APIWrapper.Contents.Creators;
-	using Client.UI;
-	using Midnight.Tasks;
-
 	public class VideoDTO<T> : DataQueryDTO<T>
 		where T : Video
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
+using Midnight.Logs;
 
 namespace VirtualHole.Client.Data
 {
@@ -63,7 +63,7 @@ namespace VirtualHole.Client.Data
 		void ICache.Upsert(string key, object data)
 		{
 			TType castData = data as TType;
-			if(castData == null) { MLog.LogError(nameof(SimpleCache<Sprite>), $"Data is not of type {nameof(TType)}"); }
+			if(castData == null) { MLog.Log(MLogLevel.Error, nameof(SimpleCache<Sprite>), $"Data is not of type {nameof(TType)}"); }
 			Upsert(key, castData);
 		}
 	}

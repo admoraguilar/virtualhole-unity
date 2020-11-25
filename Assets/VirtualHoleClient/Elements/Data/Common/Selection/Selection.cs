@@ -1,4 +1,4 @@
-﻿using Midnight;
+﻿using Midnight.Unity;
 
 namespace VirtualHole.Client.Data
 {

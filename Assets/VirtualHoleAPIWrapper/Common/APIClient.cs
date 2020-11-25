@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using BestHTTP;
-using Midnight;
+using Midnight.Logs;
 
 namespace VirtualHole.APIWrapper
 {

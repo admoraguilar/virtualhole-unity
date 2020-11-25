@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Midnight.Coroutines;
+using Midnight.Unity.Coroutines;
 
 namespace UnityEngine.UI
 {
