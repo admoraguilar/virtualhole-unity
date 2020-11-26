@@ -1,11 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using Midnight;
+using Midnight.Unity;
+using VirtualHole.APIWrapper.Contents;
 
 namespace VirtualHole.Client.UI
 {
-	using APIWrapper.Contents;
-	
 	[CreateAssetMenu(menuName = "VirtualHole/UI/UI Resources")]
 	public class UIResources : SingletonObject<UIResources>
 	{

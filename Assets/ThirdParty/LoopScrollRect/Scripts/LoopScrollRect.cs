@@ -8,7 +8,10 @@ namespace UnityEngine.UI
     [AddComponentMenu("")]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(RectTransform))]
-    public abstract class LoopScrollRect : UIBehaviour, IInitializePotentialDragHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IScrollHandler, ICanvasElement, ILayoutElement, ILayoutGroup
+    public abstract class LoopScrollRect : UIBehaviour, 
+		IInitializePotentialDragHandler, IBeginDragHandler, IEndDragHandler, 
+		IDragHandler, IScrollHandler, ICanvasElement, 
+		ILayoutElement, ILayoutGroup, IScrollRect
     {
         //==========LoopScrollRect==========
         [Tooltip("Prefab Source")]
@@ -1315,7 +1318,7 @@ namespace UnityEngine.UI
             // Don't do this in Rebuild
             if (Application.isPlaying && updateItems && UpdateItems(m_ViewBounds, m_ContentBounds))
             {
-                Canvas.ForceUpdateCanvases();
+                //Canvas.ForceUpdateCanvases();
                 m_ContentBounds = GetBounds();
             }
             // ============LoopScrollRect============

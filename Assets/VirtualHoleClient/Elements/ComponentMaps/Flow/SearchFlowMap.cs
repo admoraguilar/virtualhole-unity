@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
+using VirtualHole.Client.UI;
 
 namespace VirtualHole.Client.ComponentMaps
 {
-	using Client.UI;
-
 	public class SearchFlowMap : MonoBehaviour
 	{
 		public SearchView searchView => _searchView;

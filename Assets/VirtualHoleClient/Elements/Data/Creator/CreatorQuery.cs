@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight;
+using Midnight.Logs;
+using VirtualHole.APIWrapper;
+using VirtualHole.APIWrapper.Contents.Creators;
 
 namespace VirtualHole.Client.Data
 {
-	using APIWrapper.Contents.Creators;
-	using VirtualHole.APIWrapper;
-
 	public class CreatorDTO : DataQueryDTO<Creator>
 	{
 		public Sprite avatarSprite;

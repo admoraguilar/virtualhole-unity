@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Midnight.Mobile;
-using Midnight.FlowTree;
+using Midnight.Unity.Mobile;
+using Midnight.Unity.FlowTree;
+using VirtualHole.Client.UI;
+using VirtualHole.Client.ComponentMaps;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Client.UI;
-	using Client.ComponentMaps;
-
 	public class MainFlowNavigator : MonoBehaviour
 	{
 		[Serializable]

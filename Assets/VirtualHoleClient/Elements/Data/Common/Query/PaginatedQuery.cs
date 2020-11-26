@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Midnight.Concurrency;
+using Midnight.Tasks;
 
 namespace VirtualHole.Client.Data
 {

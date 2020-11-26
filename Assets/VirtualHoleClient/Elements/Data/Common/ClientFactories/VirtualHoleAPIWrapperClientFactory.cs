@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Midnight;
+using Midnight.Unity;
 using VirtualHole.APIWrapper;
 
 namespace VirtualHole.Client.Data

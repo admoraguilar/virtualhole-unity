@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using Midnight;
-using Midnight.FlowTree;
+using Midnight.Unity;
+using Midnight.Unity.FlowTree;
+using VirtualHole.Client.Data;
+using VirtualHole.Client.ComponentMaps;
 
 namespace VirtualHole.Client.Controllers
 {
-	using Client.Data;
-	using Client.ComponentMaps;
-
 	public class BootstrapController : MonoBehaviour
 	{
 		[SerializeField]

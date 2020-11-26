@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight;
-using Midnight.Concurrency;
+using Midnight.Tasks;
+using Midnight.Unity;
+using Midnight.Unity.Coroutines;
+using VirtualHole.Client.Data;
+
+using ContentDBSocial = VirtualHole.APIWrapper.Contents.Social;
 
 namespace VirtualHole.Client.UI
 {
-	using APIWrapper.Contents;
-	using Client.Data;
-
 	public class CreatorView : UILifecycle
 	{
 		public event Action<VideoPeekScroll> OnVideoPeekScrollProcess = delegate { };
@@ -63,7 +64,7 @@ namespace VirtualHole.Client.UI
 			avatarImage.sprite = creatorDTO.avatarSprite;
 			nameText.text = creatorDTO.raw.universalName;
 
-			foreach(Social social in creatorDTO.raw.socials) {
+			foreach(ContentDBSocial social in creatorDTO.raw.socials) {
 				Button socialButton = Instantiate(socialButtonTemplate, socialButtonContainer, false);
 				socialButton.gameObject.SetActive(true);
 

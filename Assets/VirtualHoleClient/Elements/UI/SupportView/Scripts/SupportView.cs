@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class SupportView : UILifecycle
 	{
 		public Action<InfoButtonData> OnInfoButtonDataCreated = delegate { };

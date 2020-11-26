@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using Midnight.Pages;
+using Midnight.Unity.Pages;
+using VirtualHole.Client.UI;
 
 namespace VirtualHole.Client.ComponentMaps
 {
-	using Client.UI;
-
 	public class PersonalFeedFlowMap : MonoBehaviour
 	{
 		public VideoFeedScroll videoFeed => _videoFeed;

@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight;
-using Midnight.Concurrency;
+using Midnight.Logs;
+using Midnight.Tasks;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class SearchView : UILifecycle
 	{
 		public event Action<CreatorScrollCellData> OnCellDataCreated = delegate { };
@@ -27,9 +26,9 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		public LoopScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
+		public ScrollCellDataContainer scrollDataContainer => _scrollDataContainer;
 		[SerializeField]
-		private LoopScrollCellDataContainer _scrollDataContainer = null;
+		private ScrollCellDataContainer _scrollDataContainer = null;
 
 		private List<CreatorScrollCellData> _scrollCellData = new List<CreatorScrollCellData>();
 		private CancellationTokenSource _cts = null;
@@ -51,7 +50,7 @@ namespace VirtualHole.Client.UI
 		{
 			if(string.IsNullOrEmpty(searchField.text)) { return; }
 
-			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+			CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 
 			try {
 				await Task.Delay(TimeSpan.FromSeconds(searchInputDelaySeconds), _cts.Token);

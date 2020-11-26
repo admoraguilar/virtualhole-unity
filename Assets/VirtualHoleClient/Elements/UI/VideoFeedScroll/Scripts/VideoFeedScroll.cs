@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Midnight;
-using Midnight.Concurrency;
+using Midnight.Tasks;
+using Midnight.Unity;
+using VirtualHole.Client.Data;
 
 namespace VirtualHole.Client.UI
 {
-	using Client.Data;
-
 	public class VideoFeedScroll : UILifecycle
 	{
 		[Serializable]
@@ -43,15 +42,15 @@ namespace VirtualHole.Client.UI
 		[SerializeField]
 		private LoopScrollRect _scroll = null;
 
-		private LoopScrollCellDataContainer scrollDataContainer
+		private ScrollCellDataContainer scrollDataContainer
 		{
 			get {
 				return this.GetComponent(
 					ref _scrollDataContainer,
-					() => scroll == null ? null : scroll.GetComponent<LoopScrollCellDataContainer>());
+					() => scroll == null ? null : scroll.GetComponent<ScrollCellDataContainer>());
 			}
 		}
-		private LoopScrollCellDataContainer _scrollDataContainer = null;
+		private ScrollCellDataContainer _scrollDataContainer = null;
 
 		public ContextButton contextButton => _contextButton;
 		[SerializeField]
@@ -111,6 +110,8 @@ namespace VirtualHole.Client.UI
 
 		public void ScrollToTop()
 		{
+			if(scroll.totalCount < 0) { return; }
+
 			if(scroll.totalCount > 30) {
 				scroll.verticalNormalizedPosition = 10f / _scroll.totalCount; 
 			}
@@ -121,7 +122,7 @@ namespace VirtualHole.Client.UI
 
 		private async void OnDropdownValueChanged(int value)
 		{
-			CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+			CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 			ClearFeed();
 
 			_loadingParameters = new CycleLoadParameters() { isShowLoadingIndicator = true };
@@ -139,7 +140,7 @@ namespace VirtualHole.Client.UI
 			if(isLoading) { return; }
 
 			if(isNearScrollEnd) {
-				CancellationTokenSourceFactory.CancelAndCreateCancellationTokenSource(ref _cts);
+				CancellationTokenSourceExt.CancelAndCreate(ref _cts);
 				await LoadAsync(_cts.Token);	
 			}
 		}

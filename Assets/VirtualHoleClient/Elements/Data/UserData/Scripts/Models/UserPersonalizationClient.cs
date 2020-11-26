@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Midnight;
+using Midnight.Unity;
 
 namespace VirtualHole.Client.Data
 {

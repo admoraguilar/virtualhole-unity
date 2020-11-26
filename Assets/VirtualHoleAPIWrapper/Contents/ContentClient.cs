@@ -1,9 +1,8 @@
-﻿
+﻿using VirtualHole.APIWrapper.Contents.Videos;
+using VirtualHole.APIWrapper.Contents.Creators;
+
 namespace VirtualHole.APIWrapper.Contents
 {
-	using Videos;
-	using Creators;
-
 	public class ContentClient
 	{
 		public CreatorClient creators { get; private set; } = null;

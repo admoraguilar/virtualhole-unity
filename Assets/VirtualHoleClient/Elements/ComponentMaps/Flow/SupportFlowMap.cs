@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
+using VirtualHole.Client.UI;
 
 namespace VirtualHole.Client.ComponentMaps
 {
-	using Client.UI;
-
 	public class SupportFlowMap : MonoBehaviour
 	{
 		public SupportView supportView => _supportView;
